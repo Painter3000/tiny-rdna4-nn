@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
  *
@@ -58,7 +59,9 @@ __device__ inline float one_blob_subwarp_aligned(F kernel, MatrixView<const floa
 	// Note that this procedure necessitates making the OneBlob encoding wrap around (hence also the 3 kernel calls above),
 	// which may not always be desired.
 	// If not desired, use the slower implementation without wraparound below.
-	float right_cdf = __shfl_sync(0xffffffff, left_cdf, bin_index + 1, n_bins);
+	// TCNN_RDNA4_P1_FIX_011: HIP's sync mask type is 64-bit even on gfx1201
+	// Wave32; use the runtime active mask instead of a fixed-width literal.
+	float right_cdf = __shfl_sync(__activemask(), left_cdf, bin_index + 1, n_bins);
 	if (bin_index == n_bins - 1) {
 		right_cdf += 1; // The right CDF must gain a 1 due to wrapping from right to left (it lost one (hopefully) saturated CDF)
 	}
@@ -179,7 +182,7 @@ public:
 
 #if !defined(TCNN_NO_FWD_BWD)
 	std::unique_ptr<Context> forward_impl(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const GPUMatrixDynamic<float>& input,
 		GPUMatrixDynamic<T>* output = nullptr,
 		bool use_inference_params = false,
@@ -232,7 +235,7 @@ public:
 	}
 
 	void backward_impl(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const Context& ctx,
 		const GPUMatrixDynamic<float>& input,
 		const GPUMatrixDynamic<T>& output,

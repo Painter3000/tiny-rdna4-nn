@@ -2,13 +2,16 @@ import os
 
 import re
 from setuptools import setup
-from pkg_resources import parse_version
+# TCNN_RDNA4_P1_FIX_006: Python 3.12 environment has no legacy pkg_resources;
+# packaging is already part of the existing toolchain and installs no dependency.
+from packaging.version import parse as parse_version
 import subprocess
 import shutil
 import sys
 import torch
+import torch.utils.cpp_extension as cpp_extension
 from glob import glob
-from torch.utils.cpp_extension import BuildExtension, CUDAExtension
+from torch.utils.cpp_extension import BuildExtension, CppExtension, CUDAExtension
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT_DIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
@@ -44,7 +47,17 @@ print(f"Building PyTorch extension for tiny-cuda-nn version {VERSION}")
 
 ext_modules = []
 
-if "TCNN_CUDA_ARCHITECTURES" in os.environ and os.environ["TCNN_CUDA_ARCHITECTURES"]:
+# TCNN_RDNA4_P1_FIX_001: Select the existing ROCm PyTorch backend explicitly;
+# gfx1201 is not represented by an invented CUDA SM capability.
+is_rocm = torch.version.hip is not None
+rocm_arch = os.environ.get("PYTORCH_ROCM_ARCH", "")
+if is_rocm and rocm_arch != "gfx1201":
+	raise EnvironmentError("Phase 1 requires PYTORCH_ROCM_ARCH=gfx1201")
+
+if is_rocm:
+	compute_capabilities = [120]
+	print(f"Targeting ROCm architecture {rocm_arch}")
+elif "TCNN_CUDA_ARCHITECTURES" in os.environ and os.environ["TCNN_CUDA_ARCHITECTURES"]:
 	compute_capabilities = [int(x) for x in os.environ["TCNN_CUDA_ARCHITECTURES"].replace(";", ",").split(",")]
 	print(f"Obtained compute capabilities {compute_capabilities} from environment variable TCNN_CUDA_ARCHITECTURES")
 elif torch.cuda.is_available():
@@ -84,7 +97,7 @@ if os.name == "nt":
 cpp_standard = 17
 
 # Get CUDA version and make sure the targeted compute capability is compatible
-if os.system("nvcc --version") == 0:
+if not is_rocm and os.system("nvcc --version") == 0:
 	nvcc_out = subprocess.check_output(["nvcc", "--version"]).decode()
 	cuda_version = re.search(r"release (\S+),", nvcc_out)
 
@@ -121,12 +134,25 @@ base_nvcc_flags = [
 	"-U__CUDA_NO_HALF2_OPERATORS__",
 ]
 
+if is_rocm:
+	base_nvcc_flags = [
+		f"-std=c++{cpp_standard}",
+		f"--offload-arch={rocm_arch}",
+		f"--rocm-path={os.environ.get('ROCM_PATH', '/opt/rocm')}",
+		"-D__HIP_PLATFORM_AMD__",
+		"-DUSE_ROCM",
+		"-Wno-float-conversion",
+		"-fno-strict-aliasing",
+		"-fno-gpu-rdc",
+	]
+
 if os.name == "posix":
 	base_cflags = [f"-std=c++{cpp_standard}"]
-	base_nvcc_flags += [
-		"-Xcompiler=-Wno-float-conversion",
-		"-Xcompiler=-fno-strict-aliasing",
-	]
+	if not is_rocm:
+		base_nvcc_flags += [
+			"-Xcompiler=-Wno-float-conversion",
+			"-Xcompiler=-fno-strict-aliasing",
+		]
 elif os.name == "nt":
 	base_cflags = [f"/std:c++{cpp_standard}"]
 
@@ -142,8 +168,6 @@ base_definitions = [
 	# PyTorch-supplied parameters may be unaligned. TCNN must be made aware of this such that
 	# it does not optimize for aligned memory accesses.
 	"-DTCNN_PARAMS_UNALIGNED",
-	"-DTCNN_RTC",
-	"-DTCNN_RTC_USE_FAST_MATH",
 ]
 
 if "TCNN_HALF_PRECISION" in os.environ:
@@ -166,7 +190,6 @@ base_source_files = [
 	"../../src/common_host.cu",
 	"../../src/encoding.cu",
 	"../../src/object.cu",
-	"../../src/rtc_kernel.cu",
 ]
 
 if include_networks:
@@ -177,15 +200,16 @@ if include_networks:
 else:
 	base_definitions.append("-DTCNN_NO_NETWORKS")
 
-# Copy headers required by RTC at runtime
+# RTC/JIT is deliberately excluded from the ROCm encoding-only baseline.
 rtc_dir = os.path.join(bindings_dir, "tinycudann", "rtc")
 rtc_include_dir = os.path.join(rtc_dir, "include")
 rtc_cache_dir = os.path.join(rtc_dir, "cache")
-shutil.rmtree(rtc_dir, ignore_errors=True)
-os.makedirs(rtc_include_dir, exist_ok=True)
-os.makedirs(rtc_cache_dir, exist_ok=True)
+if not is_rocm:
+	shutil.rmtree(rtc_dir, ignore_errors=True)
+	os.makedirs(rtc_include_dir, exist_ok=True)
+	os.makedirs(rtc_cache_dir, exist_ok=True)
 
-nvcc_path = shutil.which("nvcc")
+nvcc_path = None if is_rocm else shutil.which("nvcc")
 if nvcc_path is None:
 	print(f"WARNING: could not find CUDA include directory. JIT compilation will not be supported.")
 else:
@@ -208,6 +232,29 @@ else:
 	copy_files(f"{root_dir}/dependencies", pcg32_headers)
 
 def make_extension(compute_capability):
+	if is_rocm:
+		# TCNN_RDNA4_P1_FIX_002: Compile only the encoding runtime sources with
+		# hipcc; no CUTLASS, FullyFusedMLP, MMA, RTC, or JIT sources/libraries.
+		os.environ["CC"] = os.path.join(os.environ.get("ROCM_PATH", "/opt/rocm"), "bin", "hipcc")
+		os.environ["CXX"] = os.environ["CC"]
+		definitions = base_definitions + ["-DTCNN_NO_NETWORKS", "-DTCNN_NO_RTC", "-DTCNN_HALF_PRECISION=1"]
+		hip_flags = base_nvcc_flags + [
+			"-U__HIP_NO_HALF_OPERATORS__",
+			"-U__HIP_NO_HALF_CONVERSIONS__",
+		] + definitions
+		return CppExtension(
+			name=f"tinycudann_bindings._{compute_capability}_C",
+			sources=base_source_files,
+			include_dirs=[
+				f"{root_dir}/include",
+				f"{root_dir}/dependencies",
+				f"{root_dir}/dependencies/fmt/include",
+				os.path.join(os.environ.get("ROCM_PATH", "/opt/rocm"), "include"),
+			],
+			extra_compile_args={"cxx": hip_flags, "nvcc": hip_flags},
+			libraries=["amdhip64"],
+			library_dirs=[os.path.join(os.environ.get("ROCM_PATH", "/opt/rocm"), "lib")],
+		)
 	nvcc_flags = base_nvcc_flags + [f"-gencode=arch=compute_{compute_capability},code={code}_{compute_capability}" for code in ["compute", "sm"]]
 	definitions = base_definitions + [f"-DTCNN_MIN_GPU_ARCH={compute_capability}"]
 

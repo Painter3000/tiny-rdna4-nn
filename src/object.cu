@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
  *
@@ -42,23 +43,23 @@ __global__ void one_hot_batched_kernel(const uint32_t num_elements, const uint32
 }
 
 template <typename T>
-void one_hot_batched(cudaStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, T* out, float scale) {
+void one_hot_batched(hipStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, T* out, float scale) {
 	linear_kernel(one_hot_batched_kernel<T>, 0, stream, num_elements, width, one_hot_dim, out, scale);
 }
 
-template void one_hot_batched(cudaStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, float* out, float scale);
-template void one_hot_batched(cudaStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, __half* out, float scale);
+template void one_hot_batched(hipStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, float* out, float scale);
+template void one_hot_batched(hipStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, __half* out, float scale);
 
 template <typename T>
-void mult(cudaStream_t stream, const uint32_t num_elements, T* inout, float factor) {
+void mult(hipStream_t stream, const uint32_t num_elements, T* inout, float factor) {
 	linear_kernel(mult_scalar_kernel<T>, 0, stream, num_elements, inout, factor);
 }
 
-template void mult(cudaStream_t stream, const uint32_t num_elements, float* inout, float factor);
-template void mult(cudaStream_t stream, const uint32_t num_elements, __half* inout, float factor);
+template void mult(hipStream_t stream, const uint32_t num_elements, float* inout, float factor);
+template void mult(hipStream_t stream, const uint32_t num_elements, __half* inout, float factor);
 
 template <typename T>
-void trim_and_cast_from(cudaStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const T* in, float* out) {
+void trim_and_cast_from(hipStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const T* in, float* out) {
 	if (layout == RM) {
 		linear_kernel(cast_from<T>, 0, stream, num_elements, in, out);
 	} else {
@@ -66,9 +67,10 @@ void trim_and_cast_from(cudaStream_t stream, const MatrixLayout layout, const ui
 	}
 }
 
-template void trim_and_cast_from(cudaStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const float* in, float* out);
-template void trim_and_cast_from(cudaStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const __half* in, float* out);
+template void trim_and_cast_from(hipStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const float* in, float* out);
+template void trim_and_cast_from(hipStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const __half* in, float* out);
 
+#if !defined(TCNN_NO_RTC)
 std::unique_ptr<CudaRtcKernel> generate_kernel(
 	const std::string& kernel_name,
 	const std::string& device_function,
@@ -182,5 +184,6 @@ std::unique_ptr<CudaRtcKernel> generate_backward_backward_input_kernel(
 		"N_FWD_CTX_BYTES"_a = n_fwd_ctx_bytes
 	)); 
 }
+#endif
 
 }

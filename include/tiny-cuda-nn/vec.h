@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
  *
@@ -207,9 +208,9 @@ template <typename T> TCNN_HOST_DEVICE T isfinite(T a) {
 }
 
 inline TCNN_HOST_DEVICE float fma(float a, float b, float c) { return fmaf(a, b, c); }
-#ifdef __CUDACC__
+#ifdef __HIPCC__
 inline TCNN_DEVICE __half fma(__half a, __half b, __half c) {
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 600
+#if defined(__HIP_PLATFORM_AMD__) || (defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 600)
 	return __hfma(a, b, c);
 #else
 	return fmaf(a, b, c);
@@ -298,7 +299,7 @@ CWISE_OP(pow, TVEC, pow(a[i], b[i]), const TVEC& a, const TVEC& b)
 
 CWISE_OP(isfinite, BVEC, isfinite(a[i]), const TVEC& a)
 
-#if defined(__CUDACC__)
+#if defined(__HIPCC__)
 inline TCNN_DEVICE void atomic_add_gmem_float(float* addr, float in) {
 #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 700
 	int in_int = *((int*)&in);
@@ -355,7 +356,7 @@ TCNN_DEVICE void atomic_add_gmem(__half* dst, const tvec<__half, N, A>& a) {
 #undef CWISE_OP
 
 // __half2 specializations for aligned vectors with 2*N fp16 coefficients.
-#if defined(__CUDACC__) && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 600
+#if defined(__HIPCC__) && defined(__CUDA_ARCH__) && __CUDA_ARCH__ >= 600
 
 #define HVEC tvec<__half, N, A>
 #define HALF_CWISE_OP(operation, type_result, expr, ...) \
@@ -511,11 +512,11 @@ DEF_NON_TEMPLATED_VECTOR_TYPES(i16vec, int16_t)
 DEF_NON_TEMPLATED_VECTOR_TYPES(u16vec, uint16_t)
 DEF_NON_TEMPLATED_VECTOR_TYPES(i8vec, int8_t)
 DEF_NON_TEMPLATED_VECTOR_TYPES(u8vec, uint8_t)
-#if defined(__CUDACC__)
+#if defined(__HIPCC__)
 DEF_NON_TEMPLATED_VECTOR_TYPES(hvec, __half)
 #endif
 
-#if defined(__CUDACC__)
+#if defined(__HIPCC__)
 inline TCNN_HOST_DEVICE float4 to_float4(const vec4& x) { return {x.x, x.y, x.z, x.w}; }
 inline TCNN_HOST_DEVICE float3 to_float3(const vec3& x) { return {x.x, x.y, x.z}; }
 inline TCNN_HOST_DEVICE float2 to_float2(const vec2& x) { return {x.x, x.y}; }
@@ -1068,7 +1069,7 @@ using name##2 = name##2x2;
 
 DEF_NON_TEMPLATED_MATRIX_TYPES(mat, float)
 DEF_NON_TEMPLATED_MATRIX_TYPES(dmat, double)
-#if defined(__CUDACC__)
+#if defined(__HIPCC__)
 DEF_NON_TEMPLATED_MATRIX_TYPES(hmat, __half)
 #endif
 

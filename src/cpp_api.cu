@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
  *
@@ -31,7 +32,9 @@
 #include <tiny-cuda-nn/cpp_api.h>
 #include <tiny-cuda-nn/encoding.h>
 #include <tiny-cuda-nn/multi_stream.h>
+#if !defined(TCNN_NO_RTC)
 #include <tiny-cuda-nn/rtc_kernel.h>
+#endif
 
 #if !defined(TCNN_NO_NETWORKS)
 #include <tiny-cuda-nn/network_with_input_encoding.h>
@@ -60,10 +63,17 @@ float default_loss_scale(Precision p) {
 template <typename T> constexpr Precision precision() { return std::is_same<T, float>::value ? Precision::Fp32 : Precision::Fp16; }
 Precision preferred_precision() { return precision<network_precision_t>(); }
 
+// TCNN_RDNA4_P1_FIX_003: Preserve the Python API while making RTC/JIT an
+// explicit compile-time no-op in the encoding-only HIP build.
+#if defined(TCNN_NO_RTC)
+bool supports_jit_fusion(int) { return false; }
+void rtc_set_cache_dir(const std::string&) {}
+void rtc_set_include_dir(const std::string&) {}
+#else
 bool supports_jit_fusion(int device) { return device < 0 ? tcnn::supports_jit_fusion() : tcnn::supports_jit_fusion(device); }
-
 void rtc_set_cache_dir(const std::string& dir) { tcnn::rtc_set_cache_dir(dir); }
 void rtc_set_include_dir(const std::string& dir) { tcnn::rtc_set_include_dir(dir); }
+#endif
 
 void set_log_callback(const std::function<void(LogSeverity, const std::string&)>& callback) {
 	tcnn::set_log_callback([callback](tcnn::LogSeverity severity, const std::string& msg) { callback((LogSeverity)severity, msg); });
@@ -76,7 +86,7 @@ public:
 	: Module{precision<T>(), precision<T>()}, m_model{model}
 	{}
 
-	void inference(cudaStream_t stream, uint32_t n_elements, const float* input, void* output, void* params) override {
+	void inference(hipStream_t stream, uint32_t n_elements, const float* input, void* output, void* params) override {
 		m_model->set_params((T*)params, (T*)params, nullptr);
 
 		GPUMatrix<float, MatrixLayout::ColumnMajor> input_matrix((float*)input, m_model->input_width(), n_elements);
@@ -84,11 +94,18 @@ public:
 
 		// Run on our own custom stream to ensure CUDA graph capture is possible.
 		// (Significant possible speedup.)
+#if defined(__HIP_PLATFORM_AMD__)
+		// TCNN_RDNA4_P1_FIX_014: execute the correctness-first HIP path on
+		// the caller's PyTorch stream. Together with FIX_013 this avoids the
+		// auxiliary-stream/arena teardown failure seen on gfx1201/ROCm 7.2.
+		m_model->inference_mixed_precision(stream, input_matrix, output_matrix);
+#else
 		SyncedMultiStream synced_stream{stream, 2};
 		m_model->inference_mixed_precision(synced_stream.get(1), input_matrix, output_matrix);
+#endif
 	}
 
-	Context forward(cudaStream_t stream, uint32_t n_elements, const float* input, void* output, void* params, bool prepare_input_gradients) override {
+	Context forward(hipStream_t stream, uint32_t n_elements, const float* input, void* output, void* params, bool prepare_input_gradients) override {
 		m_model->set_params((T*)params, (T*)params, nullptr);
 
 		GPUMatrix<float, MatrixLayout::ColumnMajor> input_matrix((float*)input, m_model->input_width(), n_elements);
@@ -96,11 +113,16 @@ public:
 
 		// Run on our own custom stream to ensure CUDA graph capture is possible.
 		// (Significant possible speedup.)
+#if defined(__HIP_PLATFORM_AMD__)
+		// TCNN_RDNA4_P1_FIX_014: see inference() above.
+		return { m_model->forward(stream, input_matrix, &output_matrix, false, prepare_input_gradients) };
+#else
 		SyncedMultiStream synced_stream{stream, 2};
 		return { m_model->forward(synced_stream.get(1), input_matrix, &output_matrix, false, prepare_input_gradients) };
+#endif
 	}
 
-	void backward(cudaStream_t stream, const Context& ctx, uint32_t n_elements, float* dL_dinput, const void* dL_doutput, void* dL_dparams, const float* input, const void* output, const void* params) override {
+	void backward(hipStream_t stream, const Context& ctx, uint32_t n_elements, float* dL_dinput, const void* dL_doutput, void* dL_dparams, const float* input, const void* output, const void* params) override {
 		m_model->set_params((T*)params, (T*)params, (T*)dL_dparams);
 
 		GPUMatrix<float, MatrixLayout::ColumnMajor> input_matrix((float*)input, m_model->input_width(), n_elements);
@@ -111,11 +133,16 @@ public:
 
 		// Run on our own custom stream to ensure CUDA graph capture is possible.
 		// (Significant possible speedup.)
+#if defined(__HIP_PLATFORM_AMD__)
+		// TCNN_RDNA4_P1_FIX_014: see inference() above.
+		m_model->backward(stream, *ctx.ctx, input_matrix, output_matrix, dL_doutput_matrix, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? GradientMode::Overwrite : GradientMode::Ignore);
+#else
 		SyncedMultiStream synced_stream{stream, 2};
 		m_model->backward(synced_stream.get(1), *ctx.ctx, input_matrix, output_matrix, dL_doutput_matrix, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? GradientMode::Overwrite : GradientMode::Ignore);
+#endif
 	}
 
-	void backward_backward_input(cudaStream_t stream, const Context& ctx, uint32_t n_elements, const float* dL_ddLdinput, const float* input, const void* dL_doutput, void* dL_dparams, void* dL_ddLdoutput, float* dL_dinput, const void* params) override {
+	void backward_backward_input(hipStream_t stream, const Context& ctx, uint32_t n_elements, const float* dL_ddLdinput, const float* input, const void* dL_doutput, void* dL_dparams, void* dL_ddLdoutput, float* dL_dinput, const void* params) override {
 		// from: dL_ddLdinput
 		// to:   dL_ddLdoutput, dL_dparams
 		m_model->set_params((T*)params, (T*)params, (T*)dL_dparams);
@@ -129,8 +156,13 @@ public:
 
 		// Run on our own custom stream to ensure CUDA graph capture is possible.
 		// (Significant possible speedup.)
+#if defined(__HIP_PLATFORM_AMD__)
+		// TCNN_RDNA4_P1_FIX_014: see inference() above.
+		m_model->backward_backward_input(stream, *ctx.ctx, input_matrix, dL_ddLdinput_matrix, dL_doutput_matrix, dL_ddLdoutput ? &dL_ddLdoutput_matrix : nullptr, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? GradientMode::Overwrite : GradientMode::Ignore);
+#else
 		SyncedMultiStream synced_stream{stream, 2};
 		m_model->backward_backward_input(synced_stream.get(1), *ctx.ctx, input_matrix, dL_ddLdinput_matrix, dL_doutput_matrix, dL_ddLdoutput ? &dL_ddLdoutput_matrix : nullptr, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? GradientMode::Overwrite : GradientMode::Ignore);
+#endif
 	}
 
 	uint32_t n_input_dims() const override { return m_model->input_width(); }

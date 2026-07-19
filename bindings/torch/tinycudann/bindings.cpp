@@ -34,8 +34,16 @@
 #include <torch/extension.h>
 #endif
 
+#if defined(__HIP_PLATFORM_AMD__)
+// TCNN_RDNA4_P1_FIX_012: use ROCm PyTorch's CUDA-masquerading device guard
+// and current-stream API; the public Python device remains torch.cuda.
+#include <ATen/hip/HIPUtils.h>
+#include <ATen/hip/impl/HIPGuardImplMasqueradingAsCUDA.h>
+#include <ATen/hip/impl/HIPStreamMasqueradingAsCUDA.h>
+#else
 #include <ATen/cuda/CUDAUtils.h>
 #include <c10/cuda/CUDAGuard.h>
+#endif
 
 #ifdef snprintf
 #undef snprintf
@@ -92,8 +100,13 @@ public:
 		at::Device device = input.device();
 		CHECK_THROW(device == params.device());
 
+		#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		#else
 		const at::cuda::CUDAGuard device_guard{device};
-		cudaStream_t stream = at::cuda::getCurrentCUDAStream();
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+		#endif
 
 		uint32_t batch_size = input.size(0);
 
@@ -138,8 +151,13 @@ public:
 		CHECK_THROW(device == output.device());
 		CHECK_THROW(device == dL_doutput.device());
 
+		#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		#else
 		const at::cuda::CUDAGuard device_guard{device};
-		cudaStream_t stream = at::cuda::getCurrentCUDAStream();
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+		#endif
 
 		uint32_t batch_size = input.size(0);
 
@@ -203,8 +221,13 @@ public:
 		CHECK_THROW(device == dL_ddLdinput.device());
 		CHECK_THROW(device == dL_doutput.device());
 
+		#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		#else
 		const at::cuda::CUDAGuard device_guard{device};
-		cudaStream_t stream = at::cuda::getCurrentCUDAStream();
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+		#endif
 
 		uint32_t batch_size = input.size(0);
 

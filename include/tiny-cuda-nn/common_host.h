@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
  *
@@ -74,10 +75,10 @@ void set_verbose(bool verbose);
 /// Checks the result of a cuXXXXXX call and throws an error on failure
 #define CU_CHECK_THROW(x) \
 	do { \
-		CUresult _result = x; \
-		if (_result != CUDA_SUCCESS) { \
+		hipError_t _result = x; \
+		if (_result != hipSuccess) { \
 			const char *msg; \
-			cuGetErrorName(_result, &msg); \
+			hipDrvGetErrorName(_result, &msg); \
 			throw std::runtime_error{fmt::format(FILE_LINE " " #x " failed: {}", msg)}; \
 		} \
 	} while(0)
@@ -85,10 +86,10 @@ void set_verbose(bool verbose);
 /// Checks the result of a cuXXXXXX call and prints an error on failure
 #define CU_CHECK_PRINT(x) \
 	do { \
-		CUresult _result = x; \
-		if (_result != CUDA_SUCCESS) { \
+		hipError_t _result = x; \
+		if (_result != hipSuccess) { \
 			const char *msg; \
-			cuGetErrorName(_result, &msg); \
+			hipDrvGetErrorName(_result, &msg); \
 			log_error(FILE_LINE " " #x " failed: {}", msg); \
 		} \
 	} while(0)
@@ -96,17 +97,17 @@ void set_verbose(bool verbose);
 /// Checks the result of a cudaXXXXXX call and throws an error on failure
 #define CUDA_CHECK_THROW(x) \
 	do { \
-		cudaError_t _result = x; \
-		if (_result != cudaSuccess) \
-			throw std::runtime_error{fmt::format(FILE_LINE " " #x " failed: {}", cudaGetErrorString(_result))}; \
+		hipError_t _result = x; \
+		if (_result != hipSuccess) \
+			throw std::runtime_error{fmt::format(FILE_LINE " " #x " failed: {}", hipGetErrorString(_result))}; \
 	} while(0)
 
 /// Checks the result of a cudaXXXXXX call and prints an error on failure
 #define CUDA_CHECK_PRINT(x) \
 	do { \
-		cudaError_t _result = x; \
-		if (_result != cudaSuccess) \
-			log_error(FILE_LINE " " #x " failed: {}", cudaGetErrorString(_result)); \
+		hipError_t _result = x; \
+		if (_result != hipSuccess) \
+			log_error(FILE_LINE " " #x " failed: {}", hipGetErrorString(_result)); \
 	} while(0)
 
 /// Checks the result of optixXXXXXX call and throws an error on failure
@@ -401,9 +402,9 @@ private:
 	T m_val;
 };
 
-#if defined(__CUDACC__) || (defined(__clang__) && defined(__CUDA__))
+#if defined(__HIPCC__) || (defined(__clang__) && defined(__CUDA__))
 template <typename K, typename T, typename ... Types>
-inline void linear_kernel(K kernel, uint32_t shmem_size, cudaStream_t stream, T n_elements, Types ... args) {
+inline void linear_kernel(K kernel, uint32_t shmem_size, hipStream_t stream, T n_elements, Types ... args) {
 	if (n_elements <= 0) {
 		return;
 	}
@@ -419,7 +420,7 @@ __global__ void parallel_for_kernel(const size_t n_elements, F fun) {
 }
 
 template <typename F>
-inline void parallel_for_gpu(uint32_t shmem_size, cudaStream_t stream, size_t n_elements, F&& fun) {
+inline void parallel_for_gpu(uint32_t shmem_size, hipStream_t stream, size_t n_elements, F&& fun) {
 	if (n_elements <= 0) {
 		return;
 	}
@@ -427,7 +428,7 @@ inline void parallel_for_gpu(uint32_t shmem_size, cudaStream_t stream, size_t n_
 }
 
 template <typename F>
-inline void parallel_for_gpu(cudaStream_t stream, size_t n_elements, F&& fun) {
+inline void parallel_for_gpu(hipStream_t stream, size_t n_elements, F&& fun) {
 	parallel_for_gpu(0, stream, n_elements, std::forward<F>(fun));
 }
 
@@ -447,7 +448,7 @@ __global__ void parallel_for_aos_kernel(const size_t n_elements, const uint32_t 
 }
 
 template <typename F>
-inline void parallel_for_gpu_aos(uint32_t shmem_size, cudaStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
+inline void parallel_for_gpu_aos(uint32_t shmem_size, hipStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
 	if (n_elements <= 0 || n_dims <= 0) {
 		return;
 	}
@@ -462,7 +463,7 @@ inline void parallel_for_gpu_aos(uint32_t shmem_size, cudaStream_t stream, size_
 }
 
 template <typename F>
-inline void parallel_for_gpu_aos(cudaStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
+inline void parallel_for_gpu_aos(hipStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
 	parallel_for_gpu_aos(0, stream, n_elements, n_dims, std::forward<F>(fun));
 }
 
@@ -482,7 +483,7 @@ __global__ void parallel_for_soa_kernel(const size_t n_elements, const uint32_t 
 }
 
 template <typename F>
-inline void parallel_for_gpu_soa(uint32_t shmem_size, cudaStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
+inline void parallel_for_gpu_soa(uint32_t shmem_size, hipStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
 	if (n_elements <= 0 || n_dims <= 0) {
 		return;
 	}
@@ -495,7 +496,7 @@ inline void parallel_for_gpu_soa(uint32_t shmem_size, cudaStream_t stream, size_
 }
 
 template <typename F>
-inline void parallel_for_gpu_soa(cudaStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
+inline void parallel_for_gpu_soa(hipStream_t stream, size_t n_elements, uint32_t n_dims, F&& fun) {
 	parallel_for_gpu_soa(0, stream, n_elements, n_dims, std::forward<F>(fun));
 }
 

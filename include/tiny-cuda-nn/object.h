@@ -31,7 +31,9 @@
 
 #include <tiny-cuda-nn/common_host.h>
 #include <tiny-cuda-nn/gpu_matrix.h>
+#if !defined(TCNN_NO_RTC)
 #include <tiny-cuda-nn/rtc_kernel.h>
+#endif
 
 #include <json/json.hpp>
 
@@ -105,13 +107,13 @@ private:
 };
 
 template <typename T>
-void one_hot_batched(cudaStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, T* out, float scale);
+void one_hot_batched(hipStream_t stream, const uint32_t num_elements, const uint32_t width, const uint32_t one_hot_dim, T* out, float scale);
 
 template <typename T>
-void mult(cudaStream_t stream, const uint32_t num_elements, T* inout, float factor);
+void mult(hipStream_t stream, const uint32_t num_elements, T* inout, float factor);
 
 template <typename T>
-void trim_and_cast_from(cudaStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const T* in, float* out);
+void trim_and_cast_from(hipStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const T* in, float* out);
 
 enum class GradientMode {
 	Ignore,
@@ -119,6 +121,7 @@ enum class GradientMode {
 	Accumulate,
 };
 
+#if !defined(TCNN_NO_RTC)
 std::unique_ptr<CudaRtcKernel> generate_kernel(
 	const std::string& kernel_name,
 	const std::string& device_function,
@@ -150,20 +153,38 @@ std::unique_ptr<CudaRtcKernel> generate_backward_backward_input_kernel(
 	uint32_t n_dims_out,
 	uint32_t n_fwd_ctx_bytes
 );
+#else
+// TCNN_RDNA4_P1_FIX_004: Keep the generic Object interface buildable without
+// importing or linking any RTC implementation. These paths remain unreachable
+// because set_jit_fusion is forced off below.
+class CudaRtcKernel {
+public:
+	template <typename... Args> void launch(Args&&...) {
+		throw std::runtime_error{"RTC/JIT is disabled in the RDNA4 Phase-1 build."};
+	}
+};
+
+template <typename... Args>
+std::unique_ptr<CudaRtcKernel> generate_kernel(Args&&...) { return {}; }
+template <typename... Args>
+std::unique_ptr<CudaRtcKernel> generate_backward_kernel(Args&&...) { return {}; }
+template <typename... Args>
+std::unique_ptr<CudaRtcKernel> generate_backward_backward_input_kernel(Args&&...) { return {}; }
+#endif
 
 template <typename T, typename PARAMS_T, typename COMPUTE_T=T>
 class DifferentiableObject : public ParametricObject<PARAMS_T> {
 public:
 	virtual ~DifferentiableObject() { }
 
-	virtual void inference_mixed_precision_impl(cudaStream_t stream, const GPUMatrixDynamic<T>& input, GPUMatrixDynamic<COMPUTE_T>& output, bool use_inference_params = true)
+	virtual void inference_mixed_precision_impl(hipStream_t stream, const GPUMatrixDynamic<T>& input, GPUMatrixDynamic<COMPUTE_T>& output, bool use_inference_params = true)
 #if defined(TCNN_NO_FWD_BWD)
 	{ throw std::runtime_error{"tiny-cuda-nn was compiled without forward / backward support. You must call `set_jit_fusion(true)` on each model before using it."}; }
 #else
 	= 0;
 #endif
 
-	void inference_mixed_precision(cudaStream_t stream, const GPUMatrixDynamic<T>& input, GPUMatrixDynamic<COMPUTE_T>& output, bool use_inference_params = true) {
+	void inference_mixed_precision(hipStream_t stream, const GPUMatrixDynamic<T>& input, GPUMatrixDynamic<COMPUTE_T>& output, bool use_inference_params = true) {
 		CHECK_THROW(input.m() == input_width());
 		CHECK_THROW(output.m() == padded_output_width());
 		CHECK_THROW(input.n() % BATCH_SIZE_GRANULARITY == 0);
@@ -211,7 +232,7 @@ public:
 		inference_mixed_precision(nullptr, input, output, use_inference_params);
 	}
 
-	void inference(cudaStream_t stream, const GPUMatrixDynamic<T>& input, GPUMatrixDynamic<float>& output, bool use_inference_params = true) {
+	void inference(hipStream_t stream, const GPUMatrixDynamic<T>& input, GPUMatrixDynamic<float>& output, bool use_inference_params = true) {
 		CHECK_THROW(input.m() == input_width());
 		CHECK_THROW(output.m() == output_width());
 		CHECK_THROW(input.n() % BATCH_SIZE_GRANULARITY == 0);
@@ -274,7 +295,7 @@ public:
 	}
 
 	virtual std::unique_ptr<Context> forward_impl(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const GPUMatrixDynamic<T>& input,
 		GPUMatrixDynamic<COMPUTE_T>* output = nullptr,
 		bool use_inference_params = false,
@@ -286,7 +307,7 @@ public:
 	= 0;
 #endif
 	std::unique_ptr<Context> forward(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const GPUMatrixDynamic<T>& input,
 		GPUMatrixDynamic<COMPUTE_T>* output = nullptr,
 		bool use_inference_params = false,
@@ -349,7 +370,7 @@ public:
 	}
 
 	virtual void backward_impl(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const Context& ctx,
 		const GPUMatrixDynamic<T>& input,
 		const GPUMatrixDynamic<COMPUTE_T>& output,
@@ -364,7 +385,7 @@ public:
 	= 0;
 #endif
 	void backward(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const Context& ctx,
 		const GPUMatrixDynamic<T>& input,
 		const GPUMatrixDynamic<COMPUTE_T>& output,
@@ -434,7 +455,7 @@ public:
 			const auto& forward = dynamic_cast<const JitForwardContext&>(ctx);
 
 			if (param_gradients_mode == GradientMode::Overwrite) {
-				CUDA_CHECK_THROW(cudaMemsetAsync(this->gradients(), 0, sizeof(PARAMS_T) * this->n_params(), stream));
+				CUDA_CHECK_THROW(hipMemsetAsync(this->gradients(), 0, sizeof(PARAMS_T) * this->n_params(), stream));
 			}
 
 			auto g = jit_guard(stream, use_inference_params);
@@ -466,7 +487,7 @@ public:
 	}
 
 	virtual void backward_backward_input_impl(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const Context& ctx,
 		const GPUMatrixDynamic<T>& input,
 		const GPUMatrixDynamic<T>& dL_ddLdinput,
@@ -482,7 +503,7 @@ public:
 	{ throw std::runtime_error{fmt::format("{} does not support double backward.", this->name())}; }
 #endif
 	void backward_backward_input(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const Context& ctx,
 		const GPUMatrixDynamic<T>& input,
 		const GPUMatrixDynamic<T>& dL_ddLdinput,
@@ -555,7 +576,7 @@ public:
 			const auto& forward = dynamic_cast<const JitForwardContext&>(ctx);
 
 			if (param_gradients_mode == GradientMode::Overwrite) {
-				CUDA_CHECK_THROW(cudaMemsetAsync(this->gradients(), 0, sizeof(PARAMS_T) * this->n_params(), stream));
+				CUDA_CHECK_THROW(hipMemsetAsync(this->gradients(), 0, sizeof(PARAMS_T) * this->n_params(), stream));
 			}
 
 			auto g = jit_guard(stream, use_inference_params);
@@ -590,7 +611,7 @@ public:
 	}
 
 	void input_gradient(
-		cudaStream_t stream,
+		hipStream_t stream,
 		uint32_t dim,
 		const GPUMatrix<T>& input,
 		GPUMatrix<T>& d_dinput,
@@ -715,13 +736,18 @@ public:
 	}
 
 	void set_jit_fusion(bool val) {
+	#if defined(TCNN_NO_RTC)
+		(void)val;
+		m_jit_fusion = false;
+	#else
 		m_jit_fusion = val;
+	#endif
 	}
 
-	virtual void convert_params_to_jit_layout(cudaStream_t stream, bool use_inference_params) {}
-	virtual void convert_params_from_jit_layout(cudaStream_t stream, bool use_inference_params) {}
+	virtual void convert_params_to_jit_layout(hipStream_t stream, bool use_inference_params) {}
+	virtual void convert_params_from_jit_layout(hipStream_t stream, bool use_inference_params) {}
 
-	ScopeGuard jit_guard(cudaStream_t stream, bool use_inference_params) {
+	ScopeGuard jit_guard(hipStream_t stream, bool use_inference_params) {
 		if (!m_jit_fusion || m_in_jit_guard) {
 			// Permits nesting of jit guards to avoid too frequent
 			// back-and-forth conversions.

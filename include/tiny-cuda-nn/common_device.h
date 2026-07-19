@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
  *
@@ -37,9 +38,14 @@
 namespace tcnn {
 
 __forceinline__ __device__ unsigned lane_id() {
+	#if defined(__HIP_PLATFORM_AMD__)
+	// TCNN_RDNA4_P1_FIX_008: use the HIP lane intrinsic on AMD (gfx1201 Wave32).
+	return __lane_id();
+	#else
 	unsigned ret;
 	asm volatile("mov.u32 %0, %laneid;" : "=r"(ret));
 	return ret;
+	#endif
 }
 
 static constexpr float SQRT2 = 1.41421356237309504880f;

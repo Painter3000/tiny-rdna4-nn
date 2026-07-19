@@ -1,3 +1,4 @@
+#include "hip/hip_runtime.h"
 /*
  * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
  *
@@ -32,7 +33,7 @@
 #include <tiny-cuda-nn/gpu_memory.h>
 #include <tiny-cuda-nn/multi_stream.h>
 
-#include <cuda.h>
+#include <hip/hip_runtime.h>
 
 #include <algorithm>
 #include <cctype>
@@ -41,7 +42,11 @@
 
 namespace tcnn {
 
+// TCNN_RDNA4_P1_FIX_005: CUDA compiler-version and generated MMA preamble
+// checks do not apply to the explicitly non-RTC AMD HIP backend.
+#if !defined(__HIP_PLATFORM_AMD__)
 static_assert(__CUDACC_VER_MAJOR__ > 10 || (__CUDACC_VER_MAJOR__ == 10 && __CUDACC_VER_MINOR__ >= 2), "tiny-cuda-nn requires at least CUDA 10.2");
+#endif
 
 std::function<void(LogSeverity, const std::string&)> g_log_callback = [](LogSeverity severity, const std::string& msg) {
 	switch (severity) {
@@ -201,39 +206,40 @@ std::string to_string(ReductionType reduction_type) {
 
 int cuda_runtime_version() {
 	int version;
-	CUDA_CHECK_THROW(cudaRuntimeGetVersion(&version));
+	CUDA_CHECK_THROW(hipRuntimeGetVersion(&version));
 	return version;
 }
 
 int cuda_device() {
 	int device;
-	CUDA_CHECK_THROW(cudaGetDevice(&device));
+	CUDA_CHECK_THROW(hipGetDevice(&device));
 	return device;
 }
 
-void set_cuda_device(int device) { CUDA_CHECK_THROW(cudaSetDevice(device)); }
+void set_cuda_device(int device) { CUDA_CHECK_THROW(hipSetDevice(device)); }
 
 int cuda_device_count() {
 	int device_count;
-	CUDA_CHECK_THROW(cudaGetDeviceCount(&device_count));
+	CUDA_CHECK_THROW(hipGetDeviceCount(&device_count));
 	return device_count;
 }
 
 bool cuda_supports_virtual_memory(int device) {
 	int supports_vmm;
-	CU_CHECK_THROW(cuDeviceGetAttribute(&supports_vmm, CU_DEVICE_ATTRIBUTE_VIRTUAL_ADDRESS_MANAGEMENT_SUPPORTED, device));
+	// TCNN_RDNA4_P1_FIX_010: query the corresponding HIP runtime attribute.
+	CUDA_CHECK_THROW(hipDeviceGetAttribute(&supports_vmm, hipDeviceAttributeVirtualMemoryManagementSupported, device));
 	return supports_vmm != 0;
 }
 
-std::unordered_map<int, cudaDeviceProp>& cuda_device_properties() {
-	static auto* cuda_device_props = new std::unordered_map<int, cudaDeviceProp>{};
+std::unordered_map<int, hipDeviceProp_t>& cuda_device_properties() {
+	static auto* cuda_device_props = new std::unordered_map<int, hipDeviceProp_t>{};
 	return *cuda_device_props;
 }
 
-const cudaDeviceProp& cuda_get_device_properties(int device) {
+const hipDeviceProp_t& cuda_get_device_properties(int device) {
 	if (cuda_device_properties().count(device) == 0) {
 		auto& props = cuda_device_properties()[device];
-		CUDA_CHECK_THROW(cudaGetDeviceProperties(&props, device));
+		CUDA_CHECK_THROW(hipGetDeviceProperties(&props, device));
 	}
 
 	return cuda_device_properties().at(device);
@@ -271,12 +277,12 @@ uint32_t cuda_max_registers(int device) { return (uint32_t)cuda_get_device_prope
 
 size_t cuda_memory_granularity(int device) {
 	size_t granularity;
-	CUmemAllocationProp prop = {};
-	prop.type = CU_MEM_ALLOCATION_TYPE_PINNED;
-	prop.location.type = CU_MEM_LOCATION_TYPE_DEVICE;
+	hipMemAllocationProp prop = {};
+	prop.type = hipMemAllocationTypePinned;
+	prop.location.type = hipMemLocationTypeDevice;
 	prop.location.id = 0;
-	CUresult granularity_result = cuMemGetAllocationGranularity(&granularity, &prop, CU_MEM_ALLOC_GRANULARITY_MINIMUM);
-	if (granularity_result == CUDA_ERROR_NOT_SUPPORTED) {
+	hipError_t granularity_result = hipMemGetAllocationGranularity(&granularity, &prop, hipMemAllocationGranularityMinimum);
+	if (granularity_result == hipErrorNotSupported) {
 		return 1;
 	}
 	CU_CHECK_THROW(granularity_result);
@@ -285,18 +291,22 @@ size_t cuda_memory_granularity(int device) {
 
 MemoryInfo cuda_memory_info() {
 	MemoryInfo info;
-	CUDA_CHECK_THROW(cudaMemGetInfo(&info.free, &info.total));
+	CUDA_CHECK_THROW(hipMemGetInfo(&info.free, &info.total));
 	info.used = info.total - info.free;
 	return info;
 }
 
 std::string generate_device_code_preamble() {
+	#if defined(TCNN_NO_RTC)
+	return {};
+	#else
 	return dfmt(0, R"(
 		#include <tiny-cuda-nn/common_device.h>
 		#include <tiny-cuda-nn/mma.h>
 
 		using namespace tcnn;
 	)");
+	#endif
 }
 
 std::string to_snake_case(const std::string& str) {
