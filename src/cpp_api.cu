@@ -61,7 +61,14 @@ float default_loss_scale(Precision p) {
 }
 
 template <typename T> constexpr Precision precision() { return std::is_same<T, float>::value ? Precision::Fp32 : Precision::Fp16; }
-Precision preferred_precision() { return precision<network_precision_t>(); }
+Precision preferred_precision() {
+#if defined(__HIP_PLATFORM_AMD__) && defined(TCNN_PORTABLE_MLP_ONLY)
+	// TCNN_RDNA4_P2_FIX_006: integrated network precision is FP32.
+	return Precision::Fp32;
+#else
+	return precision<network_precision_t>();
+#endif
+}
 
 // TCNN_RDNA4_P1_FIX_003: Preserve the Python API while making RTC/JIT an
 // explicit compile-time no-op in the encoding-only HIP build.
@@ -186,7 +193,12 @@ private:
 
 #if !defined(TCNN_NO_NETWORKS)
 Module* create_network_with_input_encoding(uint32_t n_input_dims, uint32_t n_output_dims, const json& encoding, const json& network) {
+#if defined(__HIP_PLATFORM_AMD__) && defined(TCNN_PORTABLE_MLP_ONLY)
+	// TCNN_RDNA4_P2_FIX_007: explicit FP32 network while encodings retain FP16/FP32 API.
+	return new DifferentiableObject<float>{new tcnn::NetworkWithInputEncoding<float>{n_input_dims, n_output_dims, encoding, network}};
+#else
 	return new DifferentiableObject<network_precision_t>{new tcnn::NetworkWithInputEncoding<network_precision_t>{n_input_dims, n_output_dims, encoding, network}};
+#endif
 }
 
 Module* create_network(uint32_t n_input_dims, uint32_t n_output_dims, const json& network) {

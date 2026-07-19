@@ -163,6 +163,7 @@ os.environ["TORCH_CUDA_ARCH_LIST"] = ""
 # List of sources.
 bindings_dir = os.path.dirname(__file__)
 root_dir = os.path.abspath(os.path.join(bindings_dir, "../.."))
+dependency_root = os.environ.get("TCNN_DEPENDENCY_ROOT", os.path.join(root_dir, "dependencies"))
 
 base_definitions = [
 	# PyTorch-supplied parameters may be unaligned. TCNN must be made aware of this such that
@@ -184,8 +185,8 @@ base_definitions.append(f"-DTCNN_HALF_PRECISION={int(enable_half)}")
 
 base_source_files = [
 	"tinycudann/bindings.cpp",
-	"../../dependencies/fmt/src/format.cc",
-	"../../dependencies/fmt/src/os.cc",
+	os.path.join(dependency_root, "fmt/src/format.cc"),
+	os.path.join(dependency_root, "fmt/src/os.cc"),
 	"../../src/cpp_api.cu",
 	"../../src/common_host.cu",
 	"../../src/encoding.cu",
@@ -193,10 +194,17 @@ base_source_files = [
 ]
 
 if include_networks:
-	base_source_files += [
-		"../../src/network.cu",
-		"../../src/cutlass_mlp.cu",
-	]
+	if is_rocm:
+		# TCNN_RDNA4_P2_FIX_004: portable FP32 network only.
+		base_source_files += [
+			"../../src/portable_network.cu",
+			"../../src/portable_mlp.cu",
+		]
+	else:
+		base_source_files += [
+			"../../src/network.cu",
+			"../../src/cutlass_mlp.cu",
+		]
 else:
 	base_definitions.append("-DTCNN_NO_NETWORKS")
 
@@ -229,15 +237,21 @@ else:
 
 	copy_files(cuda_include_dir, cuda_headers)
 	copy_files(f"{root_dir}/include", tcnn_headers)
-	copy_files(f"{root_dir}/dependencies", pcg32_headers)
+	copy_files(dependency_root, pcg32_headers)
 
 def make_extension(compute_capability):
 	if is_rocm:
-		# TCNN_RDNA4_P1_FIX_002: Compile only the encoding runtime sources with
-		# hipcc; no CUTLASS, FullyFusedMLP, MMA, RTC, or JIT sources/libraries.
+		# TCNN_RDNA4_P1_FIX_002 / TCNN_RDNA4_P2_FIX_005:
+		# hipcc only; optional networking is PortableMLP FP32.
+		# No CUTLASS, FullyFusedMLP, MMA, RTC, or JIT sources/libraries.
 		os.environ["CC"] = os.path.join(os.environ.get("ROCM_PATH", "/opt/rocm"), "bin", "hipcc")
 		os.environ["CXX"] = os.environ["CC"]
-		definitions = base_definitions + ["-DTCNN_NO_NETWORKS", "-DTCNN_NO_RTC", "-DTCNN_HALF_PRECISION=1"]
+		# TCNN_RDNA4_P2_FIX_005: retain FP16 encodings; enable only FP32 PortableMLP.
+		definitions = base_definitions + ["-DTCNN_NO_RTC", "-DTCNN_HALF_PRECISION=1"]
+		if include_networks:
+			definitions.append("-DTCNN_PORTABLE_MLP_ONLY")
+		else:
+			definitions.append("-DTCNN_NO_NETWORKS")
 		hip_flags = base_nvcc_flags + [
 			"-U__HIP_NO_HALF_OPERATORS__",
 			"-U__HIP_NO_HALF_CONVERSIONS__",
@@ -247,8 +261,8 @@ def make_extension(compute_capability):
 			sources=base_source_files,
 			include_dirs=[
 				f"{root_dir}/include",
-				f"{root_dir}/dependencies",
-				f"{root_dir}/dependencies/fmt/include",
+				dependency_root,
+				os.path.join(dependency_root, "fmt/include"),
 				os.path.join(os.environ.get("ROCM_PATH", "/opt/rocm"), "include"),
 			],
 			extra_compile_args={"cxx": hip_flags, "nvcc": hip_flags},
@@ -271,10 +285,10 @@ def make_extension(compute_capability):
 		sources=source_files,
 		include_dirs=[
 			f"{root_dir}/include",
-			f"{root_dir}/dependencies",
+			dependency_root,
 			f"{root_dir}/dependencies/cutlass/include",
 			f"{root_dir}/dependencies/cutlass/tools/util/include",
-			f"{root_dir}/dependencies/fmt/include",
+			os.path.join(dependency_root, "fmt/include"),
 		],
 		extra_compile_args={"cxx": cflags, "nvcc": nvcc_flags},
 		libraries=["cuda", "nvrtc"],

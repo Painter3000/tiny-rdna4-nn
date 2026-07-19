@@ -29,6 +29,8 @@
 
 #pragma once
 
+// TCNN_RDNA4_P2_FIX_011: explicit HIP stream API for NetworkWithInputEncoding.
+
 #include <tiny-cuda-nn/common.h>
 
 #include <tiny-cuda-nn/encoding.h>
@@ -57,7 +59,7 @@ public:
 
 	virtual ~NetworkWithInputEncoding() { }
 
-	void inference_mixed_precision_impl(cudaStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>& output, bool use_inference_params = true) override {
+	void inference_mixed_precision_impl(hipStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>& output, bool use_inference_params = true) override {
 		GPUMatrixDynamic<T> network_input = {m_encoding->padded_output_width(), input.n(), stream, m_encoding->preferred_output_layout()};
 		m_encoding->inference_mixed_precision(stream, input, network_input, use_inference_params);
 		m_network->inference_mixed_precision(stream, network_input, output, use_inference_params);
@@ -67,7 +69,7 @@ public:
 		return m_encoding->padded_output_width();
 	}
 
-	std::unique_ptr<Context> forward_impl(cudaStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>* output = nullptr, bool use_inference_params = false, bool prepare_input_gradients = false) override {
+	std::unique_ptr<Context> forward_impl(hipStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>* output = nullptr, bool use_inference_params = false, bool prepare_input_gradients = false) override {
 		// Make sure our temporary buffers have the correct size for the given batch size
 		uint32_t batch_size = input.n();
 
@@ -81,7 +83,7 @@ public:
 	}
 
 	void backward_impl(
-		cudaStream_t stream,
+		hipStream_t stream,
 		const Context& ctx,
 		const GPUMatrixDynamic<float>& input,
 		const GPUMatrixDynamic<T>& output,
@@ -241,12 +243,12 @@ public:
 		return std::max(m_network->backward_device_function_shmem_bytes(n_threads, param_gradients_mode), m_encoding->backward_device_function_shmem_bytes(n_threads, param_gradients_mode));
 	}
 
-	void convert_params_to_jit_layout(cudaStream_t stream, bool use_inference_params) override {
+	void convert_params_to_jit_layout(hipStream_t stream, bool use_inference_params) override {
 		m_network->convert_params_to_jit_layout(stream, use_inference_params);
 		m_encoding->convert_params_to_jit_layout(stream, use_inference_params);
 	}
 
-	void convert_params_from_jit_layout(cudaStream_t stream, bool use_inference_params) override {
+	void convert_params_from_jit_layout(hipStream_t stream, bool use_inference_params) override {
 		m_network->convert_params_from_jit_layout(stream, use_inference_params);
 		m_encoding->convert_params_from_jit_layout(stream, use_inference_params);
 	}
