@@ -15,6 +15,13 @@ uint64_t hipblaslt_epilogue_relu_bias_launches();
 uint64_t hipblaslt_epilogue_relu_aux_bias_launches();
 uint64_t hipblaslt_epilogue_fallbacks();
 uint64_t hipblaslt_post_kernel_launches();
+uint64_t hipblaslt_planning_handle_count();
+uint64_t hipblaslt_execution_handle_count();
+uint64_t hipblaslt_execution_handle_capacity();
+uint64_t hipblaslt_execution_handle_creations();
+uint64_t hipblaslt_execution_handle_reuses();
+uint64_t hipblaslt_execution_handle_overflows();
+uint64_t hipblaslt_epilogue_descriptor_count();
 
 template <typename T>
 class HipBLASLtMLP : public Network<T> {

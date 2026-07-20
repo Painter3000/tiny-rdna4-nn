@@ -407,12 +407,20 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	// TCNN_RDNA4_P3A1_HIPBLASLT_006: private cache diagnostics.
 	m.def("_hipblaslt_cache_hits", &tcnn::hipblaslt_mlp_cache_hits);
 	m.def("_hipblaslt_cache_misses", &tcnn::hipblaslt_mlp_cache_misses);
+	m.def("_hipblaslt_mlp_cache_misses", &tcnn::hipblaslt_mlp_cache_misses);
 	m.def("_hipblaslt_cache_size", &tcnn::hipblaslt_mlp_cache_size);
 	m.def("_hipblaslt_epilogue_bias_launches", &tcnn::hipblaslt_epilogue_bias_launches);
 	m.def("_hipblaslt_epilogue_relu_bias_launches", &tcnn::hipblaslt_epilogue_relu_bias_launches);
 	m.def("_hipblaslt_epilogue_relu_aux_bias_launches", &tcnn::hipblaslt_epilogue_relu_aux_bias_launches);
 	m.def("_hipblaslt_epilogue_fallbacks", &tcnn::hipblaslt_epilogue_fallbacks);
 	m.def("_hipblaslt_post_kernel_launches", &tcnn::hipblaslt_post_kernel_launches);
+	m.def("_hipblaslt_planning_handle_count", &tcnn::hipblaslt_planning_handle_count);
+	m.def("_hipblaslt_execution_handle_count", &tcnn::hipblaslt_execution_handle_count);
+	m.def("_hipblaslt_execution_handle_capacity", &tcnn::hipblaslt_execution_handle_capacity);
+	m.def("_hipblaslt_execution_handle_creations", &tcnn::hipblaslt_execution_handle_creations);
+	m.def("_hipblaslt_execution_handle_reuses", &tcnn::hipblaslt_execution_handle_reuses);
+	m.def("_hipblaslt_execution_handle_overflows", &tcnn::hipblaslt_execution_handle_overflows);
+	m.def("_hipblaslt_epilogue_descriptor_count", &tcnn::hipblaslt_epilogue_descriptor_count);
 	#endif
 #endif
 

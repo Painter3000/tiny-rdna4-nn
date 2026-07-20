@@ -1,0 +1,8 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+small: vs3A1 fwd=1.008x fwd+bwd=1.024x
+medium: vs3A1 fwd=1.019x fwd+bwd=1.040x
+target_257_w64: vs3A1 fwd=1.025x fwd+bwd=0.979x
+large_1024_w64: vs3A1 fwd=1.473x fwd+bwd=1.144x
+large_1024_w128: vs3A1 fwd=1.714x fwd+bwd=1.211x
+large_4096_w64: vs3A1 fwd=1.201x fwd+bwd=1.022x
+PHASE3A2_PERFORMANCE=PASS

@@ -1,0 +1,14 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+Traceback (most recent call last):
+  File "/home/oem/therock_test/tcnn_rdna4_port/workspace/tools/phase3a2a/scripts/validate_phase3a2a_stream_handles.py", line 361, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/oem/therock_test/tcnn_rdna4_port/workspace/tools/phase3a2a/scripts/validate_phase3a2a_stream_handles.py", line 311, in main
+    "eight_stream_overlap": eight_stream_overlap(tcnn, native),
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/oem/therock_test/tcnn_rdna4_port/workspace/tools/phase3a2a/scripts/validate_phase3a2a_stream_handles.py", line 103, in eight_stream_overlap
+    before = read_counters(native)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/oem/therock_test/tcnn_rdna4_port/workspace/tools/phase3a2a/scripts/validate_phase3a2a_stream_handles.py", line 44, in read_counters
+    raise RuntimeError(f"Missing diagnostic binding: {name}")
+RuntimeError: Missing diagnostic binding: _hipblaslt_mlp_cache_misses

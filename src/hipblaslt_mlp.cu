@@ -22,6 +22,10 @@ namespace tcnn { namespace {
 std::atomic<uint64_t> g_cache_hits{0}, g_cache_misses{0};
 std::atomic<uint64_t> g_bias_launches{0}, g_relu_bias_launches{0}, g_relu_aux_bias_launches{0};
 std::atomic<uint64_t> g_epilogue_fallbacks{0}, g_post_kernel_launches{0};
+// TCNN_RDNA4_P3A2A_STREAM_HANDLE_001: planning and per-stream execution
+// handles are disjoint; counters are diagnostic and never affect dispatch.
+std::atomic<uint64_t> g_execution_handle_creations{0}, g_execution_handle_reuses{0}, g_execution_handle_overflows{0};
+std::atomic<uint64_t> g_epilogue_descriptor_count{0};
 
 void check_lt(hipblasStatus_t status, const char* operation) {
 	if (status != HIPBLAS_STATUS_SUCCESS) {
@@ -82,20 +86,54 @@ struct MatmulPlan {
 	}
 };
 
-struct DeviceContext {
+struct ExecutionHandleEntry {
+	hipStream_t stream = nullptr;
 	hipblasLtHandle_t handle = nullptr;
+	std::mutex submit_mutex;
+};
+
+struct DeviceContext {
+	static constexpr size_t kExecutionHandleCapacity = 64;
+	int device = -1;
+	hipblasLtHandle_t planning_handle = nullptr;
 	std::mutex mutex;
 	std::unordered_map<MatmulKey, std::shared_ptr<MatmulPlan>, KeyHash> plans;
-	DeviceContext() { check_lt(hipblasLtCreate(&handle), "Create"); }
+	std::unordered_map<uintptr_t, std::shared_ptr<ExecutionHandleEntry>> execution_handles;
+	explicit DeviceContext(int device_) : device{device_} { check_lt(hipblasLtCreate(&planning_handle), "create planning handle"); }
+	~DeviceContext() noexcept {
+		int previous = -1; const bool restore = hipGetDevice(&previous) == hipSuccess;
+		if (hipSetDevice(device) == hipSuccess) {
+			plans.clear();
+			for (auto& item : execution_handles) if (item.second->handle) { hipblasLtDestroy(item.second->handle); item.second->handle = nullptr; }
+			execution_handles.clear();
+			if (planning_handle) { hipblasLtDestroy(planning_handle); planning_handle = nullptr; }
+		}
+		if (restore && previous != device) hipSetDevice(previous);
+	}
 };
 
 DeviceContext& device_context(int device) {
-	static auto* contexts = new std::mutex;
-	static auto* devices = new std::unordered_map<int, std::unique_ptr<DeviceContext>>;
-	std::lock_guard<std::mutex> guard{*contexts};
-	auto& result = (*devices)[device];
-	if (!result) result = std::make_unique<DeviceContext>();
+	struct Registry { std::mutex mutex; std::unordered_map<int, std::unique_ptr<DeviceContext>> devices; };
+	static Registry registry;
+	std::lock_guard<std::mutex> guard{registry.mutex};
+	auto& result = registry.devices[device];
+	if (!result) result = std::make_unique<DeviceContext>(device);
 	return *result;
+}
+
+std::shared_ptr<ExecutionHandleEntry> execution_handle_for(int device, hipStream_t stream) {
+	auto& context = device_context(device);
+	std::lock_guard<std::mutex> guard{context.mutex};
+	const uintptr_t key = reinterpret_cast<uintptr_t>(stream);
+	auto found = context.execution_handles.find(key);
+	if (found != context.execution_handles.end() && found->second->stream == stream) { ++g_execution_handle_reuses; return found->second; }
+	if (context.execution_handles.size() >= DeviceContext::kExecutionHandleCapacity) {
+		++g_execution_handle_overflows;
+		throw std::runtime_error{fmt::format("HipBLASLtMLP execution-handle capacity exceeded: device={}, capacity={}, requested_stream={}", device, DeviceContext::kExecutionHandleCapacity, (const void*)stream)};
+	}
+	auto entry = std::make_shared<ExecutionHandleEntry>(); entry->stream = stream;
+	check_lt(hipblasLtCreate(&entry->handle), "create execution handle");
+	context.execution_handles.emplace(key, entry); ++g_execution_handle_creations; return entry;
 }
 
 std::shared_ptr<MatmulPlan> plan_for(const MatmulKey& key, hipblasLtMatmulDesc_t heuristic_desc = nullptr) {
@@ -110,7 +148,7 @@ std::shared_ptr<MatmulPlan> plan_for(const MatmulKey& key, hipblasLtMatmulDesc_t
 	const uint64_t workspace = 0;
 	check_lt(hipblasLtMatmulPreferenceSetAttribute(preference, HIPBLASLT_MATMUL_PREF_MAX_WORKSPACE_BYTES, &workspace, sizeof(workspace)), "set workspace");
 	hipblasLtMatmulHeuristicResult_t candidates[32]{}; int count = 0;
-	const auto status = hipblasLtMatmulAlgoGetHeuristic(context.handle, heuristic_desc ? heuristic_desc : plan->desc, plan->a, plan->b, plan->c, plan->d, preference, 32, candidates, &count);
+	const auto status = hipblasLtMatmulAlgoGetHeuristic(context.planning_handle, heuristic_desc ? heuristic_desc : plan->desc, plan->a, plan->b, plan->c, plan->d, preference, 32, candidates, &count);
 	hipblasLtMatmulPreferenceDestroy(preference);
 	check_lt(status, "AlgoGetHeuristic");
 	bool selected = false;
@@ -127,9 +165,10 @@ void gemm(hipStream_t stream, GemmRole role, const float* a, uint32_t ar, uint32
 	EpilogueKind epilogue = EpilogueKind::Default, hipblasLtMatmulDesc_t launch_desc = nullptr) {
 	int device = 0; CUDA_CHECK_THROW(hipGetDevice(&device));
 	MatmulKey key{device,ar,ac,br,bc,cr,cc,ta,tb,role,epilogue,epilogue==EpilogueKind::ReluAuxBias};
-	auto plan = plan_for(key, launch_desc); auto& context = device_context(device);
+	auto plan = plan_for(key, launch_desc); auto execution = execution_handle_for(device, stream);
 	const float alpha = 1.0f;
-	check_lt(hipblasLtMatmul(context.handle, launch_desc ? launch_desc : plan->desc, &alpha, a, plan->a, b, plan->b,
+	std::lock_guard<std::mutex> submit_guard{execution->submit_mutex};
+	check_lt(hipblasLtMatmul(execution->handle, launch_desc ? launch_desc : plan->desc, &alpha, a, plan->a, b, plan->b,
 		&beta, d, plan->c, d, plan->d, &plan->algorithm, nullptr, 0, stream), "Matmul");
 }
 
@@ -191,13 +230,13 @@ struct HipBLASLtMLP<T>::EpilogueState {
 		MatmulKey key;
 		const float* bias;
 		hipblasLtMatmulDesc_t desc = nullptr;
-		~Entry() { if (desc) hipblasLtMatmulDescDestroy(desc); }
+		~Entry() { if (desc) hipblasLtMatmulDescDestroy(desc); --g_epilogue_descriptor_count; }
 	};
 	std::mutex mutex;
 	std::vector<std::shared_ptr<Entry>> entries;
 	hipblasLtMatmulDesc_t descriptor(const MatmulKey& key, const float* bias) {
 		std::lock_guard<std::mutex> guard{mutex};
-		for (const auto& entry : entries) if (entry->key == key && entry->bias == bias) return entry->desc;
+		for (const auto& entry : entries) if (entry->key.ta == key.ta && entry->key.tb == key.tb && entry->key.epilogue == key.epilogue && entry->key.aux == key.aux && entry->bias == bias) return entry->desc;
 		auto entry = std::make_shared<Entry>(); entry->key = key; entry->bias = bias;
 		check_lt(hipblasLtMatmulDescCreate(&entry->desc, HIPBLAS_COMPUTE_32F, HIP_R_32F), "launch MatmulDescCreate");
 		configure_desc(entry->desc, key);
@@ -205,7 +244,7 @@ struct HipBLASLtMLP<T>::EpilogueState {
 		check_lt(hipblasLtMatmulDescSetAttribute(entry->desc, HIPBLASLT_MATMUL_DESC_BIAS_POINTER, &pointer, sizeof(pointer)), "set BIAS_POINTER");
 		const hipDataType bias_type = HIP_R_32F;
 		check_lt(hipblasLtMatmulDescSetAttribute(entry->desc, HIPBLASLT_MATMUL_DESC_BIAS_DATA_TYPE, &bias_type, sizeof(bias_type)), "set BIAS_DATA_TYPE");
-		entries.emplace_back(entry);
+		entries.emplace_back(entry); ++g_epilogue_descriptor_count;
 		return entry->desc;
 	}
 };
@@ -221,6 +260,13 @@ uint64_t hipblaslt_epilogue_relu_bias_launches() { return g_relu_bias_launches.l
 uint64_t hipblaslt_epilogue_relu_aux_bias_launches() { return g_relu_aux_bias_launches.load(); }
 uint64_t hipblaslt_epilogue_fallbacks() { return g_epilogue_fallbacks.load(); }
 uint64_t hipblaslt_post_kernel_launches() { return g_post_kernel_launches.load(); }
+uint64_t hipblaslt_planning_handle_count() { int device=0; CUDA_CHECK_THROW(hipGetDevice(&device)); return device_context(device).planning_handle ? 1 : 0; }
+uint64_t hipblaslt_execution_handle_count() { int device=0; CUDA_CHECK_THROW(hipGetDevice(&device)); auto& context=device_context(device); std::lock_guard<std::mutex> guard{context.mutex}; return context.execution_handles.size(); }
+uint64_t hipblaslt_execution_handle_capacity() { return DeviceContext::kExecutionHandleCapacity; }
+uint64_t hipblaslt_execution_handle_creations() { return g_execution_handle_creations.load(); }
+uint64_t hipblaslt_execution_handle_reuses() { return g_execution_handle_reuses.load(); }
+uint64_t hipblaslt_execution_handle_overflows() { return g_execution_handle_overflows.load(); }
+uint64_t hipblaslt_epilogue_descriptor_count() { return g_epilogue_descriptor_count.load(); }
 
 template <typename T> HipBLASLtMLP<T>::HipBLASLtMLP(uint32_t input_width, uint32_t hidden_width, uint32_t output_width,
 	uint32_t n_hidden_layers, Activation activation, Activation output_activation)

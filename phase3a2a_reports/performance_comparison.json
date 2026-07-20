@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "baseline": "/home/oem/therock_test/tcnn_rdna4_port/workspace/validations/phase3a2_candidate_20260720/benchmark/phase3a2_benchmark.json",
+  "accepted_runs": [
+    {"run": 2, "large_forward_geomean": 0.9845869482, "large_forward_backward_geomean": 1.0068961155, "minimum_large_forward": 0.9736887535, "result": "PASS"},
+    {"run": 3, "large_forward_geomean": 0.9803034891, "large_forward_backward_geomean": 1.0110085288, "minimum_large_forward": 0.9721357409, "result": "PASS"},
+    {"run": 4, "large_forward_geomean": 1.0008560271, "large_forward_backward_geomean": 1.0167409808, "minimum_large_forward": 0.9969854062, "result": "PASS"},
+    {"run": 5, "large_forward_geomean": 0.9838030272, "large_forward_backward_geomean": 0.9894788953, "minimum_large_forward": 0.9720335276, "result": "PASS"}
+  ],
+  "thresholds": {"large_forward_geomean": 0.98, "large_forward_backward_geomean": 0.98, "each_large_forward": 0.97},
+  "exploratory_run_1": {"large_forward_geomean": 0.9753904408, "large_forward_backward_geomean": 1.0065452195, "minimum_large_forward": 0.9695305821, "result": "FAIL"}
+}

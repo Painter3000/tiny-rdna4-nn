@@ -1,0 +1,22 @@
+{
+  "base": "1d53d05256858009b0b0159e38669a4881eed940",
+  "base_is_ancestor": true,
+  "findings": [],
+  "head": "1d53d05256858009b0b0159e38669a4881eed940",
+  "production_files": [
+    "src/hipblaslt_mlp.cu",
+    "include/tiny-cuda-nn/networks/hipblaslt_mlp.h",
+    "bindings/torch/tinycudann/bindings.cpp"
+  ],
+  "repo": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2",
+  "required_symbols": [
+    "_hipblaslt_planning_handle_count",
+    "_hipblaslt_execution_handle_count",
+    "_hipblaslt_execution_handle_capacity",
+    "_hipblaslt_execution_handle_creations",
+    "_hipblaslt_execution_handle_reuses",
+    "_hipblaslt_execution_handle_overflows",
+    "_hipblaslt_epilogue_descriptor_count"
+  ],
+  "result": "PASS"
+}

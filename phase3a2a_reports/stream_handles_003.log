@@ -1,0 +1,11 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+Traceback (most recent call last):
+  File "/home/oem/therock_test/tcnn_rdna4_port/workspace/tools/phase3a2a/scripts/validate_phase3a2a_stream_handles.py", line 361, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/oem/therock_test/tcnn_rdna4_port/workspace/tools/phase3a2a/scripts/validate_phase3a2a_stream_handles.py", line 313, in main
+    "warm_cache_stability": warm_cache_stability(tcnn, native),
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/oem/therock_test/tcnn_rdna4_port/workspace/tools/phase3a2a/scripts/validate_phase3a2a_stream_handles.py", line 256, in warm_cache_stability
+    raise AssertionError(
+AssertionError: Memory growth too large: allocated=0, reserved=16777216
