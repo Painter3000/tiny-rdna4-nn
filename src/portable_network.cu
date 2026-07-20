@@ -44,6 +44,11 @@ uint32_t minimum_alignment(const json& network) {
 template <typename T>
 Network<T>* create_network(const json& network) {
 	static_assert(std::is_same<T, float>::value, "PortableMLP factory is FP32-only.");
+	// TCNN_RDNA4_P2E_FIX_003: reject an explicit non-FP32 request instead of
+	// silently constructing the fixed FP32 backend.
+	if (network.contains("precision") && !equals_case_insensitive(network.at("precision").get<std::string>(), "Fp32")) {
+		throw std::runtime_error{"PortableMLP supports precision Fp32 only."};
+	}
 	const std::string selected = select_network(network);
 	if (!equals_case_insensitive(selected, "PortableMLP")) {
 		throw std::runtime_error{"Portable network selection failed."};

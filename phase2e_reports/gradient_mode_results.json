@@ -1,0 +1,86 @@
+[
+  {
+    "accumulate": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "case": "A",
+    "double": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "ignore_bitwise": true,
+    "ignore_input": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "overwrite": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    }
+  },
+  {
+    "accumulate": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "case": "B",
+    "double": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "ignore_bitwise": true,
+    "ignore_input": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "overwrite": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    }
+  },
+  {
+    "accumulate": {
+      "inf": 0,
+      "max_abs": 1.6763806343078613e-08,
+      "mean_abs": 2.650696051542667e-10,
+      "nan": 0,
+      "relative_l2": 1.9289136452416214e-08
+    },
+    "case": "HashGrid",
+    "encoding_gradient_norm": 0.3591653108596802,
+    "ignore_bitwise": true,
+    "ignore_input": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "network_gradient_norm": 2.2162482738494873
+  }
+]

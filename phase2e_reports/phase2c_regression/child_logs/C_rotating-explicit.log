@@ -1,0 +1,3 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+PHASE2C_NETWORK_CASE_PASS {"case": "C", "max_abs": {"input_grad": 0.0, "output": 1.1920928955078125e-07, "params_grad": 1.564621925354004e-07}, "repeats": 5, "stream_mode": "rotating-explicit"}
+PHASE2C_CHILD_PASS

@@ -37,6 +37,7 @@
 #include <string>
 
 namespace tcnn {
+	enum class GradientMode;
 	struct Context {
 		Context() = default;
 		virtual ~Context() {}
@@ -95,7 +96,9 @@ public:
 
 	virtual void inference(hipStream_t stream, uint32_t n_elements, const float* input, void* output, void* params) = 0;
 	virtual Context forward(hipStream_t stream, uint32_t n_elements, const float* input, void* output, void* params, bool prepare_input_gradients) = 0;
-	virtual void backward(hipStream_t stream, const Context& ctx, uint32_t n_elements, float* dL_dinput, const void* dL_doutput, void* dL_dparams, const float* input, const void* output, const void* params) = 0;
+	// TCNN_RDNA4_P2E_FIX_001: expose the native gradient mode to the narrow
+	// robustness-test binding while retaining Overwrite as the public default.
+	virtual void backward(hipStream_t stream, const Context& ctx, uint32_t n_elements, float* dL_dinput, const void* dL_doutput, void* dL_dparams, const float* input, const void* output, const void* params, GradientMode mode) = 0;
 	virtual void backward_backward_input(hipStream_t stream, const Context& ctx, uint32_t n_elements, const float* dL_ddLdinput, const float* input, const void* dL_doutput, void* dL_dparams, void* dL_ddLdoutput, float* dL_dinput, const void* params) = 0;
 
 	virtual uint32_t n_input_dims() const = 0;

@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "phase2d_required_cases": 8,
+  "phase2d_explicit_stream_cases": 2,
+  "phase2d_fresh_processes": 8,
+  "phase2c_stream_cases": 12,
+  "phase2c_fresh_processes": 12,
+  "encoding_fp16_fp32_cases": 8,
+  "encodings": ["Identity", "Frequency", "OneBlob", "HashGrid"]
+}

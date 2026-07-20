@@ -129,7 +129,7 @@ public:
 #endif
 	}
 
-	void backward(hipStream_t stream, const Context& ctx, uint32_t n_elements, float* dL_dinput, const void* dL_doutput, void* dL_dparams, const float* input, const void* output, const void* params) override {
+	void backward(hipStream_t stream, const Context& ctx, uint32_t n_elements, float* dL_dinput, const void* dL_doutput, void* dL_dparams, const float* input, const void* output, const void* params, GradientMode mode) override {
 		m_model->set_params((T*)params, (T*)params, (T*)dL_dparams);
 
 		GPUMatrix<float, MatrixLayout::ColumnMajor> input_matrix((float*)input, m_model->input_width(), n_elements);
@@ -142,10 +142,10 @@ public:
 		// (Significant possible speedup.)
 #if defined(__HIP_PLATFORM_AMD__)
 		// TCNN_RDNA4_P1_FIX_014: see inference() above.
-		m_model->backward(stream, *ctx.ctx, input_matrix, output_matrix, dL_doutput_matrix, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? GradientMode::Overwrite : GradientMode::Ignore);
+		m_model->backward(stream, *ctx.ctx, input_matrix, output_matrix, dL_doutput_matrix, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? mode : GradientMode::Ignore);
 #else
 		SyncedMultiStream synced_stream{stream, 2};
-		m_model->backward(synced_stream.get(1), *ctx.ctx, input_matrix, output_matrix, dL_doutput_matrix, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? GradientMode::Overwrite : GradientMode::Ignore);
+		m_model->backward(synced_stream.get(1), *ctx.ctx, input_matrix, output_matrix, dL_doutput_matrix, dL_dinput ? &dL_dinput_matrix : nullptr, false, dL_dparams ? mode : GradientMode::Ignore);
 #endif
 	}
 

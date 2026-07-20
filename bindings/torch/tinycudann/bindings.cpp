@@ -55,6 +55,7 @@
 #include <pybind11/functional.h>
 
 #include <tiny-cuda-nn/cpp_api.h>
+#include <tiny-cuda-nn/object.h>
 
 #define STRINGIFY(x) #x
 #define STR(x) STRINGIFY(x)
@@ -181,11 +182,49 @@ public:
 				params.requires_grad() ? void_data_ptr(dL_dparams) : nullptr,
 				input.data_ptr<float>(),
 				void_data_ptr(output),
-				void_data_ptr(params)
+				void_data_ptr(params),
+				tcnn::GradientMode::Overwrite
 			);
 		}
 
 		return { dL_dinput, dL_dparams };
+	}
+
+	// TCNN_RDNA4_P2E_FIX_002: explicit native GradientMode test hook. This is
+	// intentionally below the public torch.nn.Module API and reuses a caller-
+	// supplied gradient buffer so Overwrite/Accumulate/Ignore are observable.
+	std::tuple<torch::Tensor, torch::Tensor> bwd_mode(const tcnn::cpp::Context& ctx, torch::Tensor input,
+		torch::Tensor params, torch::Tensor output, torch::Tensor dL_doutput,
+		torch::Tensor dL_dparams, const std::string& mode_name) {
+		if (!ctx.ctx) throw std::runtime_error{"Module::bwd_mode: invalid forward context"};
+		CHECK_INPUT(input); CHECK_INPUT(params); CHECK_INPUT(output); CHECK_INPUT(dL_doutput); CHECK_INPUT(dL_dparams);
+		CHECK_THROW(input.scalar_type() == torch::kFloat32);
+		CHECK_THROW(params.scalar_type() == c10_param_precision());
+		CHECK_THROW(output.scalar_type() == c10_output_precision());
+		CHECK_THROW(dL_doutput.scalar_type() == c10_output_precision());
+		CHECK_THROW(dL_dparams.scalar_type() == c10_param_precision());
+		CHECK_THROW(input.size(1) == n_input_dims() && params.size(0) == n_params());
+		CHECK_THROW(dL_dparams.size(0) == n_params() && output.sizes() == dL_doutput.sizes());
+		CHECK_THROW(input.device() == params.device() && input.device() == output.device());
+		CHECK_THROW(input.device() == dL_doutput.device() && input.device() == dL_dparams.device());
+		tcnn::GradientMode mode;
+		if (mode_name == "Overwrite") mode = tcnn::GradientMode::Overwrite;
+		else if (mode_name == "Accumulate") mode = tcnn::GradientMode::Accumulate;
+		else if (mode_name == "Ignore") mode = tcnn::GradientMode::Ignore;
+		else throw std::runtime_error{"bwd_mode expects Overwrite, Accumulate, or Ignore"};
+		const at::Device device = input.device();
+#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+#else
+		const at::cuda::CUDAGuard device_guard{device};
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+#endif
+		torch::Tensor dL_dinput = torch::empty({input.size(0), input.size(1)},
+			torch::TensorOptions().dtype(torch::kFloat32).device(device));
+		m_module->backward(stream, ctx, input.size(0), dL_dinput.data_ptr<float>(), void_data_ptr(dL_doutput),
+			void_data_ptr(dL_dparams), input.data_ptr<float>(), void_data_ptr(output), void_data_ptr(params), mode);
+		return {dL_dinput, dL_dparams};
 	}
 
 	std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> bwd_bwd_input(const tcnn::cpp::Context& ctx, torch::Tensor input, torch::Tensor params, torch::Tensor dL_ddLdinput, torch::Tensor dL_doutput) {
@@ -345,6 +384,7 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	py::class_<Module>(m, "Module")
 		.def("fwd", &Module::fwd)
 		.def("bwd", &Module::bwd)
+		.def("bwd_mode", &Module::bwd_mode)
 		.def("bwd_bwd_input", &Module::bwd_bwd_input)
 		.def("initial_params", &Module::initial_params)
 		.def("n_input_dims", &Module::n_input_dims)
