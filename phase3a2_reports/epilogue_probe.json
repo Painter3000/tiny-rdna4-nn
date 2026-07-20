@@ -1,0 +1,52 @@
+{
+  "result": "PASS_WITH_SAFE_SUBSET",
+  "environment": {
+    "architecture": "gfx1201",
+    "rocm": "7.2.53211",
+    "hipblaslt": "1.2.1",
+    "workspace_bytes": 0
+  },
+  "layouts": {
+    "backend_column_major": {
+      "bias_axis": "D rows equal logical output width",
+      "HIPBLASLT_EPILOGUE_BIAS": {
+        "cases": ["A", "B", "C", "D", "E", "F", "G", "H"],
+        "default_stream": "PASS",
+        "explicit_streams": "PASS",
+        "same_model_three_streams": "PASS",
+        "integrated": true
+      },
+      "HIPBLASLT_EPILOGUE_RELU_BIAS": {
+        "cases": ["A", "C", "D", "F", "G", "H"],
+        "default_stream": "PASS",
+        "explicit_streams": "PASS",
+        "same_model_three_streams": "PASS",
+        "integrated": true
+      },
+      "HIPBLASLT_EPILOGUE_RELU_AUX_BIAS": {
+        "capability": "available in ROCm 7.2",
+        "integration": "REJECTED_BY_DESCRIPTOR_SAFETY_CONTRACT",
+        "reason": "AUX is allocated per forward context; binding it would require per-call descriptor creation or mutation of a descriptor shared by concurrent streams.",
+        "integrated": false
+      }
+    },
+    "transposed_row_major_mapping": {
+      "bias_axis": "D rows equal batch rather than logical output width",
+      "HIPBLASLT_EPILOGUE_BIAS": "REJECTED_AXIS_MISMATCH",
+      "HIPBLASLT_EPILOGUE_RELU_BIAS": "REJECTED_AXIS_MISMATCH",
+      "HIPBLASLT_EPILOGUE_RELU_AUX_BIAS": "REJECTED_AXIS_AND_DYNAMIC_AUX",
+      "fallback": "hipBLASLt GEMM plus Phase-3A1 post kernel",
+      "portable_mlp_fallback": false
+    }
+  },
+  "numerical_evidence": {
+    "phase3a2_validation": "phase3a2_reports/validation_001/phase3a2_validation.json",
+    "maximum_same_model_three_stream_abs_error": 5.960464477539063e-08,
+    "nan": 0,
+    "inf": 0,
+    "mixed_batch_iterations": 200,
+    "allocated_growth_bytes": 512,
+    "reserved_growth_bytes": 0
+  },
+  "decision": "Integrate immutable BIAS and RELU_BIAS only. Keep Sigmoid activation and unsupported layout paths on the Phase-3A1 HIP postkernel. Do not integrate RELU_AUX_BIAS."
+}

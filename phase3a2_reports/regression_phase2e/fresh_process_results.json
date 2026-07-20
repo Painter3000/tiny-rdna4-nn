@@ -1,0 +1,142 @@
+[
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 0,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 1,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 2,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 3,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 4,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 5,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 6,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 7,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 8,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 9,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 10,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 11,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 12,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 13,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 14,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": null,
+    "returncode": 0,
+    "run": 15,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": "1",
+    "returncode": 0,
+    "run": 16,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": "1",
+    "returncode": 0,
+    "run": 17,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": "1",
+    "returncode": 0,
+    "run": 18,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  },
+  {
+    "HIP_LAUNCH_BLOCKING": "1",
+    "returncode": 0,
+    "run": 19,
+    "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+    "tail": "PASS\n"
+  }
+]

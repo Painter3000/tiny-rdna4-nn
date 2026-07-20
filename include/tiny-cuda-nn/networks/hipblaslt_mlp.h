@@ -10,12 +10,18 @@ namespace tcnn {
 uint64_t hipblaslt_mlp_cache_hits();
 uint64_t hipblaslt_mlp_cache_misses();
 uint64_t hipblaslt_mlp_cache_size();
+uint64_t hipblaslt_epilogue_bias_launches();
+uint64_t hipblaslt_epilogue_relu_bias_launches();
+uint64_t hipblaslt_epilogue_relu_aux_bias_launches();
+uint64_t hipblaslt_epilogue_fallbacks();
+uint64_t hipblaslt_post_kernel_launches();
 
 template <typename T>
 class HipBLASLtMLP : public Network<T> {
 public:
 	HipBLASLtMLP(uint32_t input_width, uint32_t hidden_width, uint32_t output_width,
 		uint32_t n_hidden_layers, Activation activation, Activation output_activation);
+	~HipBLASLtMLP() override;
 
 	void inference_mixed_precision_impl(hipStream_t stream, const GPUMatrixDynamic<T>& input,
 		GPUMatrixDynamic<T>& output, bool use_inference_params = true) override;
@@ -43,6 +49,7 @@ public:
 	json hyperparams() const override;
 
 private:
+	struct EpilogueState;
 	struct Layer { uint32_t input_width; uint32_t output_width; size_t weight_offset; size_t bias_offset; };
 	struct ForwardContext : public Context {
 		std::vector<GPUMatrixDynamic<T>> preactivations;
@@ -51,10 +58,14 @@ private:
 		GPUMatrixDynamic<T> owned_output;
 	};
 	const T* selected_params(bool inference) const { return inference ? this->inference_params() : this->params(); }
+	void linear(hipStream_t stream, const GPUMatrixDynamic<T>& input, const T* weights, const T* bias,
+		GPUMatrixDynamic<T>& output, GPUMatrixDynamic<T>* pre, uint32_t in, uint32_t out,
+		Activation activation, bool inference);
 
 	uint32_t m_input_width, m_hidden_width, m_output_width, m_n_hidden_layers;
 	Activation m_activation, m_output_activation;
 	std::vector<Layer> m_layers;
+	std::unique_ptr<EpilogueState> m_epilogue_state;
 	size_t m_total_n_params = 0;
 };
 

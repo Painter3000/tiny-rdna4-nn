@@ -224,10 +224,13 @@ class Module(torch.nn.Module):
 		padded_batch_size = (batch_size + batch_size_granularity-1) // batch_size_granularity * batch_size_granularity
 
 		x_padded = x if batch_size == padded_batch_size else torch.nn.functional.pad(x, [0, 0, 0, padded_batch_size - batch_size])
+		# TCNN_RDNA4_P3A2_EPILOGUE_001: make torch.no_grad() select the native
+		# inference entry point; Parameter.requires_grad remains true otherwise.
+		params = self.params if torch.is_grad_enabled() else self.params.detach()
 		output = _module_function.apply(
 			self.native_tcnn_module,
 			x_padded.to(torch.float).contiguous(),
-			self.params.to(_torch_precision(self.native_tcnn_module.param_precision())).contiguous(),
+			params.to(_torch_precision(self.native_tcnn_module.param_precision())).contiguous(),
 			self.loss_scale
 		)
 		return output[:batch_size, :self.n_output_dims]

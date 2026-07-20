@@ -1,0 +1,912 @@
+{
+  "iterations": [
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 0,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 1,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 2,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 3,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 4,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 5,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 6,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 7,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 8,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 9,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 10,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 11,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 12,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 13,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 14,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 15,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 16,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 17,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 18,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 19,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 20,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 21,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 22,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 23,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 24,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 25,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 26,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 27,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 28,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 29,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 30,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 31,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 32,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 33,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 34,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 35,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 36,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 37,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 38,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 39,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 40,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 41,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 42,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 43,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 13,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 44,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 64,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 45,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 129,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 46,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 257,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 47,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 1,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 48,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "batch": 7,
+      "gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "i": 49,
+      "input": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    }
+  ],
+  "retain_graph": "supported",
+  "retain_graph_double": {
+    "inf": 0,
+    "max_abs": 0.0,
+    "mean_abs": 0.0,
+    "nan": 0,
+    "relative_l2": 0.0
+  }
+}

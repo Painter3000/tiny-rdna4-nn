@@ -1,0 +1,447 @@
+{
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/home/oem/therock_test/venv/lib/python3.12/site-packages/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "explicit_stream_cases": [
+    {
+      "case": "D",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 2,
+        "_hipblaslt_post_kernel_launches": 0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "explicit"
+    },
+    {
+      "case": "G",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 4,
+        "_hipblaslt_post_kernel_launches": 1
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "explicit"
+    },
+    {
+      "case": "H",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 4,
+        "_hipblaslt_post_kernel_launches": 0
+      },
+      "output": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.587935447692871e-08,
+        "mean_abs": 5.022753768457733e-09,
+        "nan": 0,
+        "relative_l2": 3.014114477323586e-07
+      },
+      "stream": "explicit"
+    }
+  ],
+  "fresh_processes": [
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "D",
+      "returncode": 0,
+      "run": 1,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "G",
+      "returncode": 0,
+      "run": 2,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "H",
+      "returncode": 0,
+      "run": 3,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 4,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "D",
+      "returncode": 0,
+      "run": 5,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "G",
+      "returncode": 0,
+      "run": 6,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "H",
+      "returncode": 0,
+      "run": 7,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 8,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "D",
+      "returncode": 0,
+      "run": 9,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "G",
+      "returncode": 0,
+      "run": 10,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "H",
+      "returncode": 0,
+      "run": 11,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 12,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "D",
+      "returncode": 0,
+      "run": 13,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "G",
+      "returncode": 0,
+      "run": 14,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": null,
+      "case": "H",
+      "returncode": 0,
+      "run": 15,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": "1",
+      "case": "A",
+      "returncode": 0,
+      "run": 16,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": "1",
+      "case": "D",
+      "returncode": 0,
+      "run": 17,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": "1",
+      "case": "G",
+      "returncode": 0,
+      "run": 18,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    },
+    {
+      "blocking": "1",
+      "case": "H",
+      "returncode": 0,
+      "run": 19,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n",
+      "stdout": "PHASE3A2_CHILD=PASS\n"
+    }
+  ],
+  "inference_cases": [
+    {
+      "case": "A",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 1,
+        "_hipblaslt_post_kernel_launches": 0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "default"
+    },
+    {
+      "case": "B",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 2,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 0,
+        "_hipblaslt_post_kernel_launches": 0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "default"
+    },
+    {
+      "case": "C",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 2,
+        "_hipblaslt_post_kernel_launches": 1
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "default"
+    },
+    {
+      "case": "D",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 2,
+        "_hipblaslt_post_kernel_launches": 0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "default"
+    },
+    {
+      "case": "E",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 3,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 0,
+        "_hipblaslt_post_kernel_launches": 1
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "default"
+    },
+    {
+      "case": "F",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 4,
+        "_hipblaslt_post_kernel_launches": 0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "default"
+    },
+    {
+      "case": "G",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 4,
+        "_hipblaslt_post_kernel_launches": 1
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "stream": "default"
+    },
+    {
+      "case": "H",
+      "counter_delta": {
+        "_hipblaslt_epilogue_bias_launches": 1,
+        "_hipblaslt_epilogue_fallbacks": 0,
+        "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+        "_hipblaslt_epilogue_relu_bias_launches": 4,
+        "_hipblaslt_post_kernel_launches": 0
+      },
+      "output": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.587935447692871e-08,
+        "mean_abs": 5.022753768457733e-09,
+        "nan": 0,
+        "relative_l2": 3.014114477323586e-07
+      },
+      "stream": "default"
+    }
+  ],
+  "mixed_batch_memory": {
+    "allocated_growth": 512,
+    "counter_delta": {
+      "_hipblaslt_epilogue_bias_launches": 200,
+      "_hipblaslt_epilogue_fallbacks": 0,
+      "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+      "_hipblaslt_epilogue_relu_bias_launches": 800,
+      "_hipblaslt_post_kernel_launches": 200
+    },
+    "iterations": 200,
+    "reserved_growth": 0,
+    "samples": [
+      {
+        "allocated": 107008,
+        "iteration": 49,
+        "reserved": 14680064
+      },
+      {
+        "allocated": 107520,
+        "iteration": 199,
+        "reserved": 14680064
+      }
+    ]
+  },
+  "phase3a1_regression_returncode": 0,
+  "result": "PASS",
+  "same_model_multistream": {
+    "counter_delta": {
+      "_hipblaslt_epilogue_bias_launches": 3,
+      "_hipblaslt_epilogue_fallbacks": 0,
+      "_hipblaslt_epilogue_relu_aux_bias_launches": 0,
+      "_hipblaslt_epilogue_relu_bias_launches": 12,
+      "_hipblaslt_post_kernel_launches": 0
+    },
+    "outputs": [
+      {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.494803190231323e-08,
+        "mean_abs": 4.1385828097872945e-09,
+        "nan": 0,
+        "relative_l2": 3.088735430716544e-07
+      },
+      {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.960464477539063e-08,
+        "mean_abs": 4.144480758583313e-09,
+        "nan": 0,
+        "relative_l2": 3.097529540534265e-07
+      },
+      {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.075708031654358e-08,
+        "mean_abs": 4.1146810403347445e-09,
+        "nan": 0,
+        "relative_l2": 3.036435699907618e-07
+      }
+    ],
+    "same_model": true,
+    "streams": 3
+  }
+}

@@ -1,0 +1,24 @@
+clang++: warning: argument unused during compilation: '-Llib' [-Wunused-command-line-argument]
+clang++: warning: argument unused during compilation: '--hip-link' [-Wunused-command-line-argument]
+In file included from /tmp/phase3a2_cpp_api_legacy_smoke.cpp:1:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+2 warnings generated when compiling for host.
+In file included from /tmp/phase3a2_cpp_api_legacy_smoke.cpp:1:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+2 warnings generated when compiling for gfx1201.

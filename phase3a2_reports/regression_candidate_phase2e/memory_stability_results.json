@@ -1,0 +1,38 @@
+[
+  {
+    "allocated_growth": 0,
+    "case": "small",
+    "samples": [
+      {
+        "allocated": 2048,
+        "i": 9,
+        "peak": 18944,
+        "reserved": 16777216
+      },
+      {
+        "allocated": 2048,
+        "i": 199,
+        "peak": 18944,
+        "reserved": 16777216
+      }
+    ]
+  },
+  {
+    "allocated_growth": 0,
+    "case": "large",
+    "samples": [
+      {
+        "allocated": 106496,
+        "i": 9,
+        "peak": 188928,
+        "reserved": 16777216
+      },
+      {
+        "allocated": 106496,
+        "i": 99,
+        "peak": 188928,
+        "reserved": 16777216
+      }
+    ]
+  }
+]

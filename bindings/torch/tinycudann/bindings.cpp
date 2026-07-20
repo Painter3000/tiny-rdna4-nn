@@ -408,6 +408,11 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	m.def("_hipblaslt_cache_hits", &tcnn::hipblaslt_mlp_cache_hits);
 	m.def("_hipblaslt_cache_misses", &tcnn::hipblaslt_mlp_cache_misses);
 	m.def("_hipblaslt_cache_size", &tcnn::hipblaslt_mlp_cache_size);
+	m.def("_hipblaslt_epilogue_bias_launches", &tcnn::hipblaslt_epilogue_bias_launches);
+	m.def("_hipblaslt_epilogue_relu_bias_launches", &tcnn::hipblaslt_epilogue_relu_bias_launches);
+	m.def("_hipblaslt_epilogue_relu_aux_bias_launches", &tcnn::hipblaslt_epilogue_relu_aux_bias_launches);
+	m.def("_hipblaslt_epilogue_fallbacks", &tcnn::hipblaslt_epilogue_fallbacks);
+	m.def("_hipblaslt_post_kernel_launches", &tcnn::hipblaslt_post_kernel_launches);
 	#endif
 #endif
 

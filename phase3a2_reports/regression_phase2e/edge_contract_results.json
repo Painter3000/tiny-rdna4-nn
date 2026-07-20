@@ -1,0 +1,56 @@
+[
+  {
+    "accepted": false,
+    "case": "zero_layers",
+    "error": "PortableMLP dimensions and n_hidden_layers must be positive."
+  },
+  {
+    "accepted": false,
+    "case": "width48",
+    "error": "PortableMLP supports n_neurons 16, 32, 64, or 128."
+  },
+  {
+    "accepted": false,
+    "case": "bad_hidden",
+    "error": "PortableMLP hidden activation must be None or ReLU."
+  },
+  {
+    "accepted": false,
+    "case": "bad_output",
+    "error": "PortableMLP output activation must be None or Sigmoid."
+  },
+  {
+    "accepted": false,
+    "case": "fp16",
+    "error": "AMD PortableMLP and HipBLASLtMLP support precision Fp32 only."
+  },
+  {
+    "accepted": false,
+    "case": "wrong_dims",
+    "error": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:100 check failed input.size(1) == n_input_dims()"
+  },
+  {
+    "accepted": true,
+    "case": "empty_batch",
+    "shape": [
+      0,
+      1
+    ]
+  },
+  {
+    "accepted": true,
+    "case": "noncontiguous",
+    "shape": [
+      2,
+      1
+    ]
+  },
+  {
+    "case": "zeros",
+    "finite": true
+  },
+  {
+    "case": "large_sigmoid",
+    "finite": true
+  }
+]
