@@ -1,0 +1,74 @@
+[
+  {
+    "case": "A",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/A_default.log",
+    "rc": 0,
+    "stream_mode": "default"
+  },
+  {
+    "case": "B",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/B_default.log",
+    "rc": 0,
+    "stream_mode": "default"
+  },
+  {
+    "case": "C",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/C_default.log",
+    "rc": 0,
+    "stream_mode": "default"
+  },
+  {
+    "case": "D",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/D_default.log",
+    "rc": 0,
+    "stream_mode": "default"
+  },
+  {
+    "case": "A",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/A_same-explicit.log",
+    "rc": 0,
+    "stream_mode": "same-explicit"
+  },
+  {
+    "case": "B",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/B_same-explicit.log",
+    "rc": 0,
+    "stream_mode": "same-explicit"
+  },
+  {
+    "case": "C",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/C_same-explicit.log",
+    "rc": 0,
+    "stream_mode": "same-explicit"
+  },
+  {
+    "case": "D",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/D_same-explicit.log",
+    "rc": 0,
+    "stream_mode": "same-explicit"
+  },
+  {
+    "case": "A",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/A_rotating-explicit.log",
+    "rc": 0,
+    "stream_mode": "rotating-explicit"
+  },
+  {
+    "case": "B",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/B_rotating-explicit.log",
+    "rc": 0,
+    "stream_mode": "rotating-explicit"
+  },
+  {
+    "case": "C",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/C_rotating-explicit.log",
+    "rc": 0,
+    "stream_mode": "rotating-explicit"
+  },
+  {
+    "case": "D",
+    "log": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2d_reports/phase2c_regression/child_logs/D_rotating-explicit.log",
+    "rc": 0,
+    "stream_mode": "rotating-explicit"
+  }
+]
