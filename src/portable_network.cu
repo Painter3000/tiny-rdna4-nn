@@ -5,6 +5,7 @@
 
 #include <tiny-cuda-nn/common.h>
 #include <tiny-cuda-nn/network.h>
+#include <tiny-cuda-nn/networks/hipblaslt_mlp.h>
 #include <tiny-cuda-nn/networks/portable_mlp.h>
 
 #include <type_traits>
@@ -19,6 +20,9 @@ std::string select_network(const json& network) {
 	) {
 		return "PortableMLP";
 	}
+	// TCNN_RDNA4_P3A1_HIPBLASLT_002: explicit accelerated AMD backend;
+	// never aliases PortableMLP and never acts as an automatic fallback.
+	if (equals_case_insensitive(requested, "HipBLASLtMLP")) return "HipBLASLtMLP";
 	if (
 		equals_case_insensitive(requested, "MLP") ||
 		equals_case_insensitive(requested, "CutlassMLP") ||
@@ -35,10 +39,9 @@ std::string select_network(const json& network) {
 
 uint32_t minimum_alignment(const json& network) {
 	const std::string selected = select_network(network);
-	if (!equals_case_insensitive(selected, "PortableMLP")) {
-		throw std::runtime_error{"Portable network selection failed."};
-	}
-	return PortableMLP<float>::REQUIRED_ALIGNMENT();
+	if (equals_case_insensitive(selected, "PortableMLP")) return PortableMLP<float>::REQUIRED_ALIGNMENT();
+	if (equals_case_insensitive(selected, "HipBLASLtMLP")) return HipBLASLtMLP<float>::REQUIRED_ALIGNMENT();
+	throw std::runtime_error{"AMD network selection failed."};
 }
 
 template <typename T>
@@ -47,26 +50,29 @@ Network<T>* create_network(const json& network) {
 	// TCNN_RDNA4_P2E_FIX_003: reject an explicit non-FP32 request instead of
 	// silently constructing the fixed FP32 backend.
 	if (network.contains("precision") && !equals_case_insensitive(network.at("precision").get<std::string>(), "Fp32")) {
-		throw std::runtime_error{"PortableMLP supports precision Fp32 only."};
+		throw std::runtime_error{"AMD PortableMLP and HipBLASLtMLP support precision Fp32 only."};
 	}
 	const std::string selected = select_network(network);
-	if (!equals_case_insensitive(selected, "PortableMLP")) {
-		throw std::runtime_error{"Portable network selection failed."};
-	}
-	return new PortableMLP<T>{
+	auto construct = [&](auto* identity) -> Network<T>* {
+		using Backend = typename std::remove_pointer<decltype(identity)>::type;
+		return new Backend{
 		network.at("n_input_dims").get<uint32_t>(),
 		network.value("n_neurons", 16u),
 		network.at("n_output_dims").get<uint32_t>(),
 		network.value("n_hidden_layers", 1u),
 		string_to_activation(network.value("activation", "ReLU")),
 		string_to_activation(network.value("output_activation", "None"))
+		};
 	};
+	if (equals_case_insensitive(selected, "PortableMLP")) return construct((PortableMLP<T>*)nullptr);
+	if (equals_case_insensitive(selected, "HipBLASLtMLP")) return construct((HipBLASLtMLP<T>*)nullptr);
+	throw std::runtime_error{"AMD network selection failed."};
 }
 
 template Network<float>* create_network<float>(const json& network);
 
 std::vector<std::string> builtin_networks() {
-	return {"PortableMLP"};
+	return {"PortableMLP", "HipBLASLtMLP"};
 }
 
 } // namespace tcnn

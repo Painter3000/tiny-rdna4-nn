@@ -1,0 +1,1037 @@
+{
+  "composed": [
+    {
+      "encoding": "Identity",
+      "encoding_gradient_norm": 0.0,
+      "encoding_params": 0,
+      "network_gradient_norm": 0.5728309154510498,
+      "network_params": 1443,
+      "params": 1443
+    },
+    {
+      "encoding": "Frequency",
+      "encoding_gradient_norm": 0.0,
+      "encoding_params": 0,
+      "network_gradient_norm": 0.3962445855140686,
+      "network_params": 1955,
+      "params": 1955
+    },
+    {
+      "encoding": "OneBlob",
+      "encoding_gradient_norm": 0.0,
+      "encoding_params": 0,
+      "network_gradient_norm": 0.20438925921916962,
+      "network_params": 1699,
+      "params": 1699
+    },
+    {
+      "encoding": "HashGrid",
+      "encoding_gradient_norm": 0.012001624330878258,
+      "encoding_params": 688,
+      "network_gradient_norm": 0.1990589052438736,
+      "network_params": 1443,
+      "params": 2131
+    }
+  ],
+  "encodings": [
+    {
+      "dtype": "torch.float16",
+      "encoding": "Identity",
+      "params": 0
+    },
+    {
+      "dtype": "torch.float16",
+      "encoding": "Frequency",
+      "params": 0
+    },
+    {
+      "dtype": "torch.float16",
+      "encoding": "OneBlob",
+      "params": 0
+    },
+    {
+      "dtype": "torch.float16",
+      "encoding": "HashGrid",
+      "params": 688
+    },
+    {
+      "dtype": "torch.float32",
+      "encoding": "Identity",
+      "params": 0
+    },
+    {
+      "dtype": "torch.float32",
+      "encoding": "Frequency",
+      "params": 0
+    },
+    {
+      "dtype": "torch.float32",
+      "encoding": "OneBlob",
+      "params": 0
+    },
+    {
+      "dtype": "torch.float32",
+      "encoding": "HashGrid",
+      "params": 688
+    }
+  ],
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/home/oem/therock_test/venv/lib/python3.12/site-packages/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "fresh_processes": [
+    {
+      "case": "A",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"A\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}}, {\"bias\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 9.313225746154785e-10, \"mean_abs\": 1.3096723705530167e-10, \"nan\": 0, \"relative_l2\": 5.796851428552879e-08}}], \"output\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 9.313225746154785e-10, \"mean_abs\": 1.3015377837988229e-11, \"nan\": 0, \"relative_l2\": 3.4608333886143785e-08}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    },
+    {
+      "case": "B",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"B\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 2.2351741790771484e-08, \"mean_abs\": 2.76122591458261e-09, \"nan\": 0, \"relative_l2\": 7.452978757649957e-08}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}}, {\"bias\": {\"inf\": 0, \"max_abs\": 3.166496753692627e-08, \"mean_abs\": 2.0489096641540527e-08, \"nan\": 0, \"relative_l2\": 6.984214973366898e-08}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 3.026798367500305e-08, \"mean_abs\": 7.289221226614018e-09, \"nan\": 0, \"relative_l2\": 1.2597141892954589e-07}}], \"output\": {\"inf\": 0, \"max_abs\": 5.960464477539063e-08, \"mean_abs\": 2.554484801464696e-08, \"nan\": 0, \"relative_l2\": 1.4711097705110456e-07}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 3.166496753692627e-08, \"mean_abs\": 2.195327475362774e-09, \"nan\": 0, \"relative_l2\": 8.194885582571444e-08}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    },
+    {
+      "case": "C",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"C\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 6.984919309616089e-10, \"mean_abs\": 1.0981660025777273e-11, \"nan\": 0, \"relative_l2\": 5.901043151880345e-08}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 3.725290298461914e-09, \"mean_abs\": 8.276401786133647e-10, \"nan\": 0, \"relative_l2\": 1.714466736939794e-07}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 9.313225746154785e-10, \"mean_abs\": 8.995115763354988e-11, \"nan\": 0, \"relative_l2\": 5.632961425667423e-08}}, {\"bias\": {\"inf\": 0, \"max_abs\": 7.450580596923828e-09, \"mean_abs\": 1.0586518328636885e-09, \"nan\": 0, \"relative_l2\": 1.003959645923614e-07}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 3.725290298461914e-09, \"mean_abs\": 1.0107314984963978e-10, \"nan\": 0, \"relative_l2\": 1.4993340501943245e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 2.9802322387695312e-08, \"mean_abs\": 2.9802322387695312e-08, \"nan\": 0, \"relative_l2\": 1.3349646601480343e-07}, \"layer\": 2, \"weight\": {\"inf\": 0, \"max_abs\": 1.4901161193847656e-08, \"mean_abs\": 2.0190782379359007e-09, \"nan\": 0, \"relative_l2\": 2.767380532892047e-07}}], \"output\": {\"inf\": 0, \"max_abs\": 5.960464477539063e-08, \"mean_abs\": 1.862645149230957e-09, \"nan\": 0, \"relative_l2\": 2.1751806514224715e-08}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 2.9802322387695312e-08, \"mean_abs\": 2.9948435398274853e-10, \"nan\": 0, \"relative_l2\": 1.4257601881562574e-07}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    },
+    {
+      "case": "D",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"D\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 7.152557373046875e-07, \"mean_abs\": 9.057112038135529e-08, \"nan\": 0, \"relative_l2\": 4.109491346031218e-07}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 4.172325134277344e-07, \"mean_abs\": 3.179650320817018e-08, \"nan\": 0, \"relative_l2\": 2.457386941217881e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 4.172325134277344e-07, \"mean_abs\": 7.660128176212311e-08, \"nan\": 0, \"relative_l2\": 1.847254542000982e-07}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 6.556510925292969e-07, \"mean_abs\": 9.579011361893208e-09, \"nan\": 0, \"relative_l2\": 2.1680134902822952e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 2.384185791015625e-06, \"mean_abs\": 1.0244548320770264e-06, \"nan\": 0, \"relative_l2\": 3.552115387906377e-07}, \"layer\": 2, \"weight\": {\"inf\": 0, \"max_abs\": 3.5762786865234375e-07, \"mean_abs\": 3.992533947894117e-08, \"nan\": 0, \"relative_l2\": 2.5436832362600237e-07}}], \"output\": {\"inf\": 0, \"max_abs\": 5.960464477539063e-08, \"mean_abs\": 9.54379153483842e-09, \"nan\": 0, \"relative_l2\": 1.3714367674197555e-07}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 2.384185791015625e-06, \"mean_abs\": 2.5942073378359964e-08, \"nan\": 0, \"relative_l2\": 2.959551410905954e-07}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    },
+    {
+      "case": "E",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"E\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 3.725290298461914e-09, \"mean_abs\": 5.512187928324863e-10, \"nan\": 0, \"relative_l2\": 1.454829412756987e-07}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 1.1175870895385742e-08, \"mean_abs\": 2.5174813345074654e-09, \"nan\": 0, \"relative_l2\": 1.5571780897513287e-07}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 2.3283064365386963e-09, \"mean_abs\": 4.6014081434009313e-10, \"nan\": 0, \"relative_l2\": 1.2298724209551863e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 7.450580596923828e-09, \"mean_abs\": 1.558873918838799e-09, \"nan\": 0, \"relative_l2\": 1.0826105635952778e-07}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 3.725290298461914e-09, \"mean_abs\": 2.086248951371772e-10, \"nan\": 0, \"relative_l2\": 1.3644164509464218e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 1.4901161193847656e-08, \"mean_abs\": 8.692344621863413e-09, \"nan\": 0, \"relative_l2\": 9.775704564459979e-08}, \"layer\": 2, \"weight\": {\"inf\": 0, \"max_abs\": 2.2351741790771484e-08, \"mean_abs\": 3.0602222977904603e-09, \"nan\": 0, \"relative_l2\": 2.2440142500851536e-07}}], \"output\": {\"inf\": 0, \"max_abs\": 5.960464477539063e-08, \"mean_abs\": 8.514949634275126e-09, \"nan\": 0, \"relative_l2\": 4.2575727917453797e-08}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 2.2351741790771484e-08, \"mean_abs\": 3.9842751320406933e-10, \"nan\": 0, \"relative_l2\": 1.670930401885178e-07}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    },
+    {
+      "case": "F",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"F\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 4.190951585769653e-09, \"mean_abs\": 7.403286872431636e-10, \"nan\": 0, \"relative_l2\": 2.1147949804238187e-07}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}}, {\"bias\": {\"inf\": 0, \"max_abs\": 4.6566128730773926e-09, \"mean_abs\": 7.512426236644387e-10, \"nan\": 0, \"relative_l2\": 2.7398863970466314e-07}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 7.450580596923828e-09, \"mean_abs\": 1.7586276879200113e-10, \"nan\": 0, \"relative_l2\": 3.1419163570755207e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 1.909211277961731e-08, \"mean_abs\": 2.852175384759903e-09, \"nan\": 0, \"relative_l2\": 3.508356715830589e-07}, \"layer\": 2, \"weight\": {\"inf\": 0, \"max_abs\": 2.2351741790771484e-08, \"mean_abs\": 4.705703049445731e-10, \"nan\": 0, \"relative_l2\": 5.385796722738162e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 4.0978193283081055e-08, \"mean_abs\": 7.057678885757923e-09, \"nan\": 0, \"relative_l2\": 4.1686316691028713e-07}, \"layer\": 3, \"weight\": {\"inf\": 0, \"max_abs\": 2.7939677238464355e-08, \"mean_abs\": 8.844790455597717e-10, \"nan\": 0, \"relative_l2\": 5.865363700155529e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layer\": 4, \"weight\": {\"inf\": 0, \"max_abs\": 6.705522537231445e-08, \"mean_abs\": 1.413809513906017e-08, \"nan\": 0, \"relative_l2\": 4.924460698714335e-07}}], \"output\": {\"inf\": 0, \"max_abs\": 3.725290298461914e-08, \"mean_abs\": 1.257285475730896e-08, \"nan\": 0, \"relative_l2\": 1.7793906588874767e-07}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 6.705522537231445e-08, \"mean_abs\": 6.835537136318237e-10, \"nan\": 0, \"relative_l2\": 3.568137820705352e-07}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    },
+    {
+      "case": "G",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"G\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 3.725290298461914e-09, \"mean_abs\": 2.523931896813991e-10, \"nan\": 0, \"relative_l2\": 1.4750504238830964e-07}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 4.0512531995773315e-08, \"mean_abs\": 6.492427928606048e-09, \"nan\": 0, \"relative_l2\": 5.214424874644653e-07}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 5.21540641784668e-08, \"mean_abs\": 5.0809845220101124e-09, \"nan\": 0, \"relative_l2\": 5.40850602313374e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 5.21540641784668e-08, \"mean_abs\": 6.833943189121783e-09, \"nan\": 0, \"relative_l2\": 4.032951073273328e-07}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 3.259629011154175e-08, \"mean_abs\": 1.1097633922929617e-09, \"nan\": 0, \"relative_l2\": 4.898296205638464e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 5.21540641784668e-08, \"mean_abs\": 6.328264134936035e-09, \"nan\": 0, \"relative_l2\": 3.3764026558795564e-07}, \"layer\": 2, \"weight\": {\"inf\": 0, \"max_abs\": 3.91155481338501e-08, \"mean_abs\": 1.397593374363737e-09, \"nan\": 0, \"relative_l2\": 5.395309747412707e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 1.1920928955078125e-07, \"mean_abs\": 1.2747477740049362e-08, \"nan\": 0, \"relative_l2\": 4.5075260336563575e-07}, \"layer\": 3, \"weight\": {\"inf\": 0, \"max_abs\": 8.009374141693115e-08, \"mean_abs\": 1.4673315895663563e-09, \"nan\": 0, \"relative_l2\": 5.94420687549562e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 2.980232238769531e-07, \"mean_abs\": 2.4586915969848633e-07, \"nan\": 0, \"relative_l2\": 7.08106812412233e-07}, \"layer\": 4, \"weight\": {\"inf\": 0, \"max_abs\": 9.313225746154785e-08, \"mean_abs\": 1.3559278144725795e-08, \"nan\": 0, \"relative_l2\": 6.809725829821536e-07}}], \"output\": {\"inf\": 0, \"max_abs\": 8.940696716308594e-08, \"mean_abs\": 7.151011338635271e-09, \"nan\": 0, \"relative_l2\": 4.21189001031808e-08}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 2.980232238769531e-07, \"mean_abs\": 1.8335606366548518e-09, \"nan\": 0, \"relative_l2\": 5.847312977292664e-07}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    },
+    {
+      "case": "H",
+      "output": "PHASE2D_CASE_PASS {\"case\": \"H\", \"input_gradient\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}, \"layers\": [{\"bias\": {\"inf\": 0, \"max_abs\": 2.9802322387695312e-08, \"mean_abs\": 3.0631781555712223e-09, \"nan\": 0, \"relative_l2\": 6.041937445196675e-08}, \"layer\": 0, \"weight\": {\"inf\": 0, \"max_abs\": 0.0, \"mean_abs\": 0.0, \"nan\": 0, \"relative_l2\": 0.0}}, {\"bias\": {\"inf\": 0, \"max_abs\": 2.9802322387695312e-08, \"mean_abs\": 2.650267560966313e-09, \"nan\": 0, \"relative_l2\": 6.994199489582608e-08}, \"layer\": 1, \"weight\": {\"inf\": 0, \"max_abs\": 1.4901161193847656e-08, \"mean_abs\": 3.1013613899233405e-10, \"nan\": 0, \"relative_l2\": 9.597289049596289e-08}}, {\"bias\": {\"inf\": 0, \"max_abs\": 2.9802322387695312e-08, \"mean_abs\": 3.688910510390997e-09, \"nan\": 0, \"relative_l2\": 7.665262288755049e-08}, \"layer\": 2, \"weight\": {\"inf\": 0, \"max_abs\": 2.9802322387695312e-08, \"mean_abs\": 1.0729386268337748e-09, \"nan\": 0, \"relative_l2\": 2.563753334446277e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 2.9802322387695312e-08, \"mean_abs\": 3.865352482534945e-09, \"nan\": 0, \"relative_l2\": 7.653871799766803e-08}, \"layer\": 3, \"weight\": {\"inf\": 0, \"max_abs\": 4.842877388000488e-08, \"mean_abs\": 1.846785946391094e-09, \"nan\": 0, \"relative_l2\": 2.8058024087235496e-07}}, {\"bias\": {\"inf\": 0, \"max_abs\": 5.960464477539063e-08, \"mean_abs\": 1.862645149230957e-08, \"nan\": 0, \"relative_l2\": 6.88093377138937e-08}, \"layer\": 4, \"weight\": {\"inf\": 0, \"max_abs\": 1.1175870895385742e-07, \"mean_abs\": 1.3818283406408227e-08, \"nan\": 0, \"relative_l2\": 4.2452976082701786e-07}}], \"output\": {\"inf\": 0, \"max_abs\": 2.384185791015625e-07, \"mean_abs\": 8.633443826511211e-08, \"nan\": 0, \"relative_l2\": 4.5791634933468834e-07}, \"parameter_gradient\": {\"inf\": 0, \"max_abs\": 1.1175870895385742e-07, \"mean_abs\": 1.3324679137838302e-09, \"nan\": 0, \"relative_l2\": 2.406073174713288e-07}, \"stream\": \"default\"}\n",
+      "returncode": 0,
+      "stderr": "tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.\n"
+    }
+  ],
+  "network_cases": [
+    {
+      "case": "A",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 9.313225746154785e-10,
+            "mean_abs": 1.3096723705530167e-10,
+            "nan": 0,
+            "relative_l2": 5.796851428552879e-08
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 9.313225746154785e-10,
+        "mean_abs": 1.3015377837988229e-11,
+        "nan": 0,
+        "relative_l2": 3.4608333886143785e-08
+      },
+      "stream": "default"
+    },
+    {
+      "case": "B",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.2351741790771484e-08,
+            "mean_abs": 2.76122591458261e-09,
+            "nan": 0,
+            "relative_l2": 7.452978757649957e-08
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 3.166496753692627e-08,
+            "mean_abs": 2.0489096641540527e-08,
+            "nan": 0,
+            "relative_l2": 6.984214973366898e-08
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.026798367500305e-08,
+            "mean_abs": 7.289221226614018e-09,
+            "nan": 0,
+            "relative_l2": 1.2597141892954589e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 5.960464477539063e-08,
+        "mean_abs": 2.554484801464696e-08,
+        "nan": 0,
+        "relative_l2": 1.4711097705110456e-07
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 3.166496753692627e-08,
+        "mean_abs": 2.195327475362774e-09,
+        "nan": 0,
+        "relative_l2": 8.194885582571444e-08
+      },
+      "stream": "default"
+    },
+    {
+      "case": "C",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 6.984919309616089e-10,
+        "mean_abs": 1.0981660025777273e-11,
+        "nan": 0,
+        "relative_l2": 5.901043151880345e-08
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 3.725290298461914e-09,
+            "mean_abs": 8.276401786133647e-10,
+            "nan": 0,
+            "relative_l2": 1.714466736939794e-07
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 9.313225746154785e-10,
+            "mean_abs": 8.995115763354988e-11,
+            "nan": 0,
+            "relative_l2": 5.632961425667423e-08
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 7.450580596923828e-09,
+            "mean_abs": 1.0586518328636885e-09,
+            "nan": 0,
+            "relative_l2": 1.003959645923614e-07
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.725290298461914e-09,
+            "mean_abs": 1.0107314984963978e-10,
+            "nan": 0,
+            "relative_l2": 1.4993340501943245e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.9802322387695312e-08,
+            "mean_abs": 2.9802322387695312e-08,
+            "nan": 0,
+            "relative_l2": 1.3349646601480343e-07
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 1.4901161193847656e-08,
+            "mean_abs": 2.0190782379359007e-09,
+            "nan": 0,
+            "relative_l2": 2.767380532892047e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 5.960464477539063e-08,
+        "mean_abs": 1.862645149230957e-09,
+        "nan": 0,
+        "relative_l2": 2.1751806514224715e-08
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 2.9802322387695312e-08,
+        "mean_abs": 2.9948435398274853e-10,
+        "nan": 0,
+        "relative_l2": 1.4257601881562574e-07
+      },
+      "stream": "default"
+    },
+    {
+      "case": "D",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 7.152557373046875e-07,
+            "mean_abs": 9.057112038135529e-08,
+            "nan": 0,
+            "relative_l2": 4.109491346031218e-07
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 4.172325134277344e-07,
+            "mean_abs": 3.179650320817018e-08,
+            "nan": 0,
+            "relative_l2": 2.457386941217881e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 4.172325134277344e-07,
+            "mean_abs": 7.660128176212311e-08,
+            "nan": 0,
+            "relative_l2": 1.847254542000982e-07
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 6.556510925292969e-07,
+            "mean_abs": 9.579011361893208e-09,
+            "nan": 0,
+            "relative_l2": 2.1680134902822952e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.384185791015625e-06,
+            "mean_abs": 1.0244548320770264e-06,
+            "nan": 0,
+            "relative_l2": 3.552115387906377e-07
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.5762786865234375e-07,
+            "mean_abs": 3.992533947894117e-08,
+            "nan": 0,
+            "relative_l2": 2.5436832362600237e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 5.960464477539063e-08,
+        "mean_abs": 9.54379153483842e-09,
+        "nan": 0,
+        "relative_l2": 1.3714367674197555e-07
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 2.384185791015625e-06,
+        "mean_abs": 2.5942073378359964e-08,
+        "nan": 0,
+        "relative_l2": 2.959551410905954e-07
+      },
+      "stream": "default"
+    },
+    {
+      "case": "E",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 3.725290298461914e-09,
+        "mean_abs": 5.512187928324863e-10,
+        "nan": 0,
+        "relative_l2": 1.454829412756987e-07
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 1.1175870895385742e-08,
+            "mean_abs": 2.5174813345074654e-09,
+            "nan": 0,
+            "relative_l2": 1.5571780897513287e-07
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 2.3283064365386963e-09,
+            "mean_abs": 4.6014081434009313e-10,
+            "nan": 0,
+            "relative_l2": 1.2298724209551863e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 7.450580596923828e-09,
+            "mean_abs": 1.558873918838799e-09,
+            "nan": 0,
+            "relative_l2": 1.0826105635952778e-07
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.725290298461914e-09,
+            "mean_abs": 2.086248951371772e-10,
+            "nan": 0,
+            "relative_l2": 1.3644164509464218e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 1.4901161193847656e-08,
+            "mean_abs": 8.692344621863413e-09,
+            "nan": 0,
+            "relative_l2": 9.775704564459979e-08
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 2.2351741790771484e-08,
+            "mean_abs": 3.0602222977904603e-09,
+            "nan": 0,
+            "relative_l2": 2.2440142500851536e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 5.960464477539063e-08,
+        "mean_abs": 8.514949634275126e-09,
+        "nan": 0,
+        "relative_l2": 4.2575727917453797e-08
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 2.2351741790771484e-08,
+        "mean_abs": 3.9842751320406933e-10,
+        "nan": 0,
+        "relative_l2": 1.670930401885178e-07
+      },
+      "stream": "default"
+    },
+    {
+      "case": "F",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 4.190951585769653e-09,
+            "mean_abs": 7.403286872431636e-10,
+            "nan": 0,
+            "relative_l2": 2.1147949804238187e-07
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 4.6566128730773926e-09,
+            "mean_abs": 7.512426236644387e-10,
+            "nan": 0,
+            "relative_l2": 2.7398863970466314e-07
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 7.450580596923828e-09,
+            "mean_abs": 1.7586276879200113e-10,
+            "nan": 0,
+            "relative_l2": 3.1419163570755207e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 1.909211277961731e-08,
+            "mean_abs": 2.852175384759903e-09,
+            "nan": 0,
+            "relative_l2": 3.508356715830589e-07
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 2.2351741790771484e-08,
+            "mean_abs": 4.705703049445731e-10,
+            "nan": 0,
+            "relative_l2": 5.385796722738162e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 4.0978193283081055e-08,
+            "mean_abs": 7.057678885757923e-09,
+            "nan": 0,
+            "relative_l2": 4.1686316691028713e-07
+          },
+          "layer": 3,
+          "weight": {
+            "inf": 0,
+            "max_abs": 2.7939677238464355e-08,
+            "mean_abs": 8.844790455597717e-10,
+            "nan": 0,
+            "relative_l2": 5.865363700155529e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          },
+          "layer": 4,
+          "weight": {
+            "inf": 0,
+            "max_abs": 6.705522537231445e-08,
+            "mean_abs": 1.413809513906017e-08,
+            "nan": 0,
+            "relative_l2": 4.924460698714335e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 3.725290298461914e-08,
+        "mean_abs": 1.257285475730896e-08,
+        "nan": 0,
+        "relative_l2": 1.7793906588874767e-07
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 6.705522537231445e-08,
+        "mean_abs": 6.835537136318237e-10,
+        "nan": 0,
+        "relative_l2": 3.568137820705352e-07
+      },
+      "stream": "default"
+    },
+    {
+      "case": "G",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 3.725290298461914e-09,
+        "mean_abs": 2.523931896813991e-10,
+        "nan": 0,
+        "relative_l2": 1.4750504238830964e-07
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 4.0512531995773315e-08,
+            "mean_abs": 6.492427928606048e-09,
+            "nan": 0,
+            "relative_l2": 5.214424874644653e-07
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 5.21540641784668e-08,
+            "mean_abs": 5.0809845220101124e-09,
+            "nan": 0,
+            "relative_l2": 5.40850602313374e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 5.21540641784668e-08,
+            "mean_abs": 6.833943189121783e-09,
+            "nan": 0,
+            "relative_l2": 4.032951073273328e-07
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.259629011154175e-08,
+            "mean_abs": 1.1097633922929617e-09,
+            "nan": 0,
+            "relative_l2": 4.898296205638464e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 5.21540641784668e-08,
+            "mean_abs": 6.328264134936035e-09,
+            "nan": 0,
+            "relative_l2": 3.3764026558795564e-07
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.91155481338501e-08,
+            "mean_abs": 1.397593374363737e-09,
+            "nan": 0,
+            "relative_l2": 5.395309747412707e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 1.1920928955078125e-07,
+            "mean_abs": 1.2747477740049362e-08,
+            "nan": 0,
+            "relative_l2": 4.5075260336563575e-07
+          },
+          "layer": 3,
+          "weight": {
+            "inf": 0,
+            "max_abs": 8.009374141693115e-08,
+            "mean_abs": 1.4673315895663563e-09,
+            "nan": 0,
+            "relative_l2": 5.94420687549562e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.980232238769531e-07,
+            "mean_abs": 2.4586915969848633e-07,
+            "nan": 0,
+            "relative_l2": 7.08106812412233e-07
+          },
+          "layer": 4,
+          "weight": {
+            "inf": 0,
+            "max_abs": 9.313225746154785e-08,
+            "mean_abs": 1.3559278144725795e-08,
+            "nan": 0,
+            "relative_l2": 6.809725829821536e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 8.940696716308594e-08,
+        "mean_abs": 7.151011338635271e-09,
+        "nan": 0,
+        "relative_l2": 4.21189001031808e-08
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 2.980232238769531e-07,
+        "mean_abs": 1.8335606366548518e-09,
+        "nan": 0,
+        "relative_l2": 5.847312977292664e-07
+      },
+      "stream": "default"
+    },
+    {
+      "case": "H",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.9802322387695312e-08,
+            "mean_abs": 3.0631781555712223e-09,
+            "nan": 0,
+            "relative_l2": 6.041937445196675e-08
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.9802322387695312e-08,
+            "mean_abs": 2.650267560966313e-09,
+            "nan": 0,
+            "relative_l2": 6.994199489582608e-08
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 1.4901161193847656e-08,
+            "mean_abs": 3.1013613899233405e-10,
+            "nan": 0,
+            "relative_l2": 9.597289049596289e-08
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.9802322387695312e-08,
+            "mean_abs": 3.688910510390997e-09,
+            "nan": 0,
+            "relative_l2": 7.665262288755049e-08
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 2.9802322387695312e-08,
+            "mean_abs": 1.0729386268337748e-09,
+            "nan": 0,
+            "relative_l2": 2.563753334446277e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.9802322387695312e-08,
+            "mean_abs": 3.865352482534945e-09,
+            "nan": 0,
+            "relative_l2": 7.653871799766803e-08
+          },
+          "layer": 3,
+          "weight": {
+            "inf": 0,
+            "max_abs": 4.842877388000488e-08,
+            "mean_abs": 1.846785946391094e-09,
+            "nan": 0,
+            "relative_l2": 2.8058024087235496e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 1.862645149230957e-08,
+            "nan": 0,
+            "relative_l2": 6.88093377138937e-08
+          },
+          "layer": 4,
+          "weight": {
+            "inf": 0,
+            "max_abs": 1.1175870895385742e-07,
+            "mean_abs": 1.3818283406408227e-08,
+            "nan": 0,
+            "relative_l2": 4.2452976082701786e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 2.384185791015625e-07,
+        "mean_abs": 8.633443826511211e-08,
+        "nan": 0,
+        "relative_l2": 4.5791634933468834e-07
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 1.1175870895385742e-07,
+        "mean_abs": 1.3324679137838302e-09,
+        "nan": 0,
+        "relative_l2": 2.406073174713288e-07
+      },
+      "stream": "default"
+    },
+    {
+      "case": "D",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 7.152557373046875e-07,
+            "mean_abs": 9.057112038135529e-08,
+            "nan": 0,
+            "relative_l2": 4.109491346031218e-07
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 4.172325134277344e-07,
+            "mean_abs": 3.179650320817018e-08,
+            "nan": 0,
+            "relative_l2": 2.457386941217881e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 4.172325134277344e-07,
+            "mean_abs": 7.660128176212311e-08,
+            "nan": 0,
+            "relative_l2": 1.847254542000982e-07
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 6.556510925292969e-07,
+            "mean_abs": 9.579011361893208e-09,
+            "nan": 0,
+            "relative_l2": 2.1680134902822952e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.384185791015625e-06,
+            "mean_abs": 1.0244548320770264e-06,
+            "nan": 0,
+            "relative_l2": 3.552115387906377e-07
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.5762786865234375e-07,
+            "mean_abs": 3.992533947894117e-08,
+            "nan": 0,
+            "relative_l2": 2.5436832362600237e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 5.960464477539063e-08,
+        "mean_abs": 9.54379153483842e-09,
+        "nan": 0,
+        "relative_l2": 1.3714367674197555e-07
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 2.384185791015625e-06,
+        "mean_abs": 2.5942073378359964e-08,
+        "nan": 0,
+        "relative_l2": 2.959551410905954e-07
+      },
+      "stream": "explicit"
+    },
+    {
+      "case": "G",
+      "input_gradient": {
+        "inf": 0,
+        "max_abs": 3.725290298461914e-09,
+        "mean_abs": 2.523931896813991e-10,
+        "nan": 0,
+        "relative_l2": 1.4750504238830964e-07
+      },
+      "layers": [
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 4.0512531995773315e-08,
+            "mean_abs": 6.492427928606048e-09,
+            "nan": 0,
+            "relative_l2": 5.214424874644653e-07
+          },
+          "layer": 0,
+          "weight": {
+            "inf": 0,
+            "max_abs": 5.21540641784668e-08,
+            "mean_abs": 5.0809845220101124e-09,
+            "nan": 0,
+            "relative_l2": 5.40850602313374e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 5.21540641784668e-08,
+            "mean_abs": 6.833943189121783e-09,
+            "nan": 0,
+            "relative_l2": 4.032951073273328e-07
+          },
+          "layer": 1,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.259629011154175e-08,
+            "mean_abs": 1.1097633922929617e-09,
+            "nan": 0,
+            "relative_l2": 4.898296205638464e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 5.21540641784668e-08,
+            "mean_abs": 6.328264134936035e-09,
+            "nan": 0,
+            "relative_l2": 3.3764026558795564e-07
+          },
+          "layer": 2,
+          "weight": {
+            "inf": 0,
+            "max_abs": 3.91155481338501e-08,
+            "mean_abs": 1.397593374363737e-09,
+            "nan": 0,
+            "relative_l2": 5.395309747412707e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 1.1920928955078125e-07,
+            "mean_abs": 1.2747477740049362e-08,
+            "nan": 0,
+            "relative_l2": 4.5075260336563575e-07
+          },
+          "layer": 3,
+          "weight": {
+            "inf": 0,
+            "max_abs": 8.009374141693115e-08,
+            "mean_abs": 1.4673315895663563e-09,
+            "nan": 0,
+            "relative_l2": 5.94420687549562e-07
+          }
+        },
+        {
+          "bias": {
+            "inf": 0,
+            "max_abs": 2.980232238769531e-07,
+            "mean_abs": 2.4586915969848633e-07,
+            "nan": 0,
+            "relative_l2": 7.08106812412233e-07
+          },
+          "layer": 4,
+          "weight": {
+            "inf": 0,
+            "max_abs": 9.313225746154785e-08,
+            "mean_abs": 1.3559278144725795e-08,
+            "nan": 0,
+            "relative_l2": 6.809725829821536e-07
+          }
+        }
+      ],
+      "output": {
+        "inf": 0,
+        "max_abs": 8.940696716308594e-08,
+        "mean_abs": 7.151011338635271e-09,
+        "nan": 0,
+        "relative_l2": 4.21189001031808e-08
+      },
+      "parameter_gradient": {
+        "inf": 0,
+        "max_abs": 2.980232238769531e-07,
+        "mean_abs": 1.8335606366548518e-09,
+        "nan": 0,
+        "relative_l2": 5.847312977292664e-07
+      },
+      "stream": "explicit"
+    }
+  ],
+  "result": "PASS",
+  "training_checkpoint": {
+    "final_loss": 2.3281059839064255e-05,
+    "initial_loss": 0.07817383855581284,
+    "loss_ratio": 0.0002978113940566262,
+    "method": "state_dict",
+    "parameter_change": 1.719032645225525,
+    "parameter_norm_after": 6.909421920776367,
+    "parameter_norm_before": 6.7699503898620605,
+    "roundtrip": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "steps": 200
+  }
+}

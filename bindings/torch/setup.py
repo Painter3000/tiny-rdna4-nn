@@ -164,6 +164,9 @@ os.environ["TORCH_CUDA_ARCH_LIST"] = ""
 bindings_dir = os.path.dirname(__file__)
 root_dir = os.path.abspath(os.path.join(bindings_dir, "../.."))
 dependency_root = os.environ.get("TCNN_DEPENDENCY_ROOT", os.path.join(root_dir, "dependencies"))
+# Keep extension source paths relative so setuptools can build an installable
+# wheel while headers may still come from an explicitly resolved dependency tree.
+dependency_source_root = os.path.relpath(dependency_root, bindings_dir)
 
 base_definitions = [
 	# PyTorch-supplied parameters may be unaligned. TCNN must be made aware of this such that
@@ -185,8 +188,8 @@ base_definitions.append(f"-DTCNN_HALF_PRECISION={int(enable_half)}")
 
 base_source_files = [
 	"tinycudann/bindings.cpp",
-	os.path.join(dependency_root, "fmt/src/format.cc"),
-	os.path.join(dependency_root, "fmt/src/os.cc"),
+	os.path.join(dependency_source_root, "fmt/src/format.cc"),
+	os.path.join(dependency_source_root, "fmt/src/os.cc"),
 	"../../src/cpp_api.cu",
 	"../../src/common_host.cu",
 	"../../src/encoding.cu",
@@ -199,6 +202,8 @@ if include_networks:
 		base_source_files += [
 			"../../src/portable_network.cu",
 			"../../src/portable_mlp.cu",
+			# TCNN_RDNA4_P3A1_HIPBLASLT_003: explicit unfused FP32 backend.
+			"../../src/hipblaslt_mlp.cu",
 		]
 	else:
 		base_source_files += [
@@ -266,7 +271,7 @@ def make_extension(compute_capability):
 				os.path.join(os.environ.get("ROCM_PATH", "/opt/rocm"), "include"),
 			],
 			extra_compile_args={"cxx": hip_flags, "nvcc": hip_flags},
-			libraries=["amdhip64"],
+			libraries=["amdhip64", "hipblaslt"],
 			library_dirs=[os.path.join(os.environ.get("ROCM_PATH", "/opt/rocm"), "lib")],
 		)
 	nvcc_flags = base_nvcc_flags + [f"-gencode=arch=compute_{compute_capability},code={code}_{compute_capability}" for code in ["compute", "sm"]]

@@ -1,0 +1,31 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+PHASE2C_ENVIRONMENT {"arch": "gfx1201", "binding": "/home/oem/therock_test/venv/lib/python3.12/site-packages/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so", "device": "AMD Radeon Graphics", "has_networks": true, "hip": "7.2.53211", "torch": "2.13.0+rocm7.2"}
+PHASE2C_NETWORK_CASE_PASS {"case": "A", "max_abs": {"input_grad": 0.0, "output": 2.9802322387695312e-08, "params_grad": 1.7881393432617188e-07}, "repeats": 10, "stream_mode": "default"}
+PHASE2C_NETWORK_CASE_PASS {"case": "B", "max_abs": {"input_grad": 0.0, "output": 4.470348358154297e-08, "params_grad": 4.76837158203125e-07}, "repeats": 10, "stream_mode": "default"}
+PHASE2C_NETWORK_CASE_PASS {"case": "C", "max_abs": {"input_grad": 0.0, "output": 1.1920928955078125e-07, "params_grad": 1.564621925354004e-07}, "repeats": 10, "stream_mode": "default"}
+PHASE2C_NETWORK_CASE_PASS {"case": "D", "max_abs": {"input_grad": 0.0, "output": 1.4901161193847656e-07, "params_grad": 1.6689300537109375e-06}, "repeats": 10, "stream_mode": "default"}
+PHASE2C_NETWORK_CASE_PASS {"case": "A", "max_abs": {"input_grad": 0.0, "output": 2.9802322387695312e-08, "params_grad": 1.7881393432617188e-07}, "repeats": 10, "stream_mode": "same-explicit"}
+PHASE2C_NETWORK_CASE_PASS {"case": "B", "max_abs": {"input_grad": 0.0, "output": 4.470348358154297e-08, "params_grad": 4.76837158203125e-07}, "repeats": 10, "stream_mode": "same-explicit"}
+PHASE2C_NETWORK_CASE_PASS {"case": "C", "max_abs": {"input_grad": 0.0, "output": 1.1920928955078125e-07, "params_grad": 1.564621925354004e-07}, "repeats": 10, "stream_mode": "same-explicit"}
+PHASE2C_NETWORK_CASE_PASS {"case": "D", "max_abs": {"input_grad": 0.0, "output": 1.4901161193847656e-07, "params_grad": 1.6689300537109375e-06}, "repeats": 10, "stream_mode": "same-explicit"}
+PHASE2C_NETWORK_CASE_PASS {"case": "A", "max_abs": {"input_grad": 0.0, "output": 2.9802322387695312e-08, "params_grad": 1.7881393432617188e-07}, "repeats": 10, "stream_mode": "rotating-explicit"}
+PHASE2C_NETWORK_CASE_PASS {"case": "B", "max_abs": {"input_grad": 0.0, "output": 4.470348358154297e-08, "params_grad": 4.76837158203125e-07}, "repeats": 10, "stream_mode": "rotating-explicit"}
+PHASE2C_NETWORK_CASE_PASS {"case": "C", "max_abs": {"input_grad": 0.0, "output": 1.1920928955078125e-07, "params_grad": 1.564621925354004e-07}, "repeats": 10, "stream_mode": "rotating-explicit"}
+PHASE2C_NETWORK_CASE_PASS {"case": "D", "max_abs": {"input_grad": 0.0, "output": 1.4901161193847656e-07, "params_grad": 1.6689300537109375e-06}, "repeats": 10, "stream_mode": "rotating-explicit"}
+PHASE2C_IDENTITY_WIE_PASS {"case": "A", "input_grad_max_abs": 0.0, "output_max_abs": 4.470348358154297e-08, "params_grad_max_abs": 1.1920928955078125e-07}
+PHASE2C_IDENTITY_WIE_PASS {"case": "B", "input_grad_max_abs": 0.0, "output_max_abs": 2.9802322387695312e-08, "params_grad_max_abs": 1.7881393432617188e-07}
+PHASE2C_IDENTITY_WIE_PASS {"case": "C", "input_grad_max_abs": 0.0, "output_max_abs": 1.1920928955078125e-07, "params_grad_max_abs": 2.384185791015625e-07}
+PHASE2C_IDENTITY_WIE_PASS {"case": "D", "input_grad_max_abs": 0.0, "output_max_abs": 8.940696716308594e-08, "params_grad_max_abs": 8.344650268554688e-07}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float16", "name": "Identity", "output_sum": 48.93598937988281, "params": 0}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float16", "name": "Frequency", "output_sum": 52.798095703125, "params": 0}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float16", "name": "OneBlob", "output_sum": 64.00077819824219, "params": 0}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float16", "name": "HashGrid", "output_sum": -0.0010901689529418945, "params": 688}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float32", "name": "Identity", "output_sum": 46.39773941040039, "params": 0}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float32", "name": "Frequency", "output_sum": 76.64083099365234, "params": 0}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float32", "name": "OneBlob", "output_sum": 64.0, "params": 0}
+PHASE1_ENCODING_REGRESSION_PASS {"dtype": "torch.float32", "name": "HashGrid", "output_sum": -0.0006544488715007901, "params": 688}
+PHASE2C_ENCODED_NETWORK_PASS {"encoding": "Frequency", "output_sum": -3.275928497314453, "param_count": 468}
+PHASE2C_ENCODED_NETWORK_PASS {"encoding": "OneBlob", "output_sum": -22.301055908203125, "param_count": 340}
+PHASE2C_ENCODED_NETWORK_PASS {"encoding": "HashGrid", "output_sum": -0.0015266152331605554, "param_count": 900}
+PHASE2C_INTEGRATION_PASS
+{"encoded_network_cases": 3, "encoding_regressions": 8, "environment": {"arch": "gfx1201", "binding": "/home/oem/therock_test/venv/lib/python3.12/site-packages/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so", "device": "AMD Radeon Graphics", "has_networks": true, "hip": "7.2.53211", "torch": "2.13.0+rocm7.2"}, "fresh_process_failures": 0, "fresh_processes": 12, "identity_wie_cases": 4, "in_process_cases": 12, "result": "PASS", "runtime_flags": {"AMD_SERIALIZE_KERNEL": null, "HIP_LAUNCH_BLOCKING": null}}

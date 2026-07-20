@@ -1,0 +1,11 @@
+Processing ./.
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: tinycudann
+  Building wheel for tinycudann (pyproject.toml): started
+  Building wheel for tinycudann (pyproject.toml): finished with status 'done'
+  Created wheel for tinycudann: filename=tinycudann-2.0-cp312-cp312-linux_x86_64.whl size=2688252 sha256=57a1f16c402783c8ba145bf7382f25d66c7c756358199188681f39e4cf449866
+  Stored in directory: /tmp/pip-ephem-wheel-cache-26g7k1md/wheels/d9/27/c5/b5772e6567d7439dd261550d6d63ce993e1cf36c7ccfbc0fae
+Successfully built tinycudann
+Installing collected packages: tinycudann
+Successfully installed tinycudann-2.0

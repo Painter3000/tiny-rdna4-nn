@@ -1,0 +1,376 @@
+{
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/home/oem/therock_test/venv/lib/python3.12/site-packages/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "hashgrid_double_accumulate": {
+    "encoding_first": {
+      "exact": false,
+      "inf": 0,
+      "max_abs": 3.725290298461914e-09,
+      "mean_abs": 4.534782965803785e-11,
+      "nan": 0,
+      "relative_l2": 2.6004700713224966e-08
+    },
+    "encoding_params": 688,
+    "encoding_second": {
+      "exact": false,
+      "inf": 0,
+      "max_abs": 1.4901161193847656e-08,
+      "mean_abs": 3.455233876792363e-10,
+      "nan": 0,
+      "relative_l2": 5.436566041425774e-08
+    },
+    "first_accumulate": {
+      "exact": false,
+      "inf": 0,
+      "max_abs": 3.725290298461914e-09,
+      "mean_abs": 1.4870975978409362e-11,
+      "nan": 0,
+      "relative_l2": 3.2432908762584057e-09
+    },
+    "network_first": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "network_params": 1410,
+    "network_second": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "overwrite_vs_public_autograd": {
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "limitation": "The public autograd path is an integration reference, not an independent mathematical reimplementation of HashGrid.",
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 3.725290298461914e-09,
+        "mean_abs": 3.119852987065741e-11,
+        "nan": 0,
+        "relative_l2": 4.730381222131171e-09
+      }
+    },
+    "second_accumulate": {
+      "exact": false,
+      "inf": 0,
+      "max_abs": 1.4901161193847656e-08,
+      "mean_abs": 1.1330795329778098e-10,
+      "nan": 0,
+      "relative_l2": 6.780452978397618e-09
+    }
+  },
+  "optimizer_resume_exact": {
+    "checkpoint_sha256": "84c1760a923d2807dd625e6516dd1c2882cfdb822b4af05be64633c25d96e8f8",
+    "child_returncode": 0,
+    "loss_exact": true,
+    "optimizer_differences": [],
+    "optimizer_param_groups": 1,
+    "optimizer_state_entries": 1,
+    "optimizer_state_exact": true,
+    "output": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "parameters": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "result_sha256": "1287ea84e2ebad0a5a009984ea7cb1e193e7607322c52c5627b1f667319178bc"
+  },
+  "overwrite_pytorch_reference": [
+    {
+      "case": "A",
+      "config": {
+        "batch": 7,
+        "hidden": 1,
+        "name": "A",
+        "out_act": "None",
+        "width": 16
+      },
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "layers": [
+        {
+          "bias": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 7.450580596923828e-09,
+            "mean_abs": 4.94765117764473e-10,
+            "nan": 0,
+            "relative_l2": 1.2128618833754094e-08
+          },
+          "layer": 0,
+          "weight": {
+            "exact": true,
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          }
+        },
+        {
+          "bias": {
+            "exact": true,
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          },
+          "layer": 1,
+          "weight": {
+            "exact": true,
+            "inf": 0,
+            "max_abs": 0.0,
+            "mean_abs": 0.0,
+            "nan": 0,
+            "relative_l2": 0.0
+          }
+        }
+      ],
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 7.450580596923828e-09,
+        "mean_abs": 4.4473268817624145e-11,
+        "nan": 0,
+        "relative_l2": 2.9914475118214123e-09
+      },
+      "reference": "independent PyTorch FP32 layer reconstruction"
+    },
+    {
+      "case": "B",
+      "config": {
+        "batch": 257,
+        "hidden": 4,
+        "name": "B",
+        "out_act": "Sigmoid",
+        "width": 64
+      },
+      "input_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 4.6566128730773926e-09,
+        "mean_abs": 3.7406538977435844e-10,
+        "nan": 0,
+        "relative_l2": 2.0609828170238697e-07
+      },
+      "layers": [
+        {
+          "bias": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 5.774199962615967e-08,
+            "mean_abs": 8.407369023188949e-09,
+            "nan": 0,
+            "relative_l2": 6.95372650804209e-07
+          },
+          "layer": 0,
+          "weight": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 5.960464477539063e-08,
+            "mean_abs": 6.0932165979465935e-09,
+            "nan": 0,
+            "relative_l2": 6.633384471272638e-07
+          }
+        },
+        {
+          "bias": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 8.195638656616211e-08,
+            "mean_abs": 1.6701960703358054e-08,
+            "nan": 0,
+            "relative_l2": 7.851511736954384e-07
+          },
+          "layer": 1,
+          "weight": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 1.1175870895385742e-07,
+            "mean_abs": 2.250988284657751e-09,
+            "nan": 0,
+            "relative_l2": 7.499935771086665e-07
+          }
+        },
+        {
+          "bias": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 1.601874828338623e-07,
+            "mean_abs": 1.8540049495641142e-08,
+            "nan": 0,
+            "relative_l2": 8.226889554603723e-07
+          },
+          "layer": 2,
+          "weight": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 7.82310962677002e-08,
+            "mean_abs": 1.9600614464820865e-09,
+            "nan": 0,
+            "relative_l2": 5.586766834777697e-07
+          }
+        },
+        {
+          "bias": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 1.4901161193847656e-07,
+            "mean_abs": 2.784508978947997e-08,
+            "nan": 0,
+            "relative_l2": 6.882934146991036e-07
+          },
+          "layer": 3,
+          "weight": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 2.60770320892334e-07,
+            "mean_abs": 1.9672143913851414e-09,
+            "nan": 0,
+            "relative_l2": 7.524865746601297e-07
+          }
+        },
+        {
+          "bias": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 3.5762786865234375e-07,
+            "mean_abs": 2.4586915969848633e-07,
+            "nan": 0,
+            "relative_l2": 6.079659301465251e-07
+          },
+          "layer": 4,
+          "weight": {
+            "exact": false,
+            "inf": 0,
+            "max_abs": 4.470348358154297e-08,
+            "mean_abs": 4.442427758988288e-09,
+            "nan": 0,
+            "relative_l2": 2.1194951727597245e-07
+          }
+        }
+      ],
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 3.5762786865234375e-07,
+        "mean_abs": 2.583187441729251e-09,
+        "nan": 0,
+        "relative_l2": 6.573361520497254e-07
+      },
+      "reference": "independent PyTorch FP32 layer reconstruction"
+    }
+  ],
+  "real_event_chain": {
+    "event_queries_after_final_wait": [
+      true,
+      true,
+      true
+    ],
+    "events": 3,
+    "first_buffer": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "input_gradient_1_vs_2": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "input_gradient_1_vs_3": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "intermediate_device_synchronizations": 0,
+    "second_buffer": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "streams": 3,
+    "third_buffer": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "used_real_torch_cuda_events": true
+  },
+  "result": "PASS"
+}

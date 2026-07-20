@@ -1,0 +1,25 @@
+{
+  "child": {
+    "dtypes": {
+      "params": "torch.float32"
+    },
+    "exact": true,
+    "keys": [
+      "params"
+    ],
+    "output": {
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "shapes": {
+      "params": [
+        13186
+      ]
+    }
+  },
+  "path": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase3a1_reports/regression_final_phase2e/model_checkpoint.pt",
+  "sha256": "c37fc69091cadfa13c9c6f1b1c7e4fa930aa5c3a506826c6a47630f8e703deb8"
+}

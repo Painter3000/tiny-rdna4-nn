@@ -1,0 +1,8 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+small: forward=0.765x forward_backward=0.841x
+medium: forward=0.692x forward_backward=1.155x
+target_257_w64: forward=0.640x forward_backward=1.776x
+large_1024_w64: forward=0.997x forward_backward=1.817x
+large_1024_w128: forward=1.938x forward_backward=1.896x
+large_4096_w64: forward=1.152x forward_backward=1.925x
+PHASE3A1_PERFORMANCE=PASS /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase3a1_reports/benchmark/phase3a1_benchmark.json

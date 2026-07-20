@@ -1,0 +1,7 @@
+small: forward=0.755x forward_backward=0.889x
+medium: forward=0.703x forward_backward=1.207x
+target_257_w64: forward=0.619x forward_backward=1.764x
+large_1024_w64: forward=1.001x forward_backward=1.808x
+large_1024_w128: forward=1.948x forward_backward=1.927x
+large_4096_w64: forward=1.251x forward_backward=1.930x
+PHASE3A1_PERFORMANCE=PASS

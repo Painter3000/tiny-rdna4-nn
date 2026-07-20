@@ -1,0 +1,274 @@
+{
+  "cases": [
+    {
+      "case": {
+        "activation": "ReLU",
+        "batch": 1,
+        "hidden": 1,
+        "input_dims": 3,
+        "name": "small",
+        "output_activation": "None",
+        "output_dims": 2,
+        "width": 16
+      },
+      "forward_backward_speedup": 0.8410691724682456,
+      "forward_speedup": 0.7648181812567334,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cold_forward_ms": 898.9921875,
+        "forward": {
+          "median_ms": 0.10374949872493744,
+          "minimum_ms": 0.03627999871969223,
+          "p95_ms": 0.11067849695682525
+        },
+        "forward_backward": {
+          "median_ms": 0.37830300629138947,
+          "minimum_ms": 0.3521389961242676,
+          "p95_ms": 0.41332301050424575
+        }
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cold_forward_ms": 1.2077510356903076,
+        "forward": {
+          "median_ms": 0.07934950292110443,
+          "minimum_ms": 0.05976000055670738,
+          "p95_ms": 0.10508199855685234
+        },
+        "forward_backward": {
+          "median_ms": 0.3181789964437485,
+          "minimum_ms": 0.2758379876613617,
+          "p95_ms": 0.34692094326019285
+        }
+      }
+    },
+    {
+      "case": {
+        "activation": "ReLU",
+        "batch": 64,
+        "hidden": 2,
+        "input_dims": 8,
+        "name": "medium",
+        "output_activation": "None",
+        "output_dims": 3,
+        "width": 32
+      },
+      "forward_backward_speedup": 1.1548350859825773,
+      "forward_speedup": 0.692216298090411,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cold_forward_ms": 46.789058685302734,
+        "forward": {
+          "median_ms": 0.11532450094819069,
+          "minimum_ms": 0.04464000090956688,
+          "p95_ms": 0.12887644693255423
+        },
+        "forward_backward": {
+          "median_ms": 0.40052299201488495,
+          "minimum_ms": 0.32871899008750916,
+          "p95_ms": 0.46721551269292827
+        }
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cold_forward_ms": 0.20648899674415588,
+        "forward": {
+          "median_ms": 0.07982949912548065,
+          "minimum_ms": 0.07013999670743942,
+          "p95_ms": 0.10062345080077648
+        },
+        "forward_backward": {
+          "median_ms": 0.4625380039215088,
+          "minimum_ms": 0.4578379988670349,
+          "p95_ms": 0.46814001202583316
+        }
+      }
+    },
+    {
+      "case": {
+        "activation": "ReLU",
+        "batch": 257,
+        "hidden": 4,
+        "input_dims": 8,
+        "name": "target_257_w64",
+        "output_activation": "Sigmoid",
+        "output_dims": 3,
+        "width": 64
+      },
+      "forward_backward_speedup": 1.7762076913706115,
+      "forward_speedup": 0.6398795777542561,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cold_forward_ms": 47.35253143310547,
+        "forward": {
+          "median_ms": 0.12370999902486801,
+          "minimum_ms": 0.07955899834632874,
+          "p95_ms": 0.13140500634908678
+        },
+        "forward_backward": {
+          "median_ms": 0.8926959931850433,
+          "minimum_ms": 0.8830369710922241,
+          "p95_ms": 0.9017179936170578
+        }
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cold_forward_ms": 0.5748680233955383,
+        "forward": {
+          "median_ms": 0.07915950194001198,
+          "minimum_ms": 0.07739999890327454,
+          "p95_ms": 0.10674354955554008
+        },
+        "forward_backward": {
+          "median_ms": 1.585613489151001,
+          "minimum_ms": 1.568513035774231,
+          "p95_ms": 1.5973420321941376
+        }
+      }
+    },
+    {
+      "case": {
+        "activation": "ReLU",
+        "batch": 1024,
+        "hidden": 4,
+        "input_dims": 8,
+        "name": "large_1024_w64",
+        "output_activation": "Sigmoid",
+        "output_dims": 3,
+        "width": 64
+      },
+      "forward_backward_speedup": 1.8166804986826748,
+      "forward_speedup": 0.9969084065376038,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cold_forward_ms": 45.51192855834961,
+        "forward": {
+          "median_ms": 0.14231950044631958,
+          "minimum_ms": 0.1401599943637848,
+          "p95_ms": 0.14355699494481086
+        },
+        "forward_backward": {
+          "median_ms": 1.6850329637527466,
+          "minimum_ms": 1.6667929887771606,
+          "p95_ms": 1.7031630158424378
+        }
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cold_forward_ms": 0.18111999332904816,
+        "forward": {
+          "median_ms": 0.14187950640916824,
+          "minimum_ms": 0.13939900696277618,
+          "p95_ms": 0.1435270495712757
+        },
+        "forward_backward": {
+          "median_ms": 3.061166524887085,
+          "minimum_ms": 2.8836278915405273,
+          "p95_ms": 3.075687086582184
+        }
+      }
+    },
+    {
+      "case": {
+        "activation": "ReLU",
+        "batch": 1024,
+        "hidden": 4,
+        "input_dims": 8,
+        "name": "large_1024_w128",
+        "output_activation": "None",
+        "output_dims": 8,
+        "width": 128
+      },
+      "forward_backward_speedup": 1.8960428752553282,
+      "forward_speedup": 1.9382697236957784,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cold_forward_ms": 46.01481246948242,
+        "forward": {
+          "median_ms": 0.16457900404930115,
+          "minimum_ms": 0.1574389934539795,
+          "p95_ms": 0.16936994791030882
+        },
+        "forward_backward": {
+          "median_ms": 1.4232739806175232,
+          "minimum_ms": 1.3351939916610718,
+          "p95_ms": 1.5826430201530455
+        }
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cold_forward_ms": 0.9754359722137451,
+        "forward": {
+          "median_ms": 0.3189985007047653,
+          "minimum_ms": 0.3163590133190155,
+          "p95_ms": 0.3250059962272644
+        },
+        "forward_backward": {
+          "median_ms": 2.698588490486145,
+          "minimum_ms": 2.4456300735473633,
+          "p95_ms": 3.099073052406311
+        }
+      }
+    },
+    {
+      "case": {
+        "activation": "ReLU",
+        "batch": 4096,
+        "hidden": 2,
+        "input_dims": 32,
+        "name": "large_4096_w64",
+        "output_activation": "None",
+        "output_dims": 16,
+        "width": 64
+      },
+      "forward_backward_speedup": 1.9248942016397943,
+      "forward_speedup": 1.151505729116572,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cold_forward_ms": 47.73017120361328,
+        "forward": {
+          "median_ms": 0.10995950177311897,
+          "minimum_ms": 0.09591999650001526,
+          "p95_ms": 0.12458500042557716
+        },
+        "forward_backward": {
+          "median_ms": 2.376110076904297,
+          "minimum_ms": 2.306149959564209,
+          "p95_ms": 2.4702929615974423
+        }
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cold_forward_ms": 0.1625490039587021,
+        "forward": {
+          "median_ms": 0.12661899626255035,
+          "minimum_ms": 0.11375900357961655,
+          "p95_ms": 0.12969304472208024
+        },
+        "forward_backward": {
+          "median_ms": 4.573760509490967,
+          "minimum_ms": 4.4995012283325195,
+          "p95_ms": 4.714400196075439
+        }
+      }
+    }
+  ],
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/lib.linux-x86_64-cpython-312/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "gates": {
+    "large_forward_backward_geomean_at_least_0_95": true,
+    "large_forward_geomean_over_1": true,
+    "no_large_regression_over_15_percent": true,
+    "one_large_forward_at_least_1_25x": true
+  },
+  "iterations": 100,
+  "large_forward_backward_geomean": 1.8786441484626755,
+  "large_forward_geomean": 1.3055049547883182,
+  "result": "PASS",
+  "warmup": 20
+}

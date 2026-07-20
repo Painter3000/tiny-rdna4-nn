@@ -56,6 +56,9 @@
 
 #include <tiny-cuda-nn/cpp_api.h>
 #include <tiny-cuda-nn/object.h>
+#if defined(__HIP_PLATFORM_AMD__) && !defined(TCNN_NO_NETWORKS)
+#include <tiny-cuda-nn/networks/hipblaslt_mlp.h>
+#endif
 
 #define STRINGIFY(x) #x
 #define STR(x) STRINGIFY(x)
@@ -400,6 +403,12 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 #if !defined(TCNN_NO_NETWORKS)
 	m.def("create_network_with_input_encoding", &create_network_with_input_encoding);
 	m.def("create_network", &create_network);
+	#if defined(__HIP_PLATFORM_AMD__)
+	// TCNN_RDNA4_P3A1_HIPBLASLT_006: private cache diagnostics.
+	m.def("_hipblaslt_cache_hits", &tcnn::hipblaslt_mlp_cache_hits);
+	m.def("_hipblaslt_cache_misses", &tcnn::hipblaslt_mlp_cache_misses);
+	m.def("_hipblaslt_cache_size", &tcnn::hipblaslt_mlp_cache_size);
+	#endif
 #endif
 
 	m.def("create_encoding", &create_encoding);

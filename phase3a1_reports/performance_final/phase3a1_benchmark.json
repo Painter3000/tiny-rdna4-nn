@@ -1,0 +1,406 @@
+{
+  "cases": [
+    {
+      "case": {
+        "batch": 1,
+        "hidden": 1,
+        "input_dims": 3,
+        "name": "small",
+        "output_dims": 2,
+        "width": 16
+      },
+      "forward_backward_speedup": 0.8891989097445291,
+      "forward_speedup": 0.754500835312048,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cache_after": {
+          "hits": 956,
+          "misses": 6,
+          "size": 6
+        },
+        "cache_before": {
+          "hits": 0,
+          "misses": 2,
+          "size": 2
+        },
+        "cold_forward_ms": 923.4176635742188,
+        "forward": {
+          "median_ms": 0.10448100045323372,
+          "minimum_ms": 0.071601003408432,
+          "p95_ms": 0.11282099708914756
+        },
+        "forward_backward": {
+          "median_ms": 0.3515850007534027,
+          "minimum_ms": 0.3222840130329132,
+          "p95_ms": 0.3893064960837364
+        },
+        "memory_allocated": 5120,
+        "memory_reserved": 2097152
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cache_after": {
+          "hits": 0,
+          "misses": 0,
+          "size": 0
+        },
+        "cache_before": {
+          "hits": 0,
+          "misses": 0,
+          "size": 0
+        },
+        "cold_forward_ms": 1.3222880363464355,
+        "forward": {
+          "median_ms": 0.07883100211620331,
+          "minimum_ms": 0.06159999966621399,
+          "p95_ms": 0.10171645320951939
+        },
+        "forward_backward": {
+          "median_ms": 0.31262899935245514,
+          "minimum_ms": 0.2710840106010437,
+          "p95_ms": 0.3665955141186714
+        },
+        "memory_allocated": 5120,
+        "memory_reserved": 2097152
+      }
+    },
+    {
+      "case": {
+        "batch": 64,
+        "hidden": 2,
+        "input_dims": 8,
+        "name": "medium",
+        "output_dims": 3,
+        "width": 32
+      },
+      "forward_backward_speedup": 1.206756178697095,
+      "forward_speedup": 0.703489456457838,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cache_after": {
+          "hits": 2390,
+          "misses": 15,
+          "size": 15
+        },
+        "cache_before": {
+          "hits": 956,
+          "misses": 9,
+          "size": 9
+        },
+        "cold_forward_ms": 47.69120407104492,
+        "forward": {
+          "median_ms": 0.11271100118756294,
+          "minimum_ms": 0.09428100287914276,
+          "p95_ms": 0.1312915042042732
+        },
+        "forward_backward": {
+          "median_ms": 0.38105998933315277,
+          "minimum_ms": 0.3377549946308136,
+          "p95_ms": 0.4286085113883018
+        },
+        "memory_allocated": 25600,
+        "memory_reserved": 2097152
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cache_after": {
+          "hits": 956,
+          "misses": 6,
+          "size": 6
+        },
+        "cache_before": {
+          "hits": 956,
+          "misses": 6,
+          "size": 6
+        },
+        "cold_forward_ms": 0.2073020040988922,
+        "forward": {
+          "median_ms": 0.07929100096225739,
+          "minimum_ms": 0.03991999849677086,
+          "p95_ms": 0.09490994662046433
+        },
+        "forward_backward": {
+          "median_ms": 0.45984649658203125,
+          "minimum_ms": 0.45508599281311035,
+          "p95_ms": 0.4893680050969124
+        },
+        "memory_allocated": 25600,
+        "memory_reserved": 2097152
+      }
+    },
+    {
+      "case": {
+        "batch": 257,
+        "hidden": 4,
+        "input_dims": 8,
+        "name": "target_257_w64",
+        "output_dims": 3,
+        "width": 64
+      },
+      "forward_backward_speedup": 1.7643010491308155,
+      "forward_speedup": 0.6187397772435425,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cache_after": {
+          "hits": 4786,
+          "misses": 24,
+          "size": 24
+        },
+        "cache_before": {
+          "hits": 2392,
+          "misses": 18,
+          "size": 18
+        },
+        "cold_forward_ms": 47.41379928588867,
+        "forward": {
+          "median_ms": 0.12483600154519081,
+          "minimum_ms": 0.0915210023522377,
+          "p95_ms": 0.15215999782085418
+        },
+        "forward_backward": {
+          "median_ms": 0.8866519927978516,
+          "minimum_ms": 0.8745319843292236,
+          "p95_ms": 0.9370609372854233
+        },
+        "memory_allocated": 189440,
+        "memory_reserved": 2097152
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cache_after": {
+          "hits": 2390,
+          "misses": 15,
+          "size": 15
+        },
+        "cache_before": {
+          "hits": 2390,
+          "misses": 15,
+          "size": 15
+        },
+        "cold_forward_ms": 0.482107013463974,
+        "forward": {
+          "median_ms": 0.07724099978804588,
+          "minimum_ms": 0.07552099972963333,
+          "p95_ms": 0.1032939478754997
+        },
+        "forward_backward": {
+          "median_ms": 1.5643210411071777,
+          "minimum_ms": 1.5499409437179565,
+          "p95_ms": 1.6108100235462188
+        },
+        "memory_allocated": 189440,
+        "memory_reserved": 2097152
+      }
+    },
+    {
+      "case": {
+        "batch": 1024,
+        "hidden": 4,
+        "input_dims": 8,
+        "name": "large_1024_w64",
+        "output_dims": 3,
+        "width": 64
+      },
+      "forward_backward_speedup": 1.8081070735873654,
+      "forward_speedup": 1.0012690601968408,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cache_after": {
+          "hits": 7182,
+          "misses": 33,
+          "size": 33
+        },
+        "cache_before": {
+          "hits": 4788,
+          "misses": 27,
+          "size": 27
+        },
+        "cold_forward_ms": 47.28937530517578,
+        "forward": {
+          "median_ms": 0.14184199273586273,
+          "minimum_ms": 0.13172200322151184,
+          "p95_ms": 0.14409599527716635
+        },
+        "forward_backward": {
+          "median_ms": 1.6844030022621155,
+          "minimum_ms": 1.6545820236206055,
+          "p95_ms": 1.728575050830841
+        },
+        "memory_allocated": 270336,
+        "memory_reserved": 2097152
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cache_after": {
+          "hits": 4786,
+          "misses": 24,
+          "size": 24
+        },
+        "cache_before": {
+          "hits": 4786,
+          "misses": 24,
+          "size": 24
+        },
+        "cold_forward_ms": 0.1858929991722107,
+        "forward": {
+          "median_ms": 0.1420219987630844,
+          "minimum_ms": 0.13964200019836426,
+          "p95_ms": 0.1436979986727238
+        },
+        "forward_backward": {
+          "median_ms": 3.0455809831619263,
+          "minimum_ms": 2.890839099884033,
+          "p95_ms": 3.112886095046997
+        },
+        "memory_allocated": 270336,
+        "memory_reserved": 2097152
+      }
+    },
+    {
+      "case": {
+        "batch": 1024,
+        "hidden": 4,
+        "input_dims": 8,
+        "name": "large_1024_w128",
+        "output_dims": 8,
+        "width": 128
+      },
+      "forward_backward_speedup": 1.9267793773614268,
+      "forward_speedup": 1.9477521211603472,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cache_after": {
+          "hits": 9578,
+          "misses": 42,
+          "size": 42
+        },
+        "cache_before": {
+          "hits": 7184,
+          "misses": 36,
+          "size": 36
+        },
+        "cold_forward_ms": 47.39939498901367,
+        "forward": {
+          "median_ms": 0.163442000746727,
+          "minimum_ms": 0.10892099887132645,
+          "p95_ms": 0.1685280054807663
+        },
+        "forward_backward": {
+          "median_ms": 1.4018189907073975,
+          "minimum_ms": 1.2871769666671753,
+          "p95_ms": 1.5756350874900817
+        },
+        "memory_allocated": 753152,
+        "memory_reserved": 2097152
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cache_after": {
+          "hits": 7182,
+          "misses": 33,
+          "size": 33
+        },
+        "cache_before": {
+          "hits": 7182,
+          "misses": 33,
+          "size": 33
+        },
+        "cold_forward_ms": 0.9592030048370361,
+        "forward": {
+          "median_ms": 0.31834450364112854,
+          "minimum_ms": 0.3146040141582489,
+          "p95_ms": 0.36054499745368956
+        },
+        "forward_backward": {
+          "median_ms": 2.700995922088623,
+          "minimum_ms": 2.425632953643799,
+          "p95_ms": 3.086715054512024
+        },
+        "memory_allocated": 753152,
+        "memory_reserved": 2097152
+      }
+    },
+    {
+      "case": {
+        "batch": 4096,
+        "hidden": 2,
+        "input_dims": 32,
+        "name": "large_4096_w64",
+        "output_dims": 16,
+        "width": 64
+      },
+      "forward_backward_speedup": 1.93046016132875,
+      "forward_speedup": 1.2514968291315638,
+      "hipblaslt": {
+        "backend": "HipBLASLtMLP",
+        "cache_after": {
+          "hits": 11012,
+          "misses": 51,
+          "size": 51
+        },
+        "cache_before": {
+          "hits": 9578,
+          "misses": 45,
+          "size": 45
+        },
+        "cold_forward_ms": 47.76765060424805,
+        "forward": {
+          "median_ms": 0.10330149903893471,
+          "minimum_ms": 0.0904809981584549,
+          "p95_ms": 0.10962800085544586
+        },
+        "forward_backward": {
+          "median_ms": 2.3816919326782227,
+          "minimum_ms": 2.2933900356292725,
+          "p95_ms": 2.543500006198883
+        },
+        "memory_allocated": 1924096,
+        "memory_reserved": 4194304
+      },
+      "portable": {
+        "backend": "PortableMLP",
+        "cache_after": {
+          "hits": 9578,
+          "misses": 42,
+          "size": 42
+        },
+        "cache_before": {
+          "hits": 9578,
+          "misses": 42,
+          "size": 42
+        },
+        "cold_forward_ms": 0.16860300302505493,
+        "forward": {
+          "median_ms": 0.12928149849176407,
+          "minimum_ms": 0.12276100367307663,
+          "p95_ms": 0.1585800513625145
+        },
+        "forward_backward": {
+          "median_ms": 4.597761392593384,
+          "minimum_ms": 4.505620956420898,
+          "p95_ms": 4.776001071929931
+        },
+        "memory_allocated": 1924096,
+        "memory_reserved": 4194304
+      }
+    }
+  ],
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/home/oem/therock_test/venv/lib/python3.12/site-packages/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "gates": {
+    "large_forward_backward_geomean_at_least_0_95": true,
+    "large_forward_geomean_over_1": true,
+    "no_large_regression_over_15_percent": true,
+    "one_large_forward_at_least_1_25x": true
+  },
+  "iterations": 100,
+  "large_forward_backward_geomean": 1.887581270347706,
+  "large_forward_geomean": 1.3463916574750334,
+  "result": "PASS",
+  "warmup": 20
+}

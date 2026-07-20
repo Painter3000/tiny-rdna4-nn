@@ -1,0 +1,6 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+binding=/home/oem/therock_test/venv/lib/python3.12/site-packages/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so
+gpu=AMD Radeon Graphics
+arch=gfx1201
+shape=(7, 2)
+NEUTRAL_IMPORT=PASS

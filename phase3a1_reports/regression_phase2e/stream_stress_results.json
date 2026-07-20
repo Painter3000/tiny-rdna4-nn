@@ -1,0 +1,21 @@
+[
+  {
+    "finite": true,
+    "iterations": 50,
+    "mode": "default"
+  },
+  {
+    "finite": true,
+    "iterations": 50,
+    "mode": "same"
+  },
+  {
+    "finite": true,
+    "iterations": 50,
+    "mode": "rotating"
+  },
+  {
+    "finite": true,
+    "mode": "three_stream_events"
+  }
+]
