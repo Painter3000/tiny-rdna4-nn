@@ -1,0 +1,4 @@
+command=/opt/rocm/bin/hipcc -std=c++14 -fsyntax-only -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies /home/oem/therock_test/tcnn_rdna4_port/workspace/tcnn_phase2e_addendum_workspace/cpp_api_legacy_call_smoke.cpp
+returncode=0
+repo=/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2
+dependencies=/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies

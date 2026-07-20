@@ -1,0 +1,7 @@
+torch=2.13.0+rocm7.2
+torch_hip=7.2.53211
+gpu=AMD Radeon Graphics
+capability=(12, 0)
+tinycudann=/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/__init__.py
+native=/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/lib.linux-x86_64-cpython-312/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so
+neutral_import=PASS

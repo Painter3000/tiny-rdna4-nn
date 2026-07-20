@@ -1,0 +1,17 @@
+workspace=/home/oem/therock_test/tcnn_rdna4_port/workspace
+repo=/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2
+bindings=/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch
+phase2e_tag_commit=c9d385ca54e9d27c904f7cdfcfd52ae6cdc0c4e7
+current_head=c9d385ca54e9d27c904f7cdfcfd52ae6cdc0c4e7
+current_branch=rdna4-phase2e-addendum
+
+ M include/tiny-cuda-nn/cpp_api.h
+ M include/tiny-cuda-nn/object.h
+?? include/tiny-cuda-nn/gradient_mode.h
+?? phase2e_addendum_reports/ADDENDUM_PREFLIGHT.txt
+?? phase2e_addendum_reports/CPP_API_COMPATIBILITY.md
+?? phase2e_addendum_reports/clean_native_build.log
+?? phase2e_addendum_reports/cpp_api_legacy_call_smoke.log
+?? phase2e_addendum_reports/cpp_api_legacy_call_smoke_status.txt
+?? phase2e_addendum_reports/neutral_import.log
+?? phase2e_addendum_reports/pip_check.log

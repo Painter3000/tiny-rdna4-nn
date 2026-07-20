@@ -1,0 +1,1530 @@
+/home/oem/therock_test/venv/lib/python3.12/site-packages/setuptools/dist.py:765: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+!!
+
+        ********************************************************************************
+        Please consider removing the following classifiers in favor of a SPDX license expression:
+
+        License :: BSD 3-Clause
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  self._finalize_license_expression()
+Building PyTorch extension for tiny-cuda-nn version 2.0
+Targeting ROCm architecture gfx1201
+Targeting C++ standard 17
+Auto-detecting TCNN_HALF_PRECISION: ON (Arch: 120)
+WARNING: could not find CUDA include directory. JIT compilation will not be supported.
+running build_ext
+building 'tinycudann_bindings._120_C' extension
+creating /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/../../src
+creating /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src
+creating /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/tinycudann
+[1/9] /opt/rocm/bin/hipcc  -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/src/common_host.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -DCUDA_HAS_FP16=1 -D__HIP_NO_HALF_OPERATORS__=1 -D__HIP_NO_HALF_CONVERSIONS__=1 -DHIP_ENABLE_WARP_SYNC_BUILTINS=1 -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:52:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   52 |                         hipStreamDestroy(m_stream);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:56:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   56 |                         hipEventDestroy(m_event);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:103:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  103 |                 hipEventDestroy(m_event);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:288:2: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  288 |         CU_CHECK_THROW(granularity_result);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+13 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:52:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   52 |                         hipStreamDestroy(m_stream);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:56:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   56 |                         hipEventDestroy(m_event);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:103:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  103 |                 hipEventDestroy(m_event);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/common_host.cu:288:2: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  288 |         CU_CHECK_THROW(granularity_result);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+13 warnings generated when compiling for host.
+[2/9] /opt/rocm/bin/hipcc  -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/src/cpp_api.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -DCUDA_HAS_FP16=1 -D__HIP_NO_HALF_OPERATORS__=1 -D__HIP_NO_HALF_CONVERSIONS__=1 -DHIP_ENABLE_WARP_SYNC_BUILTINS=1 -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:52:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   52 |                         hipStreamDestroy(m_stream);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:56:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   56 |                         hipEventDestroy(m_event);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:103:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  103 |                 hipEventDestroy(m_event);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:187:7: warning: 'jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  187 |         bool jit_fusion() const { return m_model->jit_fusion(); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:198:13: note: in instantiation of template class 'tcnn::cpp::DifferentiableObject<float>' requested here
+  198 |         return new DifferentiableObject<float>{new tcnn::NetworkWithInputEncoding<float>{n_input_dims, n_output_dims, encoding, network}};
+      |                    ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:123:15: note: overridden virtual function is here
+  123 |         virtual bool jit_fusion() const = 0;
+      |                      ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:188:7: warning: 'set_jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  188 |         void set_jit_fusion(bool val) { m_model->set_jit_fusion(val); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:124:15: note: overridden virtual function is here
+  124 |         virtual void set_jit_fusion(bool val) = 0;
+      |                      ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:187:7: warning: 'jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  187 |         bool jit_fusion() const { return m_model->jit_fusion(); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:214:13: note: in instantiation of template class 'tcnn::cpp::DifferentiableObject<__half>' requested here
+  214 |         return new DifferentiableObject<__half>{tcnn::create_encoding<__half>(n_input_dims, encoding, 0)};
+      |                    ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:123:15: note: overridden virtual function is here
+  123 |         virtual bool jit_fusion() const = 0;
+      |                      ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:188:7: warning: 'set_jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  188 |         void set_jit_fusion(bool val) { m_model->set_jit_fusion(val); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:124:15: note: overridden virtual function is here
+  124 |         virtual void set_jit_fusion(bool val) = 0;
+      |                      ^
+16 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:52:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   52 |                         hipStreamDestroy(m_stream);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:56:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   56 |                         hipEventDestroy(m_event);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:103:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  103 |                 hipEventDestroy(m_event);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:187:7: warning: 'jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  187 |         bool jit_fusion() const { return m_model->jit_fusion(); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:198:13: note: in instantiation of template class 'tcnn::cpp::DifferentiableObject<float>' requested here
+  198 |         return new DifferentiableObject<float>{new tcnn::NetworkWithInputEncoding<float>{n_input_dims, n_output_dims, encoding, network}};
+      |                    ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:123:15: note: overridden virtual function is here
+  123 |         virtual bool jit_fusion() const = 0;
+      |                      ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:188:7: warning: 'set_jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  188 |         void set_jit_fusion(bool val) { m_model->set_jit_fusion(val); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:124:15: note: overridden virtual function is here
+  124 |         virtual void set_jit_fusion(bool val) = 0;
+      |                      ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:187:7: warning: 'jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  187 |         bool jit_fusion() const { return m_model->jit_fusion(); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:214:13: note: in instantiation of template class 'tcnn::cpp::DifferentiableObject<__half>' requested here
+  214 |         return new DifferentiableObject<__half>{tcnn::create_encoding<__half>(n_input_dims, encoding, 0)};
+      |                    ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:123:15: note: overridden virtual function is here
+  123 |         virtual bool jit_fusion() const = 0;
+      |                      ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/cpp_api.cu:188:7: warning: 'set_jit_fusion' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  188 |         void set_jit_fusion(bool val) { m_model->set_jit_fusion(val); }
+      |              ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:124:15: note: overridden virtual function is here
+  124 |         virtual void set_jit_fusion(bool val) = 0;
+      |                      ^
+16 warnings generated when compiling for host.
+[3/9] /opt/rocm/bin/hipcc  -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/src/encoding.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -DCUDA_HAS_FP16=1 -D__HIP_NO_HALF_OPERATORS__=1 -D__HIP_NO_HALF_CONVERSIONS__=1 -DHIP_ENABLE_WARP_SYNC_BUILTINS=1 -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encodings/composite.h:38:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:52:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   52 |                         hipStreamDestroy(m_stream);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:56:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   56 |                         hipEventDestroy(m_event);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:103:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  103 |                 hipEventDestroy(m_event);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encodings/composite.h:412:38: warning: 'nested' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  412 |         const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:59:14: note: in instantiation of template class 'tcnn::CompositeEncoding<__half>' requested here
+   59 |                 return new CompositeEncoding<T>{encoding, n_dims_to_encode};
+      |                            ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:58:99: note: while substituting into a lambda expression here
+   58 |         register_encoding<T>(factories, "Composite", [](uint32_t n_dims_to_encode, const json& encoding) {
+      |                                                                                                          ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:123:84: note: in instantiation of function template specialization 'tcnn::register_builtin_encodings<__half>' requested here
+  123 |         static ci_hashmap<std::function<Encoding<T>*(uint32_t, const json&)>> factories = register_builtin_encodings<T>();
+      |                                                                                           ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:136:6: note: in instantiation of function template specialization 'tcnn::encoding_factories<__half>' requested here
+  136 |         if (encoding_factories<T>().count(name) == 0) {
+      |             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:149:28: note: in instantiation of function template specialization 'tcnn::create_encoding<__half>' requested here
+  149 | template Encoding<__half>* create_encoding(uint32_t n_dims_to_encode, const json& encoding, uint32_t alignment);
+      |                            ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:59:46: note: overridden virtual function is here
+   59 |         virtual const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                                     ^
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encodings/composite.h:412:38: warning: 'nested' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  412 |         const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:59:14: note: in instantiation of template class 'tcnn::CompositeEncoding<float>' requested here
+   59 |                 return new CompositeEncoding<T>{encoding, n_dims_to_encode};
+      |                            ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:58:99: note: while substituting into a lambda expression here
+   58 |         register_encoding<T>(factories, "Composite", [](uint32_t n_dims_to_encode, const json& encoding) {
+      |                                                                                                          ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:123:84: note: in instantiation of function template specialization 'tcnn::register_builtin_encodings<float>' requested here
+  123 |         static ci_hashmap<std::function<Encoding<T>*(uint32_t, const json&)>> factories = register_builtin_encodings<T>();
+      |                                                                                           ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:136:6: note: in instantiation of function template specialization 'tcnn::encoding_factories<float>' requested here
+  136 |         if (encoding_factories<T>().count(name) == 0) {
+      |             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:151:27: note: in instantiation of function template specialization 'tcnn::create_encoding<float>' requested here
+  151 | template Encoding<float>* create_encoding(uint32_t n_dims_to_encode, const json& encoding, uint32_t alignment);
+      |                           ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:59:46: note: overridden virtual function is here
+   59 |         virtual const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                                     ^
+14 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:31:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:33:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encodings/composite.h:38:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:52:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   52 |                         hipStreamDestroy(m_stream);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:56:4: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   56 |                         hipEventDestroy(m_event);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/multi_stream.h:103:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  103 |                 hipEventDestroy(m_event);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encodings/composite.h:412:38: warning: 'nested' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  412 |         const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:59:14: note: in instantiation of template class 'tcnn::CompositeEncoding<__half>' requested here
+   59 |                 return new CompositeEncoding<T>{encoding, n_dims_to_encode};
+      |                            ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:58:99: note: while substituting into a lambda expression here
+   58 |         register_encoding<T>(factories, "Composite", [](uint32_t n_dims_to_encode, const json& encoding) {
+      |                                                                                                          ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:123:84: note: in instantiation of function template specialization 'tcnn::register_builtin_encodings<__half>' requested here
+  123 |         static ci_hashmap<std::function<Encoding<T>*(uint32_t, const json&)>> factories = register_builtin_encodings<T>();
+      |                                                                                           ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:136:6: note: in instantiation of function template specialization 'tcnn::encoding_factories<__half>' requested here
+  136 |         if (encoding_factories<T>().count(name) == 0) {
+      |             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:149:28: note: in instantiation of function template specialization 'tcnn::create_encoding<__half>' requested here
+  149 | template Encoding<__half>* create_encoding(uint32_t n_dims_to_encode, const json& encoding, uint32_t alignment);
+      |                            ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:59:46: note: overridden virtual function is here
+   59 |         virtual const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                                     ^
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encodings/composite.h:412:38: warning: 'nested' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  412 |         const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:59:14: note: in instantiation of template class 'tcnn::CompositeEncoding<float>' requested here
+   59 |                 return new CompositeEncoding<T>{encoding, n_dims_to_encode};
+      |                            ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:58:99: note: while substituting into a lambda expression here
+   58 |         register_encoding<T>(factories, "Composite", [](uint32_t n_dims_to_encode, const json& encoding) {
+      |                                                                                                          ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:123:84: note: in instantiation of function template specialization 'tcnn::register_builtin_encodings<float>' requested here
+  123 |         static ci_hashmap<std::function<Encoding<T>*(uint32_t, const json&)>> factories = register_builtin_encodings<T>();
+      |                                                                                           ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:136:6: note: in instantiation of function template specialization 'tcnn::encoding_factories<float>' requested here
+  136 |         if (encoding_factories<T>().count(name) == 0) {
+      |             ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/encoding.cu:151:27: note: in instantiation of function template specialization 'tcnn::create_encoding<float>' requested here
+  151 | template Encoding<float>* create_encoding(uint32_t n_dims_to_encode, const json& encoding, uint32_t alignment);
+      |                           ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/encoding.h:59:46: note: overridden virtual function is here
+   59 |         virtual const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
+      |                                                     ^
+14 warnings generated when compiling for host.
+[4/9] /opt/rocm/bin/hipcc  -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/src/object.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -DCUDA_HAS_FP16=1 -D__HIP_NO_HALF_OPERATORS__=1 -D__HIP_NO_HALF_CONVERSIONS__=1 -DHIP_ENABLE_WARP_SYNC_BUILTINS=1 -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+9 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/object.cu:32:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+9 warnings generated when compiling for host.
+[5/9] /opt/rocm/bin/hipcc  -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/src/portable_mlp.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -DCUDA_HAS_FP16=1 -D__HIP_NO_HALF_OPERATORS__=1 -D__HIP_NO_HALF_CONVERSIONS__=1 -DHIP_ENABLE_WARP_SYNC_BUILTINS=1 -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:3:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:3:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+9 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:3:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:3:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_mlp.cu:5:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/networks/portable_mlp.h:9:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+9 warnings generated when compiling for host.
+[6/9] /opt/rocm/bin/hipcc  -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/src/portable_network.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -DCUDA_HAS_FP16=1 -D__HIP_NO_HALF_OPERATORS__=1 -D__HIP_NO_HALF_CONVERSIONS__=1 -DHIP_ENABLE_WARP_SYNC_BUILTINS=1 -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+9 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:32:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/src/portable_network.cu:7:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/network.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+9 warnings generated when compiling for host.
+[7/9] /opt/rocm/bin/hipcc -MMD -MF /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.o.d -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -fPIC -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.cc -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.cc:8:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format-inl.h:29:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+1 warning generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.cc:8:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format-inl.h:29:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+1 warning generated when compiling for host.
+[8/9] /opt/rocm/bin/hipcc -MMD -MF /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/os.o.d -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -fPIC -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/os.cc -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/os.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/os.cc:13:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/os.h:20:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+1 warning generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/os.cc:13:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/os.h:20:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+1 warning generated when compiling for host.
+[9/9] /opt/rocm/bin/hipcc -MMD -MF /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/tinycudann/bindings.o.d -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -fPIC -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include -I/opt/rocm/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include -I/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -I/home/oem/therock_test/venv/include -I/usr/include/python3.12 -c -c /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp -o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/tinycudann/bindings.o -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -D__HIP_PLATFORM_AMD__=1 -DUSE_ROCM=1 -DHIPBLAS_V2 -fPIC -std=c++17 --offload-arch=gfx1201 --rocm-path=/opt/rocm -D__HIP_PLATFORM_AMD__ -DUSE_ROCM -Wno-float-conversion -fno-strict-aliasing -fno-gpu-rdc -U__HIP_NO_HALF_OPERATORS__ -U__HIP_NO_HALF_CONVERSIONS__ -DTCNN_PARAMS_UNALIGNED -DTCNN_HALF_PRECISION=1 -DTCNN_NO_RTC -DTCNN_HALF_PRECISION=1 -DTCNN_PORTABLE_MLP_ONLY -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_API_INCLUDE_EXTENSION_H -DTORCH_EXTENSION_NAME=_120_C
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:34:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/extension.h:6:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include/torch/all.h:8:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include/torch/autograd.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/autograd.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/variable.h:7:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/cpp_hook.h:3:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/function_hook.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/ATen/Tensor.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/ATen/core/Tensor.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/ATen/core/TensorBody.h:21:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/TensorImpl.h:9:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/InferenceMode.h:4:
+/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/AutogradState.h:89:33: warning: default member initializer for bit-field is a C++20 extension [-Wc++20-extensions]
+   89 |   bool view_replay_enabled_ : 1 = false;
+      |                                 ^
+/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/AutogradState.h:90:45: warning: default member initializer for bit-field is a C++20 extension [-Wc++20-extensions]
+   90 |   bool grad_layout_enforcement_enabled_ : 1 = true;
+      |                                             ^
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:52:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common.h:66:13: warning: unknown pragma ignored [-Wunknown-pragmas]
+   66 | #    pragma diag_suppress = unsigned_compare_with_zero
+      |             ^
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:63:9: warning: 'CHECK_THROW' macro redefined [-Wmacro-redefined]
+   63 | #define CHECK_THROW(x) \
+      |         ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:72:9: note: previous definition is here
+   72 | #define CHECK_THROW(x) \
+      |         ^
+13 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:34:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/extension.h:6:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include/torch/all.h:8:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/api/include/torch/autograd.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/autograd.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/variable.h:7:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/cpp_hook.h:3:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/torch/csrc/autograd/function_hook.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/ATen/Tensor.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/ATen/core/Tensor.h:4:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/ATen/core/TensorBody.h:21:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/TensorImpl.h:9:
+In file included from /home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/InferenceMode.h:4:
+/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/AutogradState.h:89:33: warning: default member initializer for bit-field is a C++20 extension [-Wc++20-extensions]
+   89 |   bool view_replay_enabled_ : 1 = false;
+      |                                 ^
+/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/include/c10/core/AutogradState.h:90:45: warning: default member initializer for bit-field is a C++20 extension [-Wc++20-extensions]
+   90 |   bool grad_layout_enforcement_enabled_ : 1 = true;
+      |                                             ^
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:52:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:33:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common.h:66:13: warning: unknown pragma ignored [-Wunknown-pragmas]
+   66 | #    pragma diag_suppress = unsigned_compare_with_zero
+      |             ^
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:34:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:36:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/include/fmt/format.h:4143:27: warning: identifier '_a' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 4143 | constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
+      |                ~~~~~~~~~~~^~
+      |                operator""_a
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:467:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  467 |                                 CU_CHECK_THROW(hipMemUnmap(m_base_address, m_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:470:6: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  470 |                                         CU_CHECK_THROW(hipMemRelease(handle));
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:473:5: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  473 |                                 CU_CHECK_THROW(hipMemAddressFree(m_base_address, m_max_size));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:570:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  570 |                 CU_CHECK_THROW(hipMemCreate(&m_handles.back(), n_bytes_to_allocate, &prop, 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:579:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  579 |                 CU_CHECK_THROW(hipMemMap((char*)m_base_address + m_size, n_bytes_to_allocate, 0, m_handles.back(), 0));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:58:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/object.h:35:
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_matrix.h:34:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/gpu_memory.h:580:3: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  580 |                 CU_CHECK_THROW(hipMemSetAccess((char*)m_base_address + m_size, n_bytes_to_allocate, &access_desc, 1));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:81:4: note: expanded from macro 'CU_CHECK_THROW'
+   81 |                         hipDrvGetErrorName(_result, &msg); \
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/tinycudann/bindings.cpp:63:9: warning: 'CHECK_THROW' macro redefined [-Wmacro-redefined]
+   63 | #define CHECK_THROW(x) \
+      |         ^
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/common_host.h:72:9: note: previous definition is here
+   72 | #define CHECK_THROW(x) \
+      |         ^
+13 warnings generated when compiling for host.
+creating build/lib.linux-x86_64-cpython-312/tinycudann_bindings
+/opt/rocm/bin/hipcc -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -shared -Wl,-O1 -Wl,-Bsymbolic-functions /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/../../src/common_host.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/../../src/cpp_api.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/../../src/encoding.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/../../src/object.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/../../src/portable_mlp.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/../../src/portable_network.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/os.o /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/temp.linux-x86_64-cpython-312/tinycudann/bindings.o -L/opt/rocm/lib -L/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/lib -L/usr/lib/x86_64-linux-gnu -lamdhip64 -lc10 -ltorch -ltorch_cpu -ltorch_python -o build/lib.linux-x86_64-cpython-312/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so
+copying build/lib.linux-x86_64-cpython-312/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so -> tinycudann_bindings
+error: could not create 'tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so': No such file or directory
+Processing ./.
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'error'
+  error: subprocess-exited-with-error
+
+  × Getting requirements to build wheel did not run successfully.
+  │ exit code: 1
+  ╰─> [20 lines of output]
+      Traceback (most recent call last):
+        File "/home/oem/therock_test/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+        File "/home/oem/therock_test/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/home/oem/therock_test/venv/lib/python3.12/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 143, in get_requires_for_build_wheel
+          return hook(config_settings)
+                 ^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-m400xhg_/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
+          return self._get_build_requires(config_settings, requirements=[])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/tmp/pip-build-env-m400xhg_/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
+          self.run_setup()
+        File "/tmp/pip-build-env-m400xhg_/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 520, in run_setup
+          super().run_setup(setup_script=setup_script)
+        File "/tmp/pip-build-env-m400xhg_/overlay/lib/python3.12/site-packages/setuptools/build_meta.py", line 317, in run_setup
+          exec(code, locals())
+        File "<string>", line 11, in <module>
+      ModuleNotFoundError: No module named 'torch'
+      [end of output]
+
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+ERROR: Failed to build 'file:///home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch' when getting requirements to build wheel
+Processing ./.
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: tinycudann
+  Building wheel for tinycudann (pyproject.toml): started
+  Building wheel for tinycudann (pyproject.toml): finished with status 'error'
+  error: subprocess-exited-with-error
+
+  × Building wheel for tinycudann (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [39 lines of output]
+      /home/oem/therock_test/venv/lib/python3.12/site-packages/setuptools/dist.py:765: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+      !!
+
+              ********************************************************************************
+              Please consider removing the following classifiers in favor of a SPDX license expression:
+
+              License :: BSD 3-Clause
+
+              See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+              ********************************************************************************
+
+      !!
+        self._finalize_license_expression()
+      Building PyTorch extension for tiny-cuda-nn version 2.0
+      Targeting ROCm architecture gfx1201
+      Targeting C++ standard 17
+      Auto-detecting TCNN_HALF_PRECISION: ON (Arch: 120)
+      WARNING: could not find CUDA include directory. JIT compilation will not be supported.
+      running bdist_wheel
+      running build
+      running build_py
+      creating build/lib.linux-x86_64-cpython-312/tinycudann
+      copying tinycudann/modules.py -> build/lib.linux-x86_64-cpython-312/tinycudann
+      copying tinycudann/__init__.py -> build/lib.linux-x86_64-cpython-312/tinycudann
+      running egg_info
+      creating tinycudann.egg-info
+      writing tinycudann.egg-info/PKG-INFO
+      writing dependency_links to tinycudann.egg-info/dependency_links.txt
+      writing top-level names to tinycudann.egg-info/top_level.txt
+      writing manifest file 'tinycudann.egg-info/SOURCES.txt'
+      reading manifest file 'tinycudann.egg-info/SOURCES.txt'
+      writing manifest file 'tinycudann.egg-info/SOURCES.txt'
+      error: Error: setup script specifies an absolute path:
+
+          /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.cc
+
+      setup() arguments must *always* be /-separated paths relative to the
+      setup.py directory, *never* absolute paths.
+
+      [end of output]
+
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for tinycudann
+Failed to build tinycudann
+error: failed-wheel-build-for-install
+
+× Failed to build installable wheels for some pyproject.toml based projects
+╰─> tinycudann
+/home/oem/therock_test/venv/lib/python3.12/site-packages/setuptools/dist.py:765: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+!!
+
+        ********************************************************************************
+        Please consider removing the following classifiers in favor of a SPDX license expression:
+
+        License :: BSD 3-Clause
+
+        See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+        ********************************************************************************
+
+!!
+  self._finalize_license_expression()
+Building PyTorch extension for tiny-cuda-nn version 2.0
+Targeting ROCm architecture gfx1201
+Targeting C++ standard 17
+Auto-detecting TCNN_HALF_PRECISION: ON (Arch: 120)
+WARNING: could not find CUDA include directory. JIT compilation will not be supported.
+running install
+/home/oem/therock_test/venv/lib/python3.12/site-packages/setuptools/_distutils/cmd.py:90: SetuptoolsDeprecationWarning: setup.py install is deprecated.
+!!
+
+        ********************************************************************************
+        Please avoid running ``setup.py`` directly.
+        Instead, use pypa/build, pypa/installer or other
+        standards-based tools.
+
+        This deprecation is overdue, please update your project and remove deprecated
+        calls to avoid build errors in the future.
+
+        See https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html for details.
+        ********************************************************************************
+
+!!
+  self.initialize_options()
+running build
+running build_py
+copying tinycudann/modules.py -> build/lib.linux-x86_64-cpython-312/tinycudann
+copying tinycudann/__init__.py -> build/lib.linux-x86_64-cpython-312/tinycudann
+running egg_info
+writing tinycudann.egg-info/PKG-INFO
+writing dependency_links to tinycudann.egg-info/dependency_links.txt
+writing top-level names to tinycudann.egg-info/top_level.txt
+reading manifest file 'tinycudann.egg-info/SOURCES.txt'
+writing manifest file 'tinycudann.egg-info/SOURCES.txt'
+error: Error: setup script specifies an absolute path:
+
+    /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase1/dependencies/fmt/src/format.cc
+
+setup() arguments must *always* be /-separated paths relative to the
+setup.py directory, *never* absolute paths.

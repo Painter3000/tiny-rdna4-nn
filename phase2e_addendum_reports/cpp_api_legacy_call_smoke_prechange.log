@@ -1,0 +1,7 @@
+clang++: warning: argument unused during compilation: '-Llib' [-Wunused-command-line-argument]
+clang++: warning: argument unused during compilation: '--hip-link' [-Wunused-command-line-argument]
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/tcnn_phase2e_addendum_workspace/cpp_api_legacy_call_smoke.cpp:1:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/tcnn_phase2e_addendum_workspace/cpp_api_legacy_call_smoke.cpp:20:2: error: too few arguments to function call, expected 10, have 9
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include/tiny-cuda-nn/cpp_api.h:101:15: note: 'backward' declared here
+failed to execute:/opt/rocm/lib/llvm/bin/clang++ --offload-arch=gfx1201 -O3 --driver-mode=g++ -O3 -Llib --hip-link -std=c++14 -fsyntax-only -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/include -I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies -x hip /home/oem/therock_test/tcnn_rdna4_port/workspace/tcnn_phase2e_addendum_workspace/cpp_api_legacy_call_smoke.cpp
+CPP_API_LEGACY_CALL_SMOKE=FAIL

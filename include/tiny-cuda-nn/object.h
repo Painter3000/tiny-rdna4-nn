@@ -29,6 +29,8 @@
 
 #pragma once
 
+#include <tiny-cuda-nn/gradient_mode.h>
+
 #include <tiny-cuda-nn/common_host.h>
 #include <tiny-cuda-nn/gpu_matrix.h>
 #if !defined(TCNN_NO_RTC)
@@ -114,12 +116,6 @@ void mult(hipStream_t stream, const uint32_t num_elements, T* inout, float facto
 
 template <typename T>
 void trim_and_cast_from(hipStream_t stream, const MatrixLayout layout, const uint32_t num_elements, const uint32_t input_width, const uint32_t output_width, const T* in, float* out);
-
-enum class GradientMode {
-	Ignore,
-	Overwrite,
-	Accumulate,
-};
 
 #if !defined(TCNN_NO_RTC)
 std::unique_ptr<CudaRtcKernel> generate_kernel(

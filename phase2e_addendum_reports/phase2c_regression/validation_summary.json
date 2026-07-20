@@ -1,0 +1,21 @@
+{
+  "encoded_network_cases": 3,
+  "encoding_regressions": 8,
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/lib.linux-x86_64-cpython-312/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "has_networks": true,
+    "hip": "7.2.53211",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "fresh_process_failures": 0,
+  "fresh_processes": 12,
+  "identity_wie_cases": 4,
+  "in_process_cases": 12,
+  "result": "PASS",
+  "runtime_flags": {
+    "AMD_SERIALIZE_KERNEL": null,
+    "HIP_LAUNCH_BLOCKING": null
+  }
+}

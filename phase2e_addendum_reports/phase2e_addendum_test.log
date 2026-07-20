@@ -1,0 +1,5 @@
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory. Falling back to regular allocations, which will be larger and can cause occasional stutter.
+/home/oem/therock_test/tcnn_rdna4_port/workspace/tcnn_phase2e_addendum_workspace/validate_phase2e_addendum.py:398: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)
+  loss = float(loss_tensor)
+PHASE2E_ADDENDUM_NUMERICAL_PASS /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase2e_addendum_reports/phase2e_addendum_results.json
