@@ -1,0 +1,857 @@
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x3aff3d20 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3aff3d30 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3aff3d30 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3aff3d30 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3aff3d30 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8400800
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3aff3d30 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_create] handle[out]=0x3aff9c60
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x3aff5ae0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3affa260 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3affa260 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3affa260 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3aff5ae8 type=R_32F rows=8 cols=64 ld=8
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3aff5af0 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3aff5af8 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3aff5b00 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x3aff5fe0
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x3aff5fe0 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:10][HIPBLASLT][156580][Info][initialize] HIPBLASLT_TENSILE_LIBPATH not set: Using "/home/oem/therock_test/venv/lib/python3.12/site-packages/torch/lib/hipblaslt/library"
+
+[2026-07-21 15:02:10][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:11][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+0: Activation (((prob=Hipblaslt_all) != (sol=None)), )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:11][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x3aff5fe0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_create] handle[out]=0x46c68e30
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x3aff5a90 B=0x7336a9c00000 Bdesc=0x3affaa20 C=0x7336a9cc0000 Cdesc=0x3affaa60 D=0x7336a9cc0000 Ddesc=0x3affaaa0 computeDesc=0x3aff3d30 algo=0x3aff5b08 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=8 cols=64 ld=8] B=0x7336a9c00000 Bdesc=[type=R_32F rows=8 cols=1024 ld=8] C=0x7336a9cc0000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a9cc0000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8400800 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x46c69a40 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c7c6c70 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c7c6c70 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c7c6c70 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c7c6c70 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8404900
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c7c6c70 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x44f4d720 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4d770 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4d770 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4d770 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4d728 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4d730 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4d738 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4d740 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x46c6e420
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x46c6e420 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:11][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+0: Activation (((prob=Hipblaslt_all) != (sol=None)), )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:11][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x46c6e420
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400900 Adesc=0x44f4d6d0 B=0x7336a9cc0000 Bdesc=0x44f4dd00 C=0x7336a24c8000 Cdesc=0x44f4dd40 D=0x7336a24c8000 Ddesc=0x44f4dd80 computeDesc=0x3c7c6c70 algo=0x44f4d748 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400900 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x7336a9cc0000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7336a24c8000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a24c8000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8404900 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x417ef4f0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4f1d0 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4f1d0 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4f1d0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4f1d0 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8408a00
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x44f4f1d0 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8404a00 Adesc=0x44f4d6d0 B=0x7336a24c8000 Bdesc=0x44f4dd00 C=0x7336a2548000 Cdesc=0x44f4dd40 D=0x7336a2548000 Ddesc=0x44f4dd80 computeDesc=0x44f4f1d0 algo=0x44f4d748 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8404a00 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x7336a24c8000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7336a2548000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a2548000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8408a00 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x417f29b0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f0df0 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f0df0 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f0df0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f0df0 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb840cb00
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f0df0 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8408b00 Adesc=0x44f4d6d0 B=0x7336a2548000 Bdesc=0x44f4dd00 C=0x7336a1fc8000 Cdesc=0x44f4dd40 D=0x7336a1fc8000 Ddesc=0x44f4dd80 computeDesc=0x417f0df0 algo=0x44f4d748 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8408b00 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x7336a2548000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7336a1fc8000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a1fc8000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb840cb00 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x417f2ac0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f3370 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f3370 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x417f2ac8 type=R_32F rows=64 cols=3 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x417f2ad0 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x417f2ad8 type=R_32F rows=3 cols=1024 ld=3
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x417f2ae0 type=R_32F rows=3 cols=1024 ld=3
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x417f16c0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x417f16c0 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:11][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: Free0SizeMultiple ()
+}: 0
+
+
+[2026-07-21 15:02:11][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x417f16c0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b840cc00 Adesc=0x417f1ac0 B=0x7336a1fc8000 Bdesc=0x44f522f0 C=0x7337b840d000 Cdesc=0x44f52330 D=0x7337b840d000 Ddesc=0x44f52370 computeDesc=0x417f3370 algo=0x417f2ae8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b840cc00 Adesc=[type=R_32F rows=64 cols=3 ld=64] B=0x7336a1fc8000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7337b840d000 Cdesc=[type=R_32F rows=3 cols=1024 ld=3] D=0x7337b840d000 Ddesc=[type=R_32F rows=3 cols=1024 ld=3] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369c017440 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c017790 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c017790 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c017448 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c017450 type=R_32F rows=3 cols=1024 ld=3
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c017458 type=R_32F rows=64 cols=3 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c017460 type=R_32F rows=64 cols=3 ld=64
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369c018a30
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369c018a30 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:11][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Ailk_Bjlk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: Free1SizeMultiple ()
+0: LeadingFree1SizesGreaterOrEqual (((prob=3) < (sol=4)), )
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369c018a30
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a1fc8000 Adesc=0x73369c017de0 B=0x7336a1113000 Bdesc=0x73369c0182e0 C=0x7337b8434c00 Cdesc=0x73369c018320 D=0x7337b8434c00 Ddesc=0x73369c018360 computeDesc=0x73369c017790 algo=0x73369c017468 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a1fc8000 Adesc=[type=R_32F rows=64 cols=1024 ld=64] B=0x7336a1113000 Bdesc=[type=R_32F rows=3 cols=1024 ld=3] C=0x7337b8434c00 Cdesc=[type=R_32F rows=64 cols=3 ld=64] D=0x7337b8434c00 Ddesc=[type=R_32F rows=64 cols=3 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733694e13420 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c018ac0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c018ac0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694e13428 type=R_32F rows=64 cols=3 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694e13430 type=R_32F rows=3 cols=1024 ld=3
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694e13438 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694e13440 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369f484f10
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369f484f10 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369f484f10
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b840cc00 Adesc=0x73369c13c3a0 B=0x7336a1113000 Bdesc=0x73369c13c3e0 C=0x7336a1116000 Cdesc=0x73369c13c420 D=0x7336a1116000 Ddesc=0x73369c13c460 computeDesc=0x73369c018ac0 algo=0x733694e13448 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b840cc00 Adesc=[type=R_32F rows=64 cols=3 ld=64] B=0x7336a1113000 Bdesc=[type=R_32F rows=3 cols=1024 ld=3] C=0x7336a1116000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a1116000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369e35d200 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c0183e0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c0183e0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e35d208 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e35d210 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e35d218 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e35d220 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369e94f320
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369e94f320 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369e94f320
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a2548000 Adesc=0x733694b31850 B=0x7336a10d3000 Bdesc=0x733694b318f0 C=0x7337b8430b00 Cdesc=0x733694b31930 D=0x7337b8430b00 Ddesc=0x733694b31970 computeDesc=0x73369c0183e0 algo=0x73369e35d228 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a2548000 Adesc=[type=R_32F rows=64 cols=1024 ld=64] B=0x7336a10d3000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7337b8430b00 Cdesc=[type=R_32F rows=64 cols=64 ld=64] D=0x7337b8430b00 Ddesc=[type=R_32F rows=64 cols=64 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733694b318a0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369f482cd0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369f482cd0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694b318a8 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694b318b0 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694b318b8 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733694b318c0 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369e366dc0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369e366dc0 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369e366dc0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8408b00 Adesc=0x73369e360580 B=0x7336a10d3000 Bdesc=0x733694b319b0 C=0x7336a1116000 Cdesc=0x73369e35f4f0 D=0x7336a1116000 Ddesc=0x73369e35f530 computeDesc=0x73369f482cd0 algo=0x733694b318c8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8408b00 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x7336a10d3000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7336a1116000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a1116000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a24c8000 Adesc=0x733694b31850 B=0x7336a1093000 Bdesc=0x733694b318f0 C=0x7337b842ca00 Cdesc=0x733694b31930 D=0x7337b842ca00 Ddesc=0x733694b31970 computeDesc=0x73369c0183e0 algo=0x73369e35d228 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a24c8000 Adesc=[type=R_32F rows=64 cols=1024 ld=64] B=0x7336a1093000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7337b842ca00 Cdesc=[type=R_32F rows=64 cols=64 ld=64] D=0x7337b842ca00 Ddesc=[type=R_32F rows=64 cols=64 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8404a00 Adesc=0x73369e360580 B=0x7336a1093000 Bdesc=0x733694b319b0 C=0x7336a1116000 Cdesc=0x73369e35f4f0 D=0x7336a1116000 Ddesc=0x73369e35f530 computeDesc=0x73369f482cd0 algo=0x733694b318c8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8404a00 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x7336a1093000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7336a1116000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a1116000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a9cc0000 Adesc=0x733694b31850 B=0x7336a2053000 Bdesc=0x733694b318f0 C=0x7337b8428900 Cdesc=0x733694b31930 D=0x7337b8428900 Ddesc=0x733694b31970 computeDesc=0x73369c0183e0 algo=0x73369e35d228 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a9cc0000 Adesc=[type=R_32F rows=64 cols=1024 ld=64] B=0x7336a2053000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7337b8428900 Cdesc=[type=R_32F rows=64 cols=64 ld=64] D=0x7337b8428900 Ddesc=[type=R_32F rows=64 cols=64 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400900 Adesc=0x73369e360580 B=0x7336a2053000 Bdesc=0x733694b319b0 C=0x7336a1116000 Cdesc=0x73369e35f4f0 D=0x7336a1116000 Ddesc=0x73369e35f530 computeDesc=0x73369f482cd0 algo=0x733694b318c8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400900 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x7336a2053000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7336a1116000 Cdesc=[type=R_32F rows=64 cols=1024 ld=64] D=0x7336a1116000 Ddesc=[type=R_32F rows=64 cols=1024 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369e360480 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e366ee0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e366ee0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e360488 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e360490 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e360498 type=R_32F rows=8 cols=64 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e3604a0 type=R_32F rows=8 cols=64 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369e35fbe0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369e35fbe0 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369e35fbe0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a9c00000 Adesc=0x73369e35f5b0 B=0x7336a2013000 Bdesc=0x73369e35f570 C=0x7337b8428000 Cdesc=0x73369e362d50 D=0x7337b8428000 Ddesc=0x73369e362d90 computeDesc=0x73369e366ee0 algo=0x73369e3604a8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a9c00000 Adesc=[type=R_32F rows=8 cols=1024 ld=8] B=0x7336a2013000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7337b8428000 Cdesc=[type=R_32F rows=8 cols=64 ld=8] D=0x7337b8428000 Ddesc=[type=R_32F rows=8 cols=64 ld=8] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369e36c3e0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e35f9a0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e35f9a0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e36c3e8 type=R_32F rows=8 cols=64 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e36c3f0 type=R_32F rows=64 cols=1024 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e36c3f8 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369e36c400 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369e36ca10
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369e36ca10 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369e36ca10
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x73369e36fcb0 B=0x7336a2013000 Bdesc=0x73369e362dd0 C=0x7336a200b000 Cdesc=0x73369e36fcf0 D=0x7336a200b000 Ddesc=0x73369f7b55e0 computeDesc=0x73369e35f9a0 algo=0x73369e36c408 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=8 cols=64 ld=8] B=0x7336a2013000 Bdesc=[type=R_32F rows=64 cols=1024 ld=64] C=0x7336a200b000 Cdesc=[type=R_32F rows=8 cols=1024 ld=8] D=0x7336a200b000 Ddesc=[type=R_32F rows=8 cols=1024 ld=8] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3aff3d30
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3c7c6c70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x44f4f1d0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x417f0df0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x3f4a4e80 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x45973fe0 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x45973fe0 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x45973fe0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x45973fe0 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8401000
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x45973fe0 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x44f4dcb0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f94d380 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f94d380 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f94d380 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4dcb8 type=R_32F rows=8 cols=128 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4dcc0 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4dcc8 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44f4dcd0 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x3afeb7d0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x3afeb7d0 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+0: Activation (((prob=Hipblaslt_all) != (sol=None)), )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x3afeb7d0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x417f2b40 B=0x7336a0e00000 Bdesc=0x44f4ddc0 C=0x7336a0e88000 Cdesc=0x417ef7a0 D=0x7336a0e88000 Ddesc=0x3c7c9990 computeDesc=0x45973fe0 algo=0x44f4dcd8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=8 cols=128 ld=8] B=0x7336a0e00000 Bdesc=[type=R_32F rows=8 cols=1024 ld=8] C=0x7336a0e88000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x7336a0e88000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8401000 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x402789e0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b9b40 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b9b40 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b9b40 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b9b40 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8411200
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b9b40 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x46890380 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4a8a50 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4a8a50 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4a8a50 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x46890388 type=R_32F rows=128 cols=128 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x46890390 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x46890398 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x468903a0 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x403e5390
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x403e5390 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+0: Activation (((prob=Hipblaslt_all) != (sol=None)), )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x403e5390
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8401200 Adesc=0x4689aa20 B=0x7336a0e88000 Bdesc=0x44e674e0 C=0x7336a0f88000 Cdesc=0x453781c0 D=0x7336a0f88000 Ddesc=0x45344ad0 computeDesc=0x3f4b9b40 algo=0x468903a8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8401200 Adesc=[type=R_32F rows=128 cols=128 ld=128] B=0x7336a0e88000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7336a0f88000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x7336a0f88000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8411200 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x42af5b20 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b39b0 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b39b0 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b39b0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b39b0 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8421400
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3f4b39b0 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8411400 Adesc=0x4689aa20 B=0x7336a0f88000 Bdesc=0x44e674e0 C=0x7336a1088000 Cdesc=0x453781c0 D=0x7336a1088000 Ddesc=0x45344ad0 computeDesc=0x3f4b39b0 algo=0x468903a8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8411400 Adesc=[type=R_32F rows=128 cols=128 ld=128] B=0x7336a0f88000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7336a1088000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x7336a1088000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8421400 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x43015840 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x46d7f010 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x46d7f010 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x46d7f010 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x46d7f010 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8431600
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x46d7f010 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8421600 Adesc=0x4689aa20 B=0x7336a1088000 Bdesc=0x44e674e0 C=0x7336a1188000 Cdesc=0x453781c0 D=0x7336a1188000 Ddesc=0x45344ad0 computeDesc=0x46d7f010 algo=0x468903a8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8421600 Adesc=[type=R_32F rows=128 cols=128 ld=128] B=0x7336a1088000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7336a1188000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x7336a1188000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8431600 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x42112040 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x42c10590 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x42c10590 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x42c10590 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x42c10590 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8432800
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x42c10590 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x42c12aa0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x463889c0 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x463889c0 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x463889c0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x42c12aa8 type=R_32F rows=128 cols=8 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x42c12ab0 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x42c12ab8 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x42c12ac0 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x43630150
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x43630150 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x43630150
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8431800 Adesc=0x41be5320 B=0x7336a1188000 Bdesc=0x4079aff0 C=0x7337b8432a00 Cdesc=0x407ae5b0 D=0x7337b8432a00 Ddesc=0x4079a0a0 computeDesc=0x42c10590 algo=0x42c12ac8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8431800 Adesc=[type=R_32F rows=128 cols=8 ld=128] B=0x7336a1188000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7337b8432a00 Cdesc=[type=R_32F rows=8 cols=1024 ld=8] D=0x7337b8432a00 Ddesc=[type=R_32F rows=8 cols=1024 ld=8] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_BIAS biasPointer=0xb8432800 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369f481720 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e366330 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e366330 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369f481728 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369f481730 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369f481738 type=R_32F rows=128 cols=8 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369f481740 type=R_32F rows=128 cols=8 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369f7b5950
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369f7b5950 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369f7b5950
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a1188000 Adesc=0x73369f7b59e0 B=0x73369bc18000 Bdesc=0x73369f7b5a20 C=0x7337b848c200 Cdesc=0x73369e36be80 D=0x7337b848c200 Ddesc=0x73369e36bec0 computeDesc=0x73369e366330 algo=0x73369f481748 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a1188000 Adesc=[type=R_32F rows=128 cols=1024 ld=128] B=0x73369bc18000 Bdesc=[type=R_32F rows=8 cols=1024 ld=8] C=0x7337b848c200 Cdesc=[type=R_32F rows=128 cols=8 ld=128] D=0x7337b848c200 Ddesc=[type=R_32F rows=128 cols=8 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x7336960013e0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369f7b6790 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369f7b6790 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x7336960013e8 type=R_32F rows=128 cols=8 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x7336960013f0 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x7336960013f8 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696001400 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x733696004530
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x733696004530 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x733696004530
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8431800 Adesc=0x73369e36bf00 B=0x73369bc18000 Bdesc=0x733696004560 C=0x73369bc20000 Cdesc=0x7336960045a0 D=0x73369bc20000 Ddesc=0x7336960045e0 computeDesc=0x73369f7b6790 algo=0x733696001408 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8431800 Adesc=[type=R_32F rows=128 cols=8 ld=128] B=0x73369bc18000 Bdesc=[type=R_32F rows=8 cols=1024 ld=8] C=0x73369bc20000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x73369bc20000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x7336960060f0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e36b290 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369e36b290 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x7336960060f8 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696006100 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696006108 type=R_32F rows=128 cols=128 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696006110 type=R_32F rows=128 cols=128 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x733696007810
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x733696007810 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x733696007810
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a1088000 Adesc=0x733696004620 B=0x73369bb98000 Bdesc=0x733696007f50 C=0x7337b847c000 Cdesc=0x733696007f90 D=0x7337b847c000 Ddesc=0x733696007fd0 computeDesc=0x73369e36b290 algo=0x733696006118 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a1088000 Adesc=[type=R_32F rows=128 cols=1024 ld=128] B=0x73369bb98000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7337b847c000 Cdesc=[type=R_32F rows=128 cols=128 ld=128] D=0x7337b847c000 Ddesc=[type=R_32F rows=128 cols=128 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733696006150 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x7336960062e0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x7336960062e0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696006158 type=R_32F rows=128 cols=128 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696006160 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696006168 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696006170 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x733696009ba0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x733696009ba0 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x733696009ba0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8421600 Adesc=0x73369600cb00 B=0x73369bb98000 Bdesc=0x7336960080c0 C=0x73369bc20000 Cdesc=0x73369600ba70 D=0x73369bc20000 Ddesc=0x73369600bab0 computeDesc=0x7336960062e0 algo=0x733696006178 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8421600 Adesc=[type=R_32F rows=128 cols=128 ld=128] B=0x73369bb98000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x73369bc20000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x73369bc20000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a0f88000 Adesc=0x733696004620 B=0x73369bb18000 Bdesc=0x733696007f50 C=0x7337b846be00 Cdesc=0x733696007f90 D=0x7337b846be00 Ddesc=0x733696007fd0 computeDesc=0x73369e36b290 algo=0x733696006118 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a0f88000 Adesc=[type=R_32F rows=128 cols=1024 ld=128] B=0x73369bb18000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7337b846be00 Cdesc=[type=R_32F rows=128 cols=128 ld=128] D=0x7337b846be00 Ddesc=[type=R_32F rows=128 cols=128 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8411400 Adesc=0x73369600cb00 B=0x73369bb18000 Bdesc=0x7336960080c0 C=0x73369bc20000 Cdesc=0x73369600ba70 D=0x73369bc20000 Ddesc=0x73369600bab0 computeDesc=0x7336960062e0 algo=0x733696006178 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8411400 Adesc=[type=R_32F rows=128 cols=128 ld=128] B=0x73369bb18000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x73369bc20000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x73369bc20000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a0e88000 Adesc=0x733696004620 B=0x73369ba98000 Bdesc=0x733696007f50 C=0x7337b845bc00 Cdesc=0x733696007f90 D=0x7337b845bc00 Ddesc=0x733696007fd0 computeDesc=0x73369e36b290 algo=0x733696006118 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a0e88000 Adesc=[type=R_32F rows=128 cols=1024 ld=128] B=0x73369ba98000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7337b845bc00 Cdesc=[type=R_32F rows=128 cols=128 ld=128] D=0x7337b845bc00 Ddesc=[type=R_32F rows=128 cols=128 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8401200 Adesc=0x73369600cb00 B=0x73369ba98000 Bdesc=0x7336960080c0 C=0x73369bc20000 Cdesc=0x73369600ba70 D=0x73369bc20000 Ddesc=0x73369600bab0 computeDesc=0x7336960062e0 algo=0x733696006178 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8401200 Adesc=[type=R_32F rows=128 cols=128 ld=128] B=0x73369ba98000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x73369bc20000 Cdesc=[type=R_32F rows=128 cols=1024 ld=128] D=0x73369bc20000 Ddesc=[type=R_32F rows=128 cols=1024 ld=128] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733696007dc0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696009cd0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696009cd0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696007dc8 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696007dd0 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696007dd8 type=R_32F rows=8 cols=128 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696007de0 type=R_32F rows=8 cols=128 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x733696010870
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x733696010870 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x733696010870
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7336a0e00000 Adesc=0x73369600bb30 B=0x73369ba18000 Bdesc=0x73369600baf0 C=0x7337b845aa00 Cdesc=0x73369600f060 D=0x7337b845aa00 Ddesc=0x73369600f0a0 computeDesc=0x733696009cd0 algo=0x733696007de8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7336a0e00000 Adesc=[type=R_32F rows=8 cols=1024 ld=8] B=0x73369ba18000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7337b845aa00 Cdesc=[type=R_32F rows=8 cols=128 ld=8] D=0x7337b845aa00 Ddesc=[type=R_32F rows=8 cols=128 ld=8] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733696010dd0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369600c970 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369600c970 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696010dd8 type=R_32F rows=8 cols=128 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696010de0 type=R_32F rows=128 cols=1024 ld=128
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696010de8 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696010df0 type=R_32F rows=8 cols=1024 ld=8
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x733696011400
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x733696011400 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x733696011400
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x733696015360 B=0x73369ba18000 Bdesc=0x73369600f0e0 C=0x7336a1210000 Cdesc=0x733696014310 D=0x7336a1210000 Ddesc=0x733696014350 computeDesc=0x73369600c970 algo=0x733696010df8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=8 cols=128 ld=8] B=0x73369ba18000 Bdesc=[type=R_32F rows=128 cols=1024 ld=128] C=0x7336a1210000 Cdesc=[type=R_32F rows=8 cols=1024 ld=8] D=0x7336a1210000 Ddesc=[type=R_32F rows=8 cols=1024 ld=8] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x45973fe0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3f4b9b40
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3f4b39b0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x46d7f010
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x42c10590
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x4030b8f0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x425fbe20 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x425fbe20 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x425fbe20 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x425fbe20 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8402000
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x425fbe20 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x4533ff00 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x421142f0 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x421142f0 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x421142f0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4533ff08 type=R_32F rows=32 cols=64 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4533ff10 type=R_32F rows=32 cols=4096 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4533ff18 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4533ff20 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x44f523f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x44f523f0 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+0: Activation (((prob=Hipblaslt_all) != (sol=None)), )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x44f523f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x73369c016ae0 B=0x73369b600000 Bdesc=0x73369c017230 C=0x73369b780000 Cdesc=0x733696014390 D=0x73369b780000 Ddesc=0x40407840 computeDesc=0x425fbe20 algo=0x4533ff28 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=32 cols=64 ld=32] B=0x73369b600000 Bdesc=[type=R_32F rows=32 cols=4096 ld=32] C=0x73369b780000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369b780000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8402000 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x45966290 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x420e6d80 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x420e6d80 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x420e6d80 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x420e6d80 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8406100
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x420e6d80 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x44e57340 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x416d56b0 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x416d56b0 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x416d56b0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x6
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44e57348 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44e57350 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44e57358 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x44e57360 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x44f523f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x44f523f0 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+0: Activation (((prob=Hipblaslt_all) != (sol=None)), )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x44f523f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8402100 Adesc=0x403dfac0 B=0x73369b780000 Bdesc=0x41c04da0 C=0x73369b980000 Cdesc=0x44959760 D=0x73369b980000 Ddesc=0x407c9c90 computeDesc=0x420e6d80 algo=0x44e57368 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8402100 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x73369b780000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x73369b980000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369b980000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_RELU_BIAS biasPointer=0xb8406100 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x4452c460 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43a09de0 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43a09de0 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43a09de0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43a09de0 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8407200
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43a09de0 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x4026e250 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43f647e0 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43f647e0 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x43f647e0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4026e258 type=R_32F rows=64 cols=16 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4026e260 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4026e268 type=R_32F rows=16 cols=4096 ld=16
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x4026e270 type=R_32F rows=16 cols=4096 ld=16
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x44f523f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x44f523f0 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x44f523f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8406200 Adesc=0x41be2060 B=0x73369b980000 Bdesc=0x3efe0e40 C=0x7337b8407400 Cdesc=0x44931190 D=0x7337b8407400 Ddesc=0x45372900 computeDesc=0x43a09de0 algo=0x4026e278 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8406200 Adesc=[type=R_32F rows=64 cols=16 ld=64] B=0x73369b980000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x7337b8407400 Cdesc=[type=R_32F rows=16 cols=4096 ld=16] D=0x7337b8407400 Ddesc=[type=R_32F rows=16 cols=4096 ld=16] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_BIAS biasPointer=0xb8407200 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733696015210 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696015820 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696015820 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696015218 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696015220 type=R_32F rows=16 cols=4096 ld=16
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696015228 type=R_32F rows=64 cols=16 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696015230 type=R_32F rows=64 cols=16 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369600b040
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369600b040 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369600b040
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x73369b980000 Adesc=0x733696017bf0 B=0x73369af40000 Bdesc=0x733696017ce0 C=0x7337b85cd600 Cdesc=0x733696001360 D=0x7337b85cd600 Ddesc=0x733696010500 computeDesc=0x733696015820 algo=0x733696015238 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x73369b980000 Adesc=[type=R_32F rows=64 cols=4096 ld=64] B=0x73369af40000 Bdesc=[type=R_32F rows=16 cols=4096 ld=16] C=0x7337b85cd600 Cdesc=[type=R_32F rows=64 cols=16 ld=64] D=0x7337b85cd600 Ddesc=[type=R_32F rows=64 cols=16 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733696001310 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696014800 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696014800 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696001318 type=R_32F rows=64 cols=16 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696001320 type=R_32F rows=16 cols=4096 ld=16
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696001328 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696001330 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369600ee90
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369600ee90 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369600ee90
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8406200 Adesc=0x73369600fd40 B=0x73369af40000 Bdesc=0x733696010540 C=0x73369af80000 Cdesc=0x73369600fd80 D=0x73369af80000 Ddesc=0x73369600fdc0 computeDesc=0x733696014800 algo=0x733696001338 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8406200 Adesc=[type=R_32F rows=64 cols=16 ld=64] B=0x73369af40000 Bdesc=[type=R_32F rows=16 cols=4096 ld=16] C=0x73369af80000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369af80000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369600ed60 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c016f70 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c016f70 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369600ed68 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369600ed70 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369600ed78 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369600ed80 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369601ba70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369601ba70 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369601ba70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x73369b780000 Adesc=0x733696019050 B=0x73369ae40000 Bdesc=0x73369600fe00 C=0x7337b85c9500 Cdesc=0x73369601bbb0 D=0x7337b85c9500 Ddesc=0x73369601bbf0 computeDesc=0x73369c016f70 algo=0x73369600ed88 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x73369b780000 Adesc=[type=R_32F rows=64 cols=4096 ld=64] B=0x73369ae40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x7337b85c9500 Cdesc=[type=R_32F rows=64 cols=64 ld=64] D=0x7337b85c9500 Ddesc=[type=R_32F rows=64 cols=64 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x733696019fe0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696018cd0 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x733696018cd0 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696019fe8 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696019ff0 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x733696019ff8 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369601a000 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369c02d090
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369c02d090 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369c02d090
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8402100 Adesc=0x73369c0302d0 B=0x73369ae40000 Bdesc=0x73369c02cb20 C=0x73369af80000 Cdesc=0x73369c02f280 D=0x73369af80000 Ddesc=0x73369c02f2c0 computeDesc=0x733696018cd0 algo=0x73369601a008 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8402100 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x73369ae40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x73369af80000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369af80000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369c02eb00 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c02bf00 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc18c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c02bf00 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc188 sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c02eb08 type=R_32F rows=32 cols=4096 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c02eb10 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c02eb18 type=R_32F rows=32 cols=64 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c02eb20 type=R_32F rows=32 cols=64 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369c0308f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369c0308f0 attr=1 buf=0x7336a1dfc258 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369c0308f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x73369b600000 Adesc=0x73369c02f300 B=0x73369bb40000 Bdesc=0x73369601bd20 C=0x7337b85c7400 Cdesc=0x73369c032650 D=0x7337b85c7400 Ddesc=0x73369c032690 computeDesc=0x73369c02bf00 algo=0x73369c02eb28 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x73369b600000 Adesc=[type=R_32F rows=32 cols=4096 ld=32] B=0x73369bb40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x7337b85c7400 Cdesc=[type=R_32F rows=32 cols=64 ld=32] D=0x7337b85c7400 Ddesc=[type=R_32F rows=32 cols=64 ld=32] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x73369c030750 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c030960 attr=MATMUL_DESC_TRANSA buf=0x7336a1dfc15c sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x73369c030960 attr=MATMUL_DESC_TRANSB buf=0x7336a1dfc158 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c030758 type=R_32F rows=32 cols=64 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c030760 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c030768 type=R_32F rows=32 cols=4096 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x73369c030770 type=R_32F rows=32 cols=4096 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x73369c035760
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x73369c035760 attr=1 buf=0x7336a1dfc228 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x73369c035760
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x73369c036f70 B=0x73369bb40000 Bdesc=0x73369c0326d0 C=0x73369bac0000 Cdesc=0x73369c035ea0 D=0x73369bac0000 Ddesc=0x73369c035ee0 computeDesc=0x73369c030960 algo=0x73369c030778 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=32 cols=64 ld=32] B=0x73369bb40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x73369bac0000 Cdesc=[type=R_32F rows=32 cols=4096 ld=32] D=0x73369bac0000 Ddesc=[type=R_32F rows=32 cols=4096 ld=32] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x425fbe20
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x420e6d80
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x43a09de0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x3caaa9f0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c9cc020 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c9cc020 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c9cc020 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c9cc020 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8402000
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3c9cc020 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x46da73d0 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f1a00 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f1a00 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x417f1a00 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x46da73d8 type=R_32F rows=32 cols=64 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x46da73e0 type=R_32F rows=32 cols=4096 ld=32
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x46da73e8 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x46da73f0 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x43630150
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x43630150 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x43630150
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x73369c0099c0 B=0x73369a800000 Bdesc=0x3cb1f980 C=0x73369a980000 Cdesc=0x73369c039760 D=0x73369a980000 Ddesc=0x416d36e0 computeDesc=0x3c9cc020 algo=0x46da73f8 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=32 cols=64 ld=32] B=0x73369a800000 Bdesc=[type=R_32F rows=32 cols=4096 ld=32] C=0x73369a980000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369a980000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_BIAS biasPointer=0xb8402000 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x3ca91210 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3ad316d0 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3ad316d0 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3ad316d0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3ad316d0 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8406100
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3ad316d0 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x3c9ba370 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df67a20 attr=MATMUL_DESC_TRANSA buf=0x7ffd374046ac sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df67a20 attr=MATMUL_DESC_TRANSB buf=0x7ffd374046a8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df67a20 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd374046a4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3c9ba378 type=R_32F rows=64 cols=64 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3c9ba380 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3c9ba388 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_create] matLayout[out]=0x3c9ba390 type=R_32F rows=64 cols=4096 ld=64
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_create] matmulPref[out]=0x407bef50
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_set_attribute] matmulPref=0x407bef50 attr=1 buf=0x7ffd37404778 sizeInBytes=8 data=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Found hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][getAllSolutions] Final hardware solutions: =5
+[2026-07-21 15:02:12][HIPBLASLT][156580][Info][isSolutionSupported] Software match: Cijk_Alik_Bljk_S_B_UserArgs_MT32x64x16_SN_LDSB0_AFC0_AFEM4_AFEM4_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA4_GRVWB4_GSUAMB_GLS0_ISA1201_IU1_K1_LDSTI0_LBSPPA0_LBSPPB0_LBSPPM0_LPA0_LPB0_LPM0_LRVW4_LWPMn1_MIAV0_MO40_NTn1_NTA0_NTB0_NTC0_NTD0_NTM0_NEPBS0_NLCA1_NLCB1_ONLL1_PGR2_PLR1_PKA0_SIA1_SS0_SPO0_SRVW0_SSO0_SVW2_SK0_SKFTR0_SKXCCM0_TT8_8_TLDS0_ULSGRO0_USL1_UIOFGRO0_USFGROn1_VSn1_VWA4_VWB4_WSGRA0_WSGRB0_WS32_WG4_8_1And {
+0: BiasDataTypeWhiteList (The supported bias types are: )
+UseBias(0): prob: 1, Is sol support: 0
+}: 0
+
+
+[2026-07-21 15:02:12][HIPBLASLT][156580][Error][isSolutionSupported] Solution is not supported
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_algo_get_heuristic] final returnAlgoCount=4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_preference_destroy] matmulPref=0x407bef50
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8402100 Adesc=0x459574a0 B=0x73369a980000 Bdesc=0x3f4b7280 C=0x73369ab80000 Cdesc=0x3ca85ed0 D=0x73369ab80000 Ddesc=0x3c9b74f0 computeDesc=0x3ad316d0 algo=0x3c9ba398 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8402100 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x73369a980000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x73369ab80000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369ab80000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_BIAS biasPointer=0xb8406100 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_create] matmulDesc[out]=0x3adc5720 computeType=COMPUTE_32F scaleType=R_32F
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df447f0 attr=MATMUL_DESC_TRANSA buf=0x7ffd37404eec sizeInBytes=4 bufData=0x70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df447f0 attr=MATMUL_DESC_TRANSB buf=0x7ffd37404ee8 sizeInBytes=4 bufData=0x6f
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df447f0 attr=MATMUL_DESC_EPILOGUE buf=0x7ffd37404ee4 sizeInBytes=4 bufData=0x4
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df447f0 attr=MATMUL_DESC_BIAS_POINTER buf=0x7ffd37404f50 sizeInBytes=8 bufData=0xb8407200
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_set_attribute] matmulDesc=0x3df447f0 attr=MATMUL_DESC_BIAS_DATA_TYPE buf=0x7ffd37404fa0 sizeInBytes=4 bufData=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8406200 Adesc=0x41be2060 B=0x73369ab80000 Bdesc=0x3efe0e40 C=0x7337b8407400 Cdesc=0x44931190 D=0x7337b8407400 Ddesc=0x45372900 computeDesc=0x3df447f0 algo=0x4026e278 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8406200 Adesc=[type=R_32F rows=64 cols=16 ld=64] B=0x73369ab80000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x7337b8407400 Cdesc=[type=R_32F rows=16 cols=4096 ld=16] D=0x7337b8407400 Ddesc=[type=R_32F rows=16 cols=4096 ld=16] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_T transB=OP_N epilogue=EPILOGUE_BIAS biasPointer=0xb8407200 biasType=R_32F] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x73369ab80000 Adesc=0x733696017bf0 B=0x73369af40000 Bdesc=0x733696017ce0 C=0x7337b85cd600 Cdesc=0x733696001360 D=0x7337b85cd600 Ddesc=0x733696010500 computeDesc=0x733696015820 algo=0x733696015238 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x73369ab80000 Adesc=[type=R_32F rows=64 cols=4096 ld=64] B=0x73369af40000 Bdesc=[type=R_32F rows=16 cols=4096 ld=16] C=0x7337b85cd600 Cdesc=[type=R_32F rows=64 cols=16 ld=64] D=0x7337b85cd600 Ddesc=[type=R_32F rows=64 cols=16 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8406200 Adesc=0x73369600fd40 B=0x73369af40000 Bdesc=0x733696010540 C=0x73369af80000 Cdesc=0x73369600fd80 D=0x73369af80000 Ddesc=0x73369600fdc0 computeDesc=0x733696014800 algo=0x733696001338 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8406200 Adesc=[type=R_32F rows=64 cols=16 ld=64] B=0x73369af40000 Bdesc=[type=R_32F rows=16 cols=4096 ld=16] C=0x73369af80000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369af80000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x73369a980000 Adesc=0x733696019050 B=0x73369ae40000 Bdesc=0x73369600fe00 C=0x7337b85c9500 Cdesc=0x73369601bbb0 D=0x7337b85c9500 Ddesc=0x73369601bbf0 computeDesc=0x73369c016f70 algo=0x73369600ed88 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x73369a980000 Adesc=[type=R_32F rows=64 cols=4096 ld=64] B=0x73369ae40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x7337b85c9500 Cdesc=[type=R_32F rows=64 cols=64 ld=64] D=0x7337b85c9500 Ddesc=[type=R_32F rows=64 cols=64 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8402100 Adesc=0x73369c0302d0 B=0x73369ae40000 Bdesc=0x73369c02cb20 C=0x73369af80000 Cdesc=0x73369c02f280 D=0x73369af80000 Ddesc=0x73369c02f2c0 computeDesc=0x733696018cd0 algo=0x73369601a008 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8402100 Adesc=[type=R_32F rows=64 cols=64 ld=64] B=0x73369ae40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x73369af80000 Cdesc=[type=R_32F rows=64 cols=4096 ld=64] D=0x73369af80000 Ddesc=[type=R_32F rows=64 cols=4096 ld=64] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x73369a800000 Adesc=0x73369c02f300 B=0x73369ad40000 Bdesc=0x73369601bd20 C=0x7337b85c7400 Cdesc=0x73369c032650 D=0x7337b85c7400 Ddesc=0x73369c032690 computeDesc=0x73369c02bf00 algo=0x73369c02eb28 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x73369a800000 Adesc=[type=R_32F rows=32 cols=4096 ld=32] B=0x73369ad40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x7337b85c7400 Cdesc=[type=R_32F rows=32 cols=64 ld=32] D=0x7337b85c7400 Ddesc=[type=R_32F rows=32 cols=64 ld=32] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_T epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul] A=0x7337b8400000 Adesc=0x73369c036f70 B=0x73369ad40000 Bdesc=0x73369c0326d0 C=0x73369acc0000 Cdesc=0x73369c035ea0 D=0x73369acc0000 Ddesc=0x73369c035ee0 computeDesc=0x73369c030960 algo=0x73369c030778 workSpace=0 workSpaceSizeInBytes=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Trace][rocblaslt_matmul] A=0x7337b8400000 Adesc=[type=R_32F rows=32 cols=64 ld=32] B=0x73369ad40000 Bdesc=[type=R_32F rows=64 cols=4096 ld=64] C=0x73369acc0000 Cdesc=[type=R_32F rows=32 cols=4096 ld=32] D=0x73369acc0000 Ddesc=[type=R_32F rows=32 cols=4096 ld=32] computeDesc=[computeType=COMPUTE_32F scaleType=R_32F transA=OP_N transB=OP_N epilogue=EPILOGUE_DEFAULT biasPointer=0x0] workSpace=0 workSpaceSizeInBytes=0 alpha=1 beta=0 stream=0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3c9cc020
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3ad316d0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3df447f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c035ee0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c035ea0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c0326d0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c036f70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369c030960
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369601bbf0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369601bbb0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600fe00
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696019050
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369c016f70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600fdc0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600fd80
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696010540
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600fd40
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x733696014800
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3c9b74f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3ca85ed0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3f4b7280
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x459574a0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3df67a20
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c02f2c0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c02f280
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c02cb20
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c0302d0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x733696018cd0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696014350
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696014310
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600f0e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696015360
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369600c970
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600bab0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600ba70
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x7336960080c0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600cb00
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x7336960062e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x407c9c90
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44959760
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x41c04da0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x403dfac0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x416d56b0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x7336960045e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x7336960045a0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696004560
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e36bf00
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369f7b6790
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x45372900
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44931190
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3efe0e40
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x41be2060
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x43f647e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3affaaa0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3affaa60
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3affaa20
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3aff5a90
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3affa260
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x416d36e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c039760
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3cb1f980
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c0099c0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x417f1a00
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f4dd80
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f4dd40
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f4dd00
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f4d6d0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x44f4d770
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c032690
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c032650
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369601bd20
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c02f300
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369c02bf00
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f52370
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f52330
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f522f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x417f1ac0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x417f3370
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c018360
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c018320
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c0182e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c017de0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369c017790
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696007fd0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696007f90
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696007f50
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696004620
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369e36b290
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c13c460
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c13c420
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c13c3e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c13c3a0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369c018ac0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x3c7c9990
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x417ef7a0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44f4ddc0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x417f2b40
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3f94d380
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e36bec0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e36be80
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369f7b5a20
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369f7b59e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369e366330
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e35f530
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e35f4f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733694b319b0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e360580
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369f482cd0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696010500
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696001360
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696017ce0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696017bf0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x733696015820
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x40407840
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733696014390
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c017230
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369c016ae0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x421142f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e362d90
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e362d50
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e35f570
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e35f5b0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369e366ee0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600f0a0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600f060
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600baf0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369600bb30
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x733696009cd0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369f7b55e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e36fcf0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e362dd0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x73369e36fcb0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369e35f9a0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733694b31970
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733694b31930
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733694b318f0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x733694b31850
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x73369c0183e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x45344ad0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x453781c0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x44e674e0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x4689aa20
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x3f4a8a50
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x4079a0a0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x407ae5b0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x4079aff0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matrix_layout_destory] matLayout=0x41be5320
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_matmul_desc_destroy] matmulDesc=0x463889c0
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_destroy] handle=0x46c68e30
+[2026-07-21 15:02:12][HIPBLASLT][156580][Api][rocblaslt_destroy] handle=0x3aff9c60

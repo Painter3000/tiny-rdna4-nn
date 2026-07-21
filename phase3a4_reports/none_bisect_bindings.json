@@ -1,0 +1,32 @@
+{
+  "definitions": {
+    "A": "phase3a3 tag a26a0c1",
+    "B": {
+      "TCNN_P3A4_COUNTERS": "0",
+      "TCNN_P3A4_DISPATCH": "0",
+      "TCNN_P3A4_KERNELS": "1"
+    },
+    "C": {
+      "TCNN_P3A4_COUNTERS": "1",
+      "TCNN_P3A4_DISPATCH": "0",
+      "TCNN_P3A4_KERNELS": "1"
+    },
+    "D": {
+      "TCNN_P3A4_COUNTERS": "0",
+      "TCNN_P3A4_DISPATCH": "1",
+      "TCNN_P3A4_KERNELS": "1"
+    },
+    "E": {
+      "TCNN_P3A4_COUNTERS": "1",
+      "TCNN_P3A4_DISPATCH": "1",
+      "TCNN_P3A4_KERNELS": "1"
+    }
+  },
+  "variants": {
+    "A": "/tmp/tcnn_phase3a3_rebuilt_binding",
+    "B": "/tmp/tcnn_phase3a4_none_bisect/B/binding",
+    "C": "/tmp/tcnn_phase3a4_none_bisect/C/binding",
+    "D": "/tmp/tcnn_phase3a4_none_bisect/D/binding",
+    "E": "/tmp/tcnn_phase3a4_none_bisect/E/binding"
+  }
+}
