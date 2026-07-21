@@ -47,3 +47,17 @@ Exactly ten fresh-process Width-128 Forward pairs alternate A3/A4 order. Every
 process must converge and pass stationarity, invariants, and queue headroom.
 Only then is the unchanged `median(A3 per-op) / median(A4 per-op) >= 0.99`
 performance gate evaluated. No official complete series is started.
+
+## Recorded exploratory outcome
+
+Protocol v4 is a valid infrastructure FAIL. Native submission removed the v3
+bottleneck: all 20 processes converged, passed every handle/heuristic/scratch
+invariant, and passed the queue-headroom gate. The median native enqueue/GPU
+ratio was `0.42022037`, its maximum was `0.49886919`, leaving at least 50.11%
+headroom in every observed window.
+
+Seventeen of 20 processes and seven of ten pairs were stationary. The three
+failures were Phase 3A3 in pairs 2 and 9 (block spreads `3.4587%` and `3.3827%`)
+and Phase 3A4 in pair 5 (`3.1855%`). Since all ten pairs were not valid, the
+aggregate performance ratio is intentionally null. No process is repeated and
+no official series is started.

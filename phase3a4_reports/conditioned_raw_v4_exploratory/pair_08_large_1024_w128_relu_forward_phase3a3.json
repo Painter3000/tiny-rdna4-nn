@@ -1,0 +1,1189 @@
+{
+  "case": "large_1024_w128_relu",
+  "forbidden_monitor_processes": [],
+  "fresh_process": true,
+  "measurement": {
+    "counter_delta": {
+      "handle_creations": 0,
+      "heuristic_misses": 0,
+      "partial_live": 0,
+      "partial_peak": 0
+    },
+    "counters_after": {
+      "handle_creations": 1,
+      "heuristic_misses": 3,
+      "partial_live": 0,
+      "partial_peak": 0
+    },
+    "counters_before": {
+      "handle_creations": 1,
+      "heuristic_misses": 3,
+      "partial_live": 0,
+      "partial_peak": 0
+    },
+    "invariants": {
+      "no_handle_creations": true,
+      "no_heuristic_misses": true,
+      "no_scratch_peak_growth": true,
+      "partial_live_zero_at_boundaries": true
+    },
+    "invariants_pass": true,
+    "stationarity": {
+      "block_medians_ms": [
+        0.05756627395749092,
+        0.05757628008723259,
+        0.05753409489989281,
+        0.05761190503835678,
+        0.05756659433245659,
+        0.057613469660282135,
+        0.05761534348130226,
+        0.05835878849029541
+      ],
+      "block_spread_fraction": 0.014317588967610753,
+      "blocks": [
+        {
+          "block": 1,
+          "median_ms": 0.05756627395749092,
+          "per_operation_ms": [
+            0.05753752961754799,
+            0.05753222480416298,
+            0.05774378031492233,
+            0.057597219944000244,
+            0.05756627395749092
+          ],
+          "windows": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "block": 2,
+          "median_ms": 0.05757628008723259,
+          "per_operation_ms": [
+            0.0578722283244133,
+            0.05758785083889961,
+            0.05756690725684166,
+            0.05757628008723259,
+            0.057482849806547165
+          ],
+          "windows": [
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "block": 3,
+          "median_ms": 0.05753409489989281,
+          "per_operation_ms": [
+            0.05774035304784775,
+            0.057514093816280365,
+            0.05753409489989281,
+            0.057530343532562256,
+            0.057544413954019547
+          ],
+          "windows": [
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "block": 4,
+          "median_ms": 0.05761190503835678,
+          "per_operation_ms": [
+            0.057642530649900436,
+            0.05761190503835678,
+            0.057607851922512054,
+            0.05769222602248192,
+            0.057498782873153687
+          ],
+          "windows": [
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "block": 5,
+          "median_ms": 0.05756659433245659,
+          "per_operation_ms": [
+            0.05753941461443901,
+            0.05760284513235092,
+            0.05771535262465477,
+            0.057520657777786255,
+            0.05756659433245659
+          ],
+          "windows": [
+            21,
+            22,
+            23,
+            24,
+            25
+          ]
+        },
+        {
+          "block": 6,
+          "median_ms": 0.057613469660282135,
+          "per_operation_ms": [
+            0.057613469660282135,
+            0.05771441385149956,
+            0.05746160075068474,
+            0.057796914130449295,
+            0.057530976831912994
+          ],
+          "windows": [
+            26,
+            27,
+            28,
+            29,
+            30
+          ]
+        },
+        {
+          "block": 7,
+          "median_ms": 0.05761534348130226,
+          "per_operation_ms": [
+            0.05759470909833908,
+            0.05761534348130226,
+            0.05748191475868225,
+            0.05807597562670708,
+            0.05833504721522331
+          ],
+          "windows": [
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        },
+        {
+          "block": 8,
+          "median_ms": 0.05835878849029541,
+          "per_operation_ms": [
+            0.05844910070300102,
+            0.05835878849029541,
+            0.058513790369033813,
+            0.05833660811185837,
+            0.05834942311048508
+          ],
+          "windows": [
+            36,
+            37,
+            38,
+            39,
+            40
+          ]
+        }
+      ],
+      "every_block_within_2_percent": true,
+      "maximum_block_deviation_fraction": 0.013172838949647233,
+      "overall_median_per_operation_ms": 0.05760003253817558,
+      "spread_at_most_2_percent": true
+    },
+    "stationarity_pass": true,
+    "total_forward_operations": 5120,
+    "window_count": 40,
+    "windows": [
+      {
+        "enqueue_to_gpu_ratio": 0.43214375973863056,
+        "hip_event_gpu_ms": 7.364803791046143,
+        "native_host_enqueue_ms": 3.182654,
+        "operations": 128,
+        "per_operation_ms": 0.05753752961754799,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5678562402613694,
+        "window": 1
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4319989268553647,
+        "hip_event_gpu_ms": 7.364124774932861,
+        "native_host_enqueue_ms": 3.181294,
+        "operations": 128,
+        "per_operation_ms": 0.05753222480416298,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5680010731446353,
+        "window": 2
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42792541664637695,
+        "hip_event_gpu_ms": 7.391203880310059,
+        "native_host_enqueue_ms": 3.162884,
+        "operations": 128,
+        "per_operation_ms": 0.05774378031492233,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.572074583353623,
+        "window": 3
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4629044220957632,
+        "hip_event_gpu_ms": 7.372444152832031,
+        "native_host_enqueue_ms": 3.412737,
+        "operations": 128,
+        "per_operation_ms": 0.057597219944000244,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5370955779042368,
+        "window": 4
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4299275673682793,
+        "hip_event_gpu_ms": 7.368483066558838,
+        "native_host_enqueue_ms": 3.167914,
+        "operations": 128,
+        "per_operation_ms": 0.05756627395749092,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5700724326317207,
+        "window": 5
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4309473392435306,
+        "hip_event_gpu_ms": 7.407645225524902,
+        "native_host_enqueue_ms": 3.192305,
+        "operations": 128,
+        "per_operation_ms": 0.0578722283244133,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5690526607564694,
+        "window": 6
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4212766010380874,
+        "hip_event_gpu_ms": 7.37124490737915,
+        "native_host_enqueue_ms": 3.105333,
+        "operations": 128,
+        "per_operation_ms": 0.05758785083889961,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5787233989619126,
+        "window": 7
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4612794216827426,
+        "hip_event_gpu_ms": 7.368564128875732,
+        "native_host_enqueue_ms": 3.398967,
+        "operations": 128,
+        "per_operation_ms": 0.05756690725684166,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5387205783172574,
+        "window": 8
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4425548858643662,
+        "hip_event_gpu_ms": 7.3697638511657715,
+        "native_host_enqueue_ms": 3.261525,
+        "operations": 128,
+        "per_operation_ms": 0.05757628008723259,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5574451141356338,
+        "window": 9
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42632471176139886,
+        "hip_event_gpu_ms": 7.357804775238037,
+        "native_host_enqueue_ms": 3.136814,
+        "operations": 128,
+        "per_operation_ms": 0.057482849806547165,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5736752882386011,
+        "window": 10
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4246370868598963,
+        "hip_event_gpu_ms": 7.390765190124512,
+        "native_host_enqueue_ms": 3.138393,
+        "operations": 128,
+        "per_operation_ms": 0.05774035304784775,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5753629131401037,
+        "window": 11
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4598556272482447,
+        "hip_event_gpu_ms": 7.361804008483887,
+        "native_host_enqueue_ms": 3.385367,
+        "operations": 128,
+        "per_operation_ms": 0.057514093816280365,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5401443727517553,
+        "window": 12
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4514831061511736,
+        "hip_event_gpu_ms": 7.364364147186279,
+        "native_host_enqueue_ms": 3.324886,
+        "operations": 128,
+        "per_operation_ms": 0.05753409489989281,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5485168938488264,
+        "window": 13
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42355678223454435,
+        "hip_event_gpu_ms": 7.363883972167969,
+        "native_host_enqueue_ms": 3.119023,
+        "operations": 128,
+        "per_operation_ms": 0.057530343532562256,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5764432177654557,
+        "window": 14
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42411574835050075,
+        "hip_event_gpu_ms": 7.365684986114502,
+        "native_host_enqueue_ms": 3.123903,
+        "operations": 128,
+        "per_operation_ms": 0.057544413954019547,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5758842516494993,
+        "window": 15
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4269070029117902,
+        "hip_event_gpu_ms": 7.378243923187256,
+        "native_host_enqueue_ms": 3.149824,
+        "operations": 128,
+        "per_operation_ms": 0.057642530649900436,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5730929970882098,
+        "window": 16
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.45051940623590775,
+        "hip_event_gpu_ms": 7.374323844909668,
+        "native_host_enqueue_ms": 3.322276,
+        "operations": 128,
+        "per_operation_ms": 0.05761190503835678,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5494805937640923,
+        "window": 17
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42254887138028413,
+        "hip_event_gpu_ms": 7.373805046081543,
+        "native_host_enqueue_ms": 3.115793,
+        "operations": 128,
+        "per_operation_ms": 0.057607851922512054,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5774511286197159,
+        "window": 18
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4232837137881241,
+        "hip_event_gpu_ms": 7.3846049308776855,
+        "native_host_enqueue_ms": 3.125783,
+        "operations": 128,
+        "per_operation_ms": 0.05769222602248192,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5767162862118759,
+        "window": 19
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4317530249686551,
+        "hip_event_gpu_ms": 7.359844207763672,
+        "native_host_enqueue_ms": 3.177635,
+        "operations": 128,
+        "per_operation_ms": 0.057498782873153687,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5682469750313449,
+        "window": 20
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.453574413728061,
+        "hip_event_gpu_ms": 7.365045070648193,
+        "native_host_enqueue_ms": 3.340596,
+        "operations": 128,
+        "per_operation_ms": 0.05753941461443901,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5464255862719389,
+        "window": 21
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.44935741568888016,
+        "hip_event_gpu_ms": 7.373164176940918,
+        "native_host_enqueue_ms": 3.313186,
+        "operations": 128,
+        "per_operation_ms": 0.05760284513235092,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5506425843111198,
+        "window": 22
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4187202336727394,
+        "hip_event_gpu_ms": 7.3875651359558105,
+        "native_host_enqueue_ms": 3.093323,
+        "operations": 128,
+        "per_operation_ms": 0.05771535262465477,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5812797663272606,
+        "window": 23
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4264614609374878,
+        "hip_event_gpu_ms": 7.362644195556641,
+        "native_host_enqueue_ms": 3.139884,
+        "operations": 128,
+        "per_operation_ms": 0.057520657777786255,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5735385390625122,
+        "window": 24
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4520316370414255,
+        "hip_event_gpu_ms": 7.368524074554443,
+        "native_host_enqueue_ms": 3.330806,
+        "operations": 128,
+        "per_operation_ms": 0.05756659433245659,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5479683629585745,
+        "window": 25
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4515663583690612,
+        "hip_event_gpu_ms": 7.374524116516113,
+        "native_host_enqueue_ms": 3.330087,
+        "operations": 128,
+        "per_operation_ms": 0.057613469660282135,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5484336416309388,
+        "window": 26
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.43059731905003645,
+        "hip_event_gpu_ms": 7.387444972991943,
+        "native_host_enqueue_ms": 3.181014,
+        "operations": 128,
+        "per_operation_ms": 0.05771441385149956,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5694026809499635,
+        "window": 27
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.43012746211574127,
+        "hip_event_gpu_ms": 7.3550848960876465,
+        "native_host_enqueue_ms": 3.163624,
+        "operations": 128,
+        "per_operation_ms": 0.05746160075068474,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5698725378842587,
+        "window": 28
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4332309854118738,
+        "hip_event_gpu_ms": 7.39800500869751,
+        "native_host_enqueue_ms": 3.205045,
+        "operations": 128,
+        "per_operation_ms": 0.057796914130449295,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5667690145881261,
+        "window": 29
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.45942871593722456,
+        "hip_event_gpu_ms": 7.363965034484863,
+        "native_host_enqueue_ms": 3.383217,
+        "operations": 128,
+        "per_operation_ms": 0.057530976831912994,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5405712840627754,
+        "window": 30
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42806449387398643,
+        "hip_event_gpu_ms": 7.372122764587402,
+        "native_host_enqueue_ms": 3.155744,
+        "operations": 128,
+        "per_operation_ms": 0.05759470909833908,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5719355061260136,
+        "window": 31
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.43020698896890025,
+        "hip_event_gpu_ms": 7.3747639656066895,
+        "native_host_enqueue_ms": 3.172675,
+        "operations": 128,
+        "per_operation_ms": 0.05761534348130226,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5697930110310998,
+        "window": 32
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42202037222213296,
+        "hip_event_gpu_ms": 7.357685089111328,
+        "native_host_enqueue_ms": 3.105093,
+        "operations": 128,
+        "per_operation_ms": 0.05748191475868225,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.577979627777867,
+        "window": 33
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4655832783386877,
+        "hip_event_gpu_ms": 7.433724880218506,
+        "native_host_enqueue_ms": 3.461018,
+        "operations": 128,
+        "per_operation_ms": 0.05807597562670708,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5344167216613123,
+        "window": 34
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4572612974253147,
+        "hip_event_gpu_ms": 7.466886043548584,
+        "native_host_enqueue_ms": 3.414318,
+        "operations": 128,
+        "per_operation_ms": 0.05833504721522331,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5427387025746853,
+        "window": 35
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42932586875903095,
+        "hip_event_gpu_ms": 7.481484889984131,
+        "native_host_enqueue_ms": 3.211995,
+        "operations": 128,
+        "per_operation_ms": 0.05844910070300102,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5706741312409691,
+        "window": 36
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4248455012756639,
+        "hip_event_gpu_ms": 7.4699249267578125,
+        "native_host_enqueue_ms": 3.173564,
+        "operations": 128,
+        "per_operation_ms": 0.05835878849029541,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5751544987243361,
+        "window": 37
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.456543953468402,
+        "hip_event_gpu_ms": 7.489765167236328,
+        "native_host_enqueue_ms": 3.419407,
+        "operations": 128,
+        "per_operation_ms": 0.058513790369033813,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5434560465315981,
+        "window": 38
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.45402009209575667,
+        "hip_event_gpu_ms": 7.467085838317871,
+        "native_host_enqueue_ms": 3.390207,
+        "operations": 128,
+        "per_operation_ms": 0.05833660811185837,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5459799079042433,
+        "window": 39
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4359197179094192,
+        "hip_event_gpu_ms": 7.46872615814209,
+        "native_host_enqueue_ms": 3.255765,
+        "operations": 128,
+        "per_operation_ms": 0.05834942311048508,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5640802820905808,
+        "window": 40
+      }
+    ]
+  },
+  "metric": "forward",
+  "model_plan_warmup": {
+    "counter_delta": {
+      "handle_creations": 1,
+      "heuristic_misses": 3,
+      "partial_live": 0,
+      "partial_peak": 0
+    },
+    "normal_forward_operations": 3
+  },
+  "native_window": {
+    "hip_graph": false,
+    "normal_forward_operations": 128,
+    "python_calls_per_window": 1,
+    "same_input_and_output_within_window": true,
+    "same_stream": true
+  },
+  "protocol": "conditioning_v4",
+  "queue_headroom": {
+    "failing_windows": [],
+    "minimum_required_fraction": 0.2,
+    "pass": true,
+    "rule": "native_host_enqueue_ms / hip_event_gpu_ms <= 0.80"
+  },
+  "schema": 4,
+  "status": "VALID",
+  "steady_state_warmup": {
+    "convergence": {
+      "converged": true,
+      "endpoint_drift_fraction": 0.005759825854544911,
+      "last_5_per_operation_ms": [
+        0.057981595396995544,
+        0.05778190493583679,
+        0.05749315768480301,
+        0.05780285224318504,
+        0.057648781687021255
+      ],
+      "monotonic": false,
+      "monotonic_drift_over_0_5_percent": false,
+      "spread_fraction": 0.008453125813953608
+    },
+    "maximum_windows": 100,
+    "minimum_windows": 10,
+    "window_count": 54,
+    "windows": [
+      {
+        "enqueue_to_gpu_ratio": 0.2716127384812092,
+        "hip_event_gpu_ms": 11.987710952758789,
+        "native_host_enqueue_ms": 3.256015,
+        "operations": 128,
+        "per_operation_ms": 0.09365399181842804,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.7283872615187907,
+        "window": 1
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.2772344905968575,
+        "hip_event_gpu_ms": 11.718870162963867,
+        "native_host_enqueue_ms": 3.248875,
+        "operations": 128,
+        "per_operation_ms": 0.09155367314815521,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.7227655094031424,
+        "window": 2
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.27101235047327205,
+        "hip_event_gpu_ms": 11.52254867553711,
+        "native_host_enqueue_ms": 3.122753,
+        "operations": 128,
+        "per_operation_ms": 0.09001991152763367,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.728987649526728,
+        "window": 3
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.27177462969021116,
+        "hip_event_gpu_ms": 11.355228424072266,
+        "native_host_enqueue_ms": 3.086063,
+        "operations": 128,
+        "per_operation_ms": 0.08871272206306458,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.7282253703097888,
+        "window": 4
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.2816643806854365,
+        "hip_event_gpu_ms": 11.161347389221191,
+        "native_host_enqueue_ms": 3.143754,
+        "operations": 128,
+        "per_operation_ms": 0.08719802647829056,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.7183356193145636,
+        "window": 5
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.301374512463865,
+        "hip_event_gpu_ms": 10.992585182189941,
+        "native_host_enqueue_ms": 3.312885,
+        "operations": 128,
+        "per_operation_ms": 0.08587957173585892,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6986254875361351,
+        "window": 6
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.2887126294570478,
+        "hip_event_gpu_ms": 10.826104164123535,
+        "native_host_enqueue_ms": 3.125633,
+        "operations": 128,
+        "per_operation_ms": 0.08457893878221512,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.7112873705429522,
+        "window": 7
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.29569923604722453,
+        "hip_event_gpu_ms": 10.902344703674316,
+        "native_host_enqueue_ms": 3.223815,
+        "operations": 128,
+        "per_operation_ms": 0.0851745679974556,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.7043007639527754,
+        "window": 8
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.29873524565269816,
+        "hip_event_gpu_ms": 10.74454402923584,
+        "native_host_enqueue_ms": 3.209774,
+        "operations": 128,
+        "per_operation_ms": 0.083941750228405,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.7012647543473018,
+        "window": 9
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3148042209827092,
+        "hip_event_gpu_ms": 10.58806324005127,
+        "native_host_enqueue_ms": 3.333167,
+        "operations": 128,
+        "per_operation_ms": 0.08271924406290054,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6851957790172908,
+        "window": 10
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3040807579134147,
+        "hip_event_gpu_ms": 10.443982124328613,
+        "native_host_enqueue_ms": 3.175814,
+        "operations": 128,
+        "per_operation_ms": 0.08159361034631729,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6959192420865853,
+        "window": 11
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.31091777993118236,
+        "hip_event_gpu_ms": 10.326701164245605,
+        "native_host_enqueue_ms": 3.210755,
+        "operations": 128,
+        "per_operation_ms": 0.08067735284566879,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6890822200688176,
+        "window": 12
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.30705249853401173,
+        "hip_event_gpu_ms": 10.159379959106445,
+        "native_host_enqueue_ms": 3.119463,
+        "operations": 128,
+        "per_operation_ms": 0.0793701559305191,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6929475014659883,
+        "window": 13
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.33571092609604275,
+        "hip_event_gpu_ms": 10.071900367736816,
+        "native_host_enqueue_ms": 3.381247,
+        "operations": 128,
+        "per_operation_ms": 0.07868672162294388,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6642890739039573,
+        "window": 14
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3237740337723713,
+        "hip_event_gpu_ms": 9.951458930969238,
+        "native_host_enqueue_ms": 3.222024,
+        "operations": 128,
+        "per_operation_ms": 0.07774577289819717,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6762259662276286,
+        "window": 15
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3269200673696498,
+        "hip_event_gpu_ms": 9.829818725585938,
+        "native_host_enqueue_ms": 3.213565,
+        "operations": 128,
+        "per_operation_ms": 0.07679545879364014,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6730799326303503,
+        "window": 16
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3252661394330203,
+        "hip_event_gpu_ms": 9.721097946166992,
+        "native_host_enqueue_ms": 3.161944,
+        "operations": 128,
+        "per_operation_ms": 0.07594607770442963,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6747338605669797,
+        "window": 17
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.326253654558331,
+        "hip_event_gpu_ms": 9.617498397827148,
+        "native_host_enqueue_ms": 3.137744,
+        "operations": 128,
+        "per_operation_ms": 0.0751367062330246,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.673746345441669,
+        "window": 18
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3579668253189572,
+        "hip_event_gpu_ms": 9.481736183166504,
+        "native_host_enqueue_ms": 3.394147,
+        "operations": 128,
+        "per_operation_ms": 0.07407606393098831,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6420331746810428,
+        "window": 19
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3354113684544832,
+        "hip_event_gpu_ms": 9.392895698547363,
+        "native_host_enqueue_ms": 3.150484,
+        "operations": 128,
+        "per_operation_ms": 0.07338199764490128,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6645886315455167,
+        "window": 20
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3458566104897569,
+        "hip_event_gpu_ms": 9.298694610595703,
+        "native_host_enqueue_ms": 3.216015,
+        "operations": 128,
+        "per_operation_ms": 0.07264605164527893,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6541433895102431,
+        "window": 21
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3379746462992736,
+        "hip_event_gpu_ms": 9.220375061035156,
+        "native_host_enqueue_ms": 3.116253,
+        "operations": 128,
+        "per_operation_ms": 0.07203418016433716,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6620253537007263,
+        "window": 22
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.37107263957045367,
+        "hip_event_gpu_ms": 9.150733947753906,
+        "native_host_enqueue_ms": 3.395587,
+        "operations": 128,
+        "per_operation_ms": 0.07149010896682739,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6289273604295463,
+        "window": 23
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3472688967057828,
+        "hip_event_gpu_ms": 9.03105354309082,
+        "native_host_enqueue_ms": 3.136204,
+        "operations": 128,
+        "per_operation_ms": 0.07055510580539703,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6527311032942171,
+        "window": 24
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3485568417742296,
+        "hip_event_gpu_ms": 8.959293365478516,
+        "native_host_enqueue_ms": 3.122823,
+        "operations": 128,
+        "per_operation_ms": 0.0699944794178009,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6514431582257705,
+        "window": 25
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3544088287860614,
+        "hip_event_gpu_ms": 8.86257266998291,
+        "native_host_enqueue_ms": 3.140974,
+        "operations": 128,
+        "per_operation_ms": 0.06923884898424149,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6455911712139386,
+        "window": 26
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.38537044170092394,
+        "hip_event_gpu_ms": 8.805571556091309,
+        "native_host_enqueue_ms": 3.393407,
+        "operations": 128,
+        "per_operation_ms": 0.06879352778196335,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6146295582990761,
+        "window": 27
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.389221632582106,
+        "hip_event_gpu_ms": 8.709451675415039,
+        "native_host_enqueue_ms": 3.389907,
+        "operations": 128,
+        "per_operation_ms": 0.06804259121417999,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6107783674178939,
+        "window": 28
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3695121269774908,
+        "hip_event_gpu_ms": 8.613370895385742,
+        "native_host_enqueue_ms": 3.182745,
+        "operations": 128,
+        "per_operation_ms": 0.06729196012020111,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6304878730225092,
+        "window": 29
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.37138528483078226,
+        "hip_event_gpu_ms": 8.558131217956543,
+        "native_host_enqueue_ms": 3.178364,
+        "operations": 128,
+        "per_operation_ms": 0.06686040014028549,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6286147151692177,
+        "window": 30
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.37554864495795215,
+        "hip_event_gpu_ms": 8.466370582580566,
+        "native_host_enqueue_ms": 3.179534,
+        "operations": 128,
+        "per_operation_ms": 0.06614352017641068,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6244513550420479,
+        "window": 31
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.395832096524083,
+        "hip_event_gpu_ms": 8.428970336914062,
+        "native_host_enqueue_ms": 3.336457,
+        "operations": 128,
+        "per_operation_ms": 0.06585133075714111,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.604167903475917,
+        "window": 32
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3765480027799848,
+        "hip_event_gpu_ms": 8.355330467224121,
+        "native_host_enqueue_ms": 3.146183,
+        "operations": 128,
+        "per_operation_ms": 0.06527601927518845,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6234519972200152,
+        "window": 33
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.38073964545119016,
+        "hip_event_gpu_ms": 8.304609298706055,
+        "native_host_enqueue_ms": 3.161894,
+        "operations": 128,
+        "per_operation_ms": 0.06487976014614105,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6192603545488098,
+        "window": 34
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.37580167458550245,
+        "hip_event_gpu_ms": 8.226208686828613,
+        "native_host_enqueue_ms": 3.091423,
+        "operations": 128,
+        "per_operation_ms": 0.06426725536584854,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6241983254144976,
+        "window": 35
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.40490170352591687,
+        "hip_event_gpu_ms": 8.167009353637695,
+        "native_host_enqueue_ms": 3.306836,
+        "operations": 128,
+        "per_operation_ms": 0.0638047605752945,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5950982964740832,
+        "window": 36
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3860317108940726,
+        "hip_event_gpu_ms": 8.088047981262207,
+        "native_host_enqueue_ms": 3.122243,
+        "operations": 128,
+        "per_operation_ms": 0.06318787485361099,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6139682891059274,
+        "window": 37
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3923501738850244,
+        "hip_event_gpu_ms": 8.014888763427734,
+        "native_host_enqueue_ms": 3.144643,
+        "operations": 128,
+        "per_operation_ms": 0.06261631846427917,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6076498261149756,
+        "window": 38
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.3916845662606737,
+        "hip_event_gpu_ms": 7.981328010559082,
+        "native_host_enqueue_ms": 3.126163,
+        "operations": 128,
+        "per_operation_ms": 0.06235412508249283,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.6083154337393263,
+        "window": 39
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4220929214002762,
+        "hip_event_gpu_ms": 7.929926872253418,
+        "native_host_enqueue_ms": 3.347166,
+        "operations": 128,
+        "per_operation_ms": 0.06195255368947983,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5779070785997238,
+        "window": 40
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4113462316795894,
+        "hip_event_gpu_ms": 8.115367889404297,
+        "native_host_enqueue_ms": 3.338226,
+        "operations": 128,
+        "per_operation_ms": 0.06340131163597107,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5886537683204106,
+        "window": 41
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4043661161689545,
+        "hip_event_gpu_ms": 7.792205810546875,
+        "native_host_enqueue_ms": 3.150904,
+        "operations": 128,
+        "per_operation_ms": 0.06087660789489746,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5956338838310455,
+        "window": 42
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4051884149244099,
+        "hip_event_gpu_ms": 7.752205848693848,
+        "native_host_enqueue_ms": 3.141104,
+        "operations": 128,
+        "per_operation_ms": 0.060564108192920685,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5948115850755902,
+        "window": 43
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4089522734137672,
+        "hip_event_gpu_ms": 7.720005989074707,
+        "native_host_enqueue_ms": 3.157114,
+        "operations": 128,
+        "per_operation_ms": 0.06031254678964615,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5910477265862328,
+        "window": 44
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.43508077344037094,
+        "hip_event_gpu_ms": 7.657005786895752,
+        "native_host_enqueue_ms": 3.331416,
+        "operations": 128,
+        "per_operation_ms": 0.05982035771012306,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.564919226559629,
+        "window": 45
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4035280579722816,
+        "hip_event_gpu_ms": 7.635806083679199,
+        "native_host_enqueue_ms": 3.081262,
+        "operations": 128,
+        "per_operation_ms": 0.059654735028743744,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5964719420277185,
+        "window": 46
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.41458453151136676,
+        "hip_event_gpu_ms": 7.592405796051025,
+        "native_host_enqueue_ms": 3.147694,
+        "operations": 128,
+        "per_operation_ms": 0.059315670281648636,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5854154684886332,
+        "window": 47
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.41238987378576175,
+        "hip_event_gpu_ms": 7.524125099182129,
+        "native_host_enqueue_ms": 3.102873,
+        "operations": 128,
+        "per_operation_ms": 0.05878222733736038,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5876101262142382,
+        "window": 48
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.45182738239887094,
+        "hip_event_gpu_ms": 7.457243919372559,
+        "native_host_enqueue_ms": 3.369387,
+        "operations": 128,
+        "per_operation_ms": 0.058259718120098114,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.548172617601129,
+        "window": 49
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.43468602217534,
+        "hip_event_gpu_ms": 7.42164421081543,
+        "native_host_enqueue_ms": 3.226085,
+        "operations": 128,
+        "per_operation_ms": 0.057981595396995544,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.56531397782466,
+        "window": 50
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4255323589591503,
+        "hip_event_gpu_ms": 7.396083831787109,
+        "native_host_enqueue_ms": 3.147273,
+        "operations": 128,
+        "per_operation_ms": 0.05778190493583679,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5744676410408497,
+        "window": 51
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.42274772409873207,
+        "hip_event_gpu_ms": 7.359124183654785,
+        "native_host_enqueue_ms": 3.111053,
+        "operations": 128,
+        "per_operation_ms": 0.05749315768480301,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5772522759012679,
+        "window": 52
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.450735624219508,
+        "hip_event_gpu_ms": 7.3987650871276855,
+        "native_host_enqueue_ms": 3.334887,
+        "operations": 128,
+        "per_operation_ms": 0.05780285224318504,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.549264375780492,
+        "window": 53
+      },
+      {
+        "enqueue_to_gpu_ratio": 0.4612680144199245,
+        "hip_event_gpu_ms": 7.379044055938721,
+        "native_host_enqueue_ms": 3.403717,
+        "operations": 128,
+        "per_operation_ms": 0.057648781687021255,
+        "queue_headroom_at_least_20_percent": true,
+        "queue_headroom_fraction": 0.5387319855800755,
+        "window": 54
+      }
+    ]
+  },
+  "valid": true,
+  "variant": "phase3a3"
+}
