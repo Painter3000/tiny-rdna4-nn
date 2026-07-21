@@ -1,0 +1,63 @@
+diff --git a/bindings/torch/tinycudann/bindings.cpp b/bindings/torch/tinycudann/bindings.cpp
+--- a/bindings/torch/tinycudann/bindings.cpp
++++ b/bindings/torch/tinycudann/bindings.cpp
+@@ -52,6 +52,7 @@
+ #include <tiny-cuda-nn/networks/hipblaslt_mlp.h>
+ #endif
+ 
++#include <chrono>
+ #define STRINGIFY(x) #x
+ #define STR(x) STRINGIFY(x)
+ #define FILE_LINE __FILE__ ":" STR(__LINE__)
+@@ -126,4 +127,46 @@ public:
+ 		return { std::move(ctx), output };
+ 	}
+ 
++	// Test-only Protocol-v4 benchmark entry point. This patch is applied only
++	// to isolated benchmark worktrees and is never part of a production build.
++	std::tuple<double, float, torch::Tensor> benchmark_forward_window_128(torch::Tensor input, torch::Tensor params) {
++		CHECK_INPUT(input);
++		CHECK_INPUT(params);
++		CHECK_THROW(input.scalar_type() == torch::kFloat32);
++		CHECK_THROW(params.scalar_type() == c10_param_precision());
++		CHECK_THROW(input.size(1) == n_input_dims());
++		CHECK_THROW(params.size(0) == n_params());
++		at::Device device = input.device();
++		CHECK_THROW(device == params.device());
++
++		#if defined(__HIP_PLATFORM_AMD__)
++		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
++		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
++		#else
++		const at::cuda::CUDAGuard device_guard{device};
++		hipStream_t stream = at::cuda::getCurrentCUDAStream();
++		#endif
++
++		const uint32_t batch_size = input.size(0);
++		torch::Tensor output = torch::empty({batch_size, n_output_dims()}, torch::TensorOptions().dtype(c10_output_precision()).device(device));
++		hipEvent_t start = nullptr;
++		hipEvent_t stop = nullptr;
++		CHECK_THROW(hipEventCreate(&start) == hipSuccess);
++		CHECK_THROW(hipEventCreate(&stop) == hipSuccess);
++		CHECK_THROW(hipEventRecord(start, stream) == hipSuccess);
++		const auto host_start = std::chrono::steady_clock::now();
++		for (uint32_t i = 0; i < 128; ++i) {
++			m_module->inference(stream, batch_size, input.data_ptr<float>(), void_data_ptr(output), void_data_ptr(params));
++		}
++		const auto host_stop = std::chrono::steady_clock::now();
++		CHECK_THROW(hipEventRecord(stop, stream) == hipSuccess);
++		CHECK_THROW(hipEventSynchronize(stop) == hipSuccess);
++		float gpu_ms = 0.0f;
++		CHECK_THROW(hipEventElapsedTime(&gpu_ms, start, stop) == hipSuccess);
++		CHECK_THROW(hipEventDestroy(start) == hipSuccess);
++		CHECK_THROW(hipEventDestroy(stop) == hipSuccess);
++		const double host_ms = std::chrono::duration<double, std::milli>(host_stop - host_start).count();
++		return {host_ms, gpu_ms, output};
++	}
++
+ 	std::tuple<torch::Tensor, torch::Tensor> bwd(const tcnn::cpp::Context& ctx, torch::Tensor input, torch::Tensor params, torch::Tensor output, torch::Tensor dL_doutput) {
+@@ -387,3 +430,4 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+ 	py::class_<Module>(m, "Module")
+ 		.def("fwd", &Module::fwd)
++		.def("_benchmark_forward_window_128", &Module::benchmark_forward_window_128)
+ 		.def("bwd", &Module::bwd)
