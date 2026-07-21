@@ -26,6 +26,14 @@ def main():
     for variant, commit in COMMITS.items():
         worktree = OUT / f"worktree_{variant}"
         run(["git", "worktree", "add", "--detach", str(worktree), commit], cwd=ROOT)
+        # Git worktrees contain gitlinks but not populated submodule contents.
+        # Reuse the already verified local dependency checkouts without copying
+        # or modifying them; only the temporary worktree receives symlinks.
+        for dependency in ("cmrc", "cutlass", "fmt"):
+            target = worktree / "dependencies" / dependency
+            if target.exists():
+                target.rmdir()
+            target.symlink_to(ROOT / "dependencies" / dependency, target_is_directory=True)
         run(["git", "apply", str(PATCH)], cwd=worktree)
         setup = worktree / "bindings/torch/setup.py"
         build_temp = OUT / variant / "build_temp"
