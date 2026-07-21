@@ -1,0 +1,15 @@
+{
+  "bindings": {
+    "phase3a3": "/tmp/tcnn_phase3a3_rebuilt_binding",
+    "phase3a4": "/tmp/tcnn_phase3a4_candidate"
+  },
+  "commits": {
+    "phase3a3": "a26a0c1218d7ddeaad174c86a33255189ca5c2cc",
+    "phase3a4_production_wip": "c8f822c"
+  },
+  "notes": [
+    "Both bindings were built before trace instrumentation was introduced.",
+    "The Phase-3A4 binding passed integrated_validation_004.",
+    "Each conditioned case imports exactly one binding in a fresh process."
+  ]
+}
