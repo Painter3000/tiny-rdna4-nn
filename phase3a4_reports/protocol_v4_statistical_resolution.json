@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "analysis": "protocol_v4_statistical_resolution",
+  "source": {
+    "file": "phase3a4_reports/conditioned_width128_forward_pairs_v4.json",
+    "sha256": "d007ae9c3d5d0d0d1b168952bd58032773550f96bc44ae1cf0421c654406b172",
+    "valid_pairs": [1, 3, 4, 6, 7, 8, 10],
+    "valid_pair_count": 7,
+    "total_pair_count": 10,
+    "observed_complete_pair_validity_rate": 0.7
+  },
+  "ratios": [
+    {"pair": 1, "order": "A3->A4", "phase3a3_ms": 0.05747378617525101, "phase3a4_ms": 0.05747566372156143, "ratio": 0.9999673331948019},
+    {"pair": 3, "order": "A3->A4", "phase3a3_ms": 0.057445187121629715, "phase3a4_ms": 0.0575153436511755, "ratio": 0.9987802119383781},
+    {"pair": 4, "order": "A4->A3", "phase3a3_ms": 0.05751238204538822, "phase3a4_ms": 0.0574948824942112, "ratio": 1.0003043671091734},
+    {"pair": 6, "order": "A4->A3", "phase3a3_ms": 0.056370651349425316, "phase3a4_ms": 0.05745955742895603, "ratio": 0.9810491739189419},
+    {"pair": 7, "order": "A3->A4", "phase3a3_ms": 0.05747862532734871, "phase3a4_ms": 0.05744955874979496, "ratio": 1.0005059495353192},
+    {"pair": 8, "order": "A4->A3", "phase3a3_ms": 0.05760003253817558, "phase3a4_ms": 0.05761362612247467, "ratio": 0.9997640560885686},
+    {"pair": 10, "order": "A4->A3", "phase3a3_ms": 0.05757533945143223, "phase3a4_ms": 0.05749957449734211, "ratio": 1.0013176611262335}
+  ],
+  "ratio_summary": {
+    "arithmetic_mean": 0.9973841075587738,
+    "median": 0.9999673331948019,
+    "geometric_mean": 0.9973613545188813,
+    "minimum": 0.9810491739189419,
+    "maximum": 1.0013176611262335
+  },
+  "log_ratio_student_t": {
+    "mean": -0.002642132842063135,
+    "sample_standard_deviation": 0.0073123502115234095,
+    "standard_error": 0.0027638085941573565,
+    "degrees_of_freedom": 6,
+    "t_critical_95_two_sided": 2.4469118511449786,
+    "confidence_interval_95": [-0.009404928845403114, 0.004120663161276843],
+    "back_transformed_ratio_interval_95": [0.9906391591747359, 1.0041291647671282]
+  },
+  "leave_one_pair_out": [
+    {"removed_pair": 1, "geometric_mean": 0.9969276854879258, "ratio_interval_95": [0.9886859061461658, 1.0052381690827716]},
+    {"removed_pair": 3, "geometric_mean": 0.9971250743222468, "ratio_interval_95": [0.9888087023768766, 1.0055113910831992]},
+    {"removed_pair": 4, "geometric_mean": 0.9968716949262658, "ratio_interval_95": [0.9886590777116221, 1.0051525329088515]},
+    {"removed_pair": 6, "geometric_mean": 1.0001062997260173, "ratio_interval_95": [0.9992209496720733, 1.00099243423581]},
+    {"removed_pair": 7, "geometric_mean": 0.9968382170832246, "ratio_interval_95": [0.9886447541469362, 1.0050995839198844]},
+    {"removed_pair": 8, "geometric_mean": 0.996961466026352, "ratio_interval_95": [0.9887038180267734, 1.005288081849501]},
+    {"removed_pair": 10, "geometric_mean": 0.9967034915102153, "ratio_interval_95": [0.9886003207575893, 1.0048730807889812]}
+  ],
+  "bootstrap": {
+    "seed": 20260721,
+    "repetitions": 100000,
+    "method": "percentile bootstrap of the log-mean/geometric mean with pair resampling",
+    "ratio_interval_95": [0.9917710248254609, 1.0005262407091648]
+  },
+  "order_comparison": {
+    "A3->A4": {
+      "pairs": [1, 3, 7],
+      "count": 3,
+      "arithmetic_mean": 0.9997511648894998,
+      "median": 0.9999673331948019,
+      "geometric_mean": 0.9997509049088811,
+      "ratio_interval_95": [0.9975596223743063, 1.0019470009092766]
+    },
+    "A4->A3": {
+      "pairs": [4, 6, 8, 10],
+      "count": 4,
+      "arithmetic_mean": 0.9956088145607292,
+      "median": 1.000034211598871,
+      "geometric_mean": 0.9955729405624975,
+      "ratio_interval_95": [0.9801398346698607, 1.011249053370136]
+    }
+  },
+  "sample_size_method": {
+    "description": "Iterative two-sided 95% Student-t half-width on the log-ratio using the observed log sample standard deviation; relative target h is represented as log(1+h).",
+    "valid_pairs_for_relative_interval_half_width": {
+      "1.0_percent": 5,
+      "0.5_percent": 11,
+      "0.25_percent": 36
+    },
+    "estimated_total_pairs_at_observed_0.70_complete_pair_validity": {
+      "1.0_percent": 8,
+      "0.5_percent": 16,
+      "0.25_percent": 52
+    }
+  },
+  "gate_decision_estimate": {
+    "gate": 0.99,
+    "assumed_true_center": 0.9973613545188813,
+    "log_margin_above_gate": 0.007408203011438316,
+    "valid_pairs_for_two_sided_95_interval_lower_bound_above_gate": 7,
+    "estimated_total_pairs_at_observed_0.70_complete_pair_validity": 10,
+    "formal_current_interval_excludes_gate": true,
+    "leave_one_out_robust": false
+  },
+  "assessment": {
+    "formal_statistical_result": "The seven-pair Student-t and bootstrap lower bounds are narrowly above 0.99.",
+    "robustness": "The conclusion is leave-one-out fragile and the order groups have materially different dispersion because pair 6 is in A4->A3.",
+    "planning_minimum_valid_pairs": 11,
+    "planning_minimum_total_pairs_at_observed_validity": 16,
+    "recommendation": "Perform a separate compositor-free environment qualification before using additional pairs for a release decision."
+  }
+}
