@@ -41,3 +41,16 @@ new full runs named `conditioned_performance_v2_run_1.json` through `_4.json`.
 
 Official series 1 and its valid Protocol-v1 FAIL remain immutable historical
 evidence.
+
+## Recorded exploratory outcome
+
+The predeclared ten-pair Width-128 Forward exploration is a valid
+infrastructure FAIL. All 20 adaptive warm-ups converged and all 20 measurement
+counter/scratch invariant sets passed, but only 9 of 20 measurement processes
+passed the six-block stationarity gate. Eleven processes were nonstationary;
+only pair 5 was valid on both sides. Observed block spreads reached
+`13.93754468%` for Phase 3A3 and `13.46807702%` for Phase 3A4.
+
+Consequently `conditioned_ratio` is intentionally null and no performance PASS
+may be inferred from the descriptive medians. Official series 2 remains locked
+and its four output files were not created.
