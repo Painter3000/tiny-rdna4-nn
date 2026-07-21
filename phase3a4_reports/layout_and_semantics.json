@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "runtime_base": "4d50f988bca407c70f4ccd6e65dd36600316b7d1",
+  "implementation_base": "a26a0c1218d7ddeaad174c86a33255189ca5c2cc",
+  "logical_shape": ["width", "batch"],
+  "released_layout": "ColumnMajor",
+  "physical_view": "[batch,width]",
+  "physical_index": "sample * width + feature",
+  "mask_source": "stored post-ReLU hidden activation",
+  "mask_predicate": "activation > 0.0f",
+  "signed_zero": {"negative_zero_derivative": 0, "positive_zero_derivative": 0},
+  "gradient_modes": {
+    "Overwrite": "stage1 partials; stage2 assigns db",
+    "Accumulate": "stage1 partials; stage2 adds to db",
+    "Ignore": "relu-only stage1; no partials and no stage2"
+  },
+  "block": {"threads": 256, "x": "WIDTH", "y": "256/WIDTH"},
+  "partial_formula": "ceil(batch / (256 / width)) * width * sizeof(float)",
+  "maximum_partial_bytes_before_alignment": 1048576,
+  "final_bias_gradient_atomics": false,
+  "wave_shuffle_reduction": false,
+  "row_major_policy": "legacy HIP fallback"
+}

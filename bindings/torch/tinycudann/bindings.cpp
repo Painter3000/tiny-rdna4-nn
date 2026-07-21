@@ -421,6 +421,14 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	m.def("_hipblaslt_execution_handle_reuses", &tcnn::hipblaslt_execution_handle_reuses);
 	m.def("_hipblaslt_execution_handle_overflows", &tcnn::hipblaslt_execution_handle_overflows);
 	m.def("_hipblaslt_epilogue_descriptor_count", &tcnn::hipblaslt_epilogue_descriptor_count);
+	m.def("_hipblaslt_fused_relu_biasgrad_stage1_launches", &tcnn::hipblaslt_fused_relu_biasgrad_stage1_launches);
+	m.def("_hipblaslt_fused_relu_only_launches", &tcnn::hipblaslt_fused_relu_only_launches);
+	m.def("_hipblaslt_biasgrad_finalize_launches", &tcnn::hipblaslt_biasgrad_finalize_launches);
+	m.def("_hipblaslt_fused_relu_biasgrad_fallbacks", &tcnn::hipblaslt_fused_relu_biasgrad_fallbacks);
+	m.def("_hipblaslt_legacy_activation_grad_launches", &tcnn::hipblaslt_legacy_activation_grad_launches);
+	m.def("_hipblaslt_legacy_bias_grad_launches", &tcnn::hipblaslt_legacy_bias_grad_launches);
+	m.def("_hipblaslt_fused_partial_bytes_live", &tcnn::hipblaslt_fused_partial_bytes_live);
+	m.def("_hipblaslt_fused_partial_bytes_peak", &tcnn::hipblaslt_fused_partial_bytes_peak);
 	#endif
 #endif
 

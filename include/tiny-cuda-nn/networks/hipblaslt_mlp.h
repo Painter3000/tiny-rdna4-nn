@@ -22,6 +22,14 @@ uint64_t hipblaslt_execution_handle_creations();
 uint64_t hipblaslt_execution_handle_reuses();
 uint64_t hipblaslt_execution_handle_overflows();
 uint64_t hipblaslt_epilogue_descriptor_count();
+uint64_t hipblaslt_fused_relu_biasgrad_stage1_launches();
+uint64_t hipblaslt_fused_relu_only_launches();
+uint64_t hipblaslt_biasgrad_finalize_launches();
+uint64_t hipblaslt_fused_relu_biasgrad_fallbacks();
+uint64_t hipblaslt_legacy_activation_grad_launches();
+uint64_t hipblaslt_legacy_bias_grad_launches();
+uint64_t hipblaslt_fused_partial_bytes_live();
+uint64_t hipblaslt_fused_partial_bytes_peak();
 
 template <typename T>
 class HipBLASLtMLP : public Network<T> {

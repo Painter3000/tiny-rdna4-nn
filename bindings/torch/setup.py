@@ -204,6 +204,7 @@ if include_networks:
 			"../../src/portable_mlp.cu",
 			# TCNN_RDNA4_P3A1_HIPBLASLT_003: explicit unfused FP32 backend.
 			"../../src/hipblaslt_mlp.cu",
+			"../../src/hipblaslt_relu_biasgrad.cu",
 		]
 	else:
 		base_source_files += [

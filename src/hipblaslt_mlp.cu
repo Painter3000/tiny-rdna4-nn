@@ -15,7 +15,12 @@
 #include <type_traits>
 #include <unordered_map>
 
-namespace tcnn { namespace {
+namespace tcnn {
+
+void launch_fused_relu_backward(uint32_t width, hipStream_t stream, const float* upstream, const float* mask,
+	float* dz, float* partial, float* db, uint32_t batch, GradientMode mode);
+
+namespace {
 
 // TCNN_RDNA4_P3A2_EPILOGUE_001: immutable epilogue plans and per-instance
 // launch descriptors keep dynamic pointers out of the global cache.
@@ -26,6 +31,11 @@ std::atomic<uint64_t> g_epilogue_fallbacks{0}, g_post_kernel_launches{0};
 // handles are disjoint; counters are diagnostic and never affect dispatch.
 std::atomic<uint64_t> g_execution_handle_creations{0}, g_execution_handle_reuses{0}, g_execution_handle_overflows{0};
 std::atomic<uint64_t> g_epilogue_descriptor_count{0};
+// TCNN_RDNA4_P3A4_FUSED_RELU_BGRAD_001: deterministic two-stage hidden
+// ReLU derivative and bias-gradient reduction without final atomics.
+std::atomic<uint64_t> g_fused_stage1_launches{0}, g_fused_relu_only_launches{0}, g_biasgrad_finalize_launches{0};
+std::atomic<uint64_t> g_fused_backward_fallbacks{0}, g_legacy_activation_grad_launches{0}, g_legacy_bias_grad_launches{0};
+std::atomic<uint64_t> g_fused_partial_bytes_live{0}, g_fused_partial_bytes_peak{0};
 
 void check_lt(hipblasStatus_t status, const char* operation) {
 	if (status != HIPBLAS_STATUS_SUCCESS) {
@@ -201,6 +211,11 @@ __global__ void bias_gradient(uint32_t width, const float* delta, float* gradien
 	if (mode == GradientMode::Overwrite) gradient[row] = sum; else gradient[row] += sum;
 }
 
+void update_partial_peak(uint64_t live) {
+	auto peak = g_fused_partial_bytes_peak.load();
+	while (peak < live && !g_fused_partial_bytes_peak.compare_exchange_weak(peak, live)) {}
+}
+
 void require_contiguous(const GPUMatrixDynamic<float>& matrix) {
 	const uint32_t expected = matrix.layout() == MatrixLayout::ColumnMajor ? matrix.m() : matrix.n();
 	if (matrix.stride() != expected) throw std::runtime_error{"HipBLASLtMLP requires contiguous tiny-cuda-nn matrix views."};
@@ -267,6 +282,14 @@ uint64_t hipblaslt_execution_handle_creations() { return g_execution_handle_crea
 uint64_t hipblaslt_execution_handle_reuses() { return g_execution_handle_reuses.load(); }
 uint64_t hipblaslt_execution_handle_overflows() { return g_execution_handle_overflows.load(); }
 uint64_t hipblaslt_epilogue_descriptor_count() { return g_epilogue_descriptor_count.load(); }
+uint64_t hipblaslt_fused_relu_biasgrad_stage1_launches() { return g_fused_stage1_launches.load(); }
+uint64_t hipblaslt_fused_relu_only_launches() { return g_fused_relu_only_launches.load(); }
+uint64_t hipblaslt_biasgrad_finalize_launches() { return g_biasgrad_finalize_launches.load(); }
+uint64_t hipblaslt_fused_relu_biasgrad_fallbacks() { return g_fused_backward_fallbacks.load(); }
+uint64_t hipblaslt_legacy_activation_grad_launches() { return g_legacy_activation_grad_launches.load(); }
+uint64_t hipblaslt_legacy_bias_grad_launches() { return g_legacy_bias_grad_launches.load(); }
+uint64_t hipblaslt_fused_partial_bytes_live() { return g_fused_partial_bytes_live.load(); }
+uint64_t hipblaslt_fused_partial_bytes_peak() { return g_fused_partial_bytes_peak.load(); }
 
 template <typename T> HipBLASLtMLP<T>::HipBLASLtMLP(uint32_t input_width, uint32_t hidden_width, uint32_t output_width,
 	uint32_t n_hidden_layers, Activation activation, Activation output_activation)
@@ -324,22 +347,44 @@ template <typename T> std::unique_ptr<Context> HipBLASLtMLP<T>::forward_impl(hip
 
 template <typename T> void HipBLASLtMLP<T>::backward_impl(hipStream_t stream, const Context& context, const GPUMatrixDynamic<T>& input, const GPUMatrixDynamic<T>& output, const GPUMatrixDynamic<T>& doutput, GPUMatrixDynamic<T>* dinput, bool inference, GradientMode mode) {
 	auto& f=dynamic_cast<const ForwardContext&>(context); uint32_t batch=input.n(); const T* p=selected_params(inference);
+	// Account the fully predictable Activation=None legacy path after all of
+	// its launches, keeping diagnostics out of the kernel-submission sequence.
+	const bool preaccount_legacy = m_activation == Activation::None;
 	std::vector<GPUMatrixDynamic<T>> delta; delta.reserve(m_layers.size());
 	for (uint32_t layer=0; layer<m_layers.size(); ++layer) delta.emplace_back(m_layers[layer].output_width,batch,stream,layer+1==m_layers.size()?output.layout():f.activations[layer].layout());
 	linear_kernel(activation_gradient,0,stream,batch*m_output_width,f.output_preactivation.data(),output.data(),doutput.data(),delta.back().data(),m_output_activation); CUDA_CHECK_THROW(hipGetLastError());
+	if (!preaccount_legacy) ++g_legacy_activation_grad_launches;
 	float* gradients=nullptr; if (mode!=GradientMode::Ignore) { gradients=this->gradients(); if(!gradients) throw std::runtime_error{"HipBLASLtMLP gradient memory was not provided."}; }
 	for (int32_t i=(int32_t)m_layers.size()-1;i>=0;--i) { auto& l=m_layers[i]; const auto& layer_input=i?f.activations[i-1]:input;
 		if (gradients) { float beta=mode==GradientMode::Accumulate?1.f:0.f;
 			gemm(stream,GemmRole::WeightGradient,layer_input.data(),layer_input.layout()==MatrixLayout::ColumnMajor?l.input_width:batch,layer_input.layout()==MatrixLayout::ColumnMajor?batch:l.input_width,layer_input.layout()==MatrixLayout::RowMajor,
 				delta[i].data(),delta[i].layout()==MatrixLayout::ColumnMajor?l.output_width:batch,delta[i].layout()==MatrixLayout::ColumnMajor?batch:l.output_width,delta[i].layout()==MatrixLayout::ColumnMajor,
 				gradients+l.weight_offset,l.input_width,l.output_width,beta);
-			linear_kernel(bias_gradient,0,stream,l.output_width,delta[i].data(),gradients+l.bias_offset,batch,delta[i].layout(),mode); CUDA_CHECK_THROW(hipGetLastError()); }
+			const bool hidden_fused_bias = i < (int32_t)m_n_hidden_layers && m_activation == Activation::ReLU && delta[i].layout() == MatrixLayout::ColumnMajor;
+			if (!hidden_fused_bias) { linear_kernel(bias_gradient,0,stream,l.output_width,delta[i].data(),gradients+l.bias_offset,batch,delta[i].layout(),mode); if (!preaccount_legacy) ++g_legacy_bias_grad_launches; CUDA_CHECK_THROW(hipGetLastError()); } }
 		auto input_gemm = [&](float* destination, MatrixLayout destination_layout) {
 			if (destination_layout==MatrixLayout::ColumnMajor) gemm(stream,GemmRole::InputGradient,p+l.weight_offset,l.input_width,l.output_width,false,delta[i].data(),delta[i].layout()==MatrixLayout::ColumnMajor?l.output_width:batch,delta[i].layout()==MatrixLayout::ColumnMajor?batch:l.output_width,delta[i].layout()==MatrixLayout::RowMajor,destination,l.input_width,batch,0.f);
 			else gemm(stream,GemmRole::InputGradient,delta[i].data(),delta[i].layout()==MatrixLayout::ColumnMajor?l.output_width:batch,delta[i].layout()==MatrixLayout::ColumnMajor?batch:l.output_width,delta[i].layout()==MatrixLayout::ColumnMajor,p+l.weight_offset,l.input_width,l.output_width,true,destination,batch,l.input_width,0.f);
 		};
 		if (i==0) { if(dinput) input_gemm(dinput->data(),dinput->layout()); }
-		else { GPUMatrixDynamic<T> upstream{l.input_width,batch,stream,f.activations[i-1].layout()}; input_gemm(upstream.data(),upstream.layout()); linear_kernel(activation_gradient,0,stream,batch*l.input_width,f.preactivations[i-1].data(),f.activations[i-1].data(),upstream.data(),delta[i-1].data(),m_activation); CUDA_CHECK_THROW(hipGetLastError()); }
+		else { GPUMatrixDynamic<T> upstream{l.input_width,batch,stream,f.activations[i-1].layout()}; input_gemm(upstream.data(),upstream.layout());
+			const bool fused = m_activation == Activation::ReLU && upstream.layout() == MatrixLayout::ColumnMajor && delta[i-1].layout() == MatrixLayout::ColumnMajor;
+			if (fused) {
+				const uint32_t rows_per_tile = 256 / l.input_width; const uint32_t n_partials = div_round_up(batch, rows_per_tile);
+				const uint64_t partial_bytes = mode == GradientMode::Ignore ? 0 : (uint64_t)n_partials * l.input_width * sizeof(float);
+				GPUMatrixDynamic<T> partials; float* partial_pointer = nullptr;
+				if (partial_bytes) { partials = GPUMatrixDynamic<T>{l.input_width,n_partials,stream,MatrixLayout::ColumnMajor}; partial_pointer=partials.data(); const auto live=g_fused_partial_bytes_live.fetch_add(partial_bytes)+partial_bytes; update_partial_peak(live); }
+				launch_fused_relu_backward(l.input_width,stream,upstream.data(),f.activations[i-1].data(),delta[i-1].data(),partial_pointer,gradients?gradients+m_layers[i-1].bias_offset:nullptr,batch,mode);
+				if (mode == GradientMode::Ignore) ++g_fused_relu_only_launches;
+				else { ++g_fused_stage1_launches; ++g_biasgrad_finalize_launches; }
+				CUDA_CHECK_THROW(hipGetLastError());
+				if (partial_bytes) g_fused_partial_bytes_live.fetch_sub(partial_bytes);
+			} else { if (!preaccount_legacy) ++g_fused_backward_fallbacks; linear_kernel(activation_gradient,0,stream,batch*l.input_width,f.preactivations[i-1].data(),f.activations[i-1].data(),upstream.data(),delta[i-1].data(),m_activation); if (!preaccount_legacy) ++g_legacy_activation_grad_launches; CUDA_CHECK_THROW(hipGetLastError()); } }
+	}
+	if (preaccount_legacy) {
+		g_legacy_activation_grad_launches.fetch_add(m_n_hidden_layers + 1);
+		g_fused_backward_fallbacks.fetch_add(m_n_hidden_layers);
+		if (mode != GradientMode::Ignore) g_legacy_bias_grad_launches.fetch_add(m_layers.size());
 	}
 }
 

@@ -1,0 +1,247 @@
+{
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/tmp/tcnn_phase3a4_candidate/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "phase3a1_regression": "PASS",
+  "result": "PASS",
+  "targeted": {
+    "counters": {
+      "_hipblaslt_biasgrad_finalize_launches": 968,
+      "_hipblaslt_fused_partial_bytes_live": 0,
+      "_hipblaslt_fused_partial_bytes_peak": 1048576,
+      "_hipblaslt_fused_relu_biasgrad_fallbacks": 0,
+      "_hipblaslt_fused_relu_biasgrad_stage1_launches": 968,
+      "_hipblaslt_fused_relu_only_launches": 56,
+      "_hipblaslt_legacy_activation_grad_launches": 512,
+      "_hipblaslt_legacy_bias_grad_launches": 484
+    },
+    "determinism": [
+      {
+        "bit_exact": true,
+        "repetitions": 100,
+        "sum": -2780.674644790379,
+        "width": 16
+      },
+      {
+        "bit_exact": true,
+        "repetitions": 100,
+        "sum": -1610.7647823950222,
+        "width": 32
+      },
+      {
+        "bit_exact": true,
+        "repetitions": 100,
+        "sum": 1467.526108983725,
+        "width": 64
+      },
+      {
+        "bit_exact": true,
+        "repetitions": 100,
+        "sum": -1837.325640373437,
+        "width": 128
+      }
+    ],
+    "matrix": [
+      {
+        "batch": 1,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 16
+      },
+      {
+        "batch": 7,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 16
+      },
+      {
+        "batch": 31,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 16
+      },
+      {
+        "batch": 64,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 16
+      },
+      {
+        "batch": 257,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 16
+      },
+      {
+        "batch": 1024,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 16
+      },
+      {
+        "batch": 4096,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 16
+      },
+      {
+        "batch": 1,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 32
+      },
+      {
+        "batch": 7,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 32
+      },
+      {
+        "batch": 31,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 32
+      },
+      {
+        "batch": 64,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 32
+      },
+      {
+        "batch": 257,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 32
+      },
+      {
+        "batch": 1024,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 32
+      },
+      {
+        "batch": 4096,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 32
+      },
+      {
+        "batch": 1,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 64
+      },
+      {
+        "batch": 7,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 64
+      },
+      {
+        "batch": 31,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 64
+      },
+      {
+        "batch": 64,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 64
+      },
+      {
+        "batch": 257,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 64
+      },
+      {
+        "batch": 1024,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 64
+      },
+      {
+        "batch": 4096,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 64
+      },
+      {
+        "batch": 1,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 128
+      },
+      {
+        "batch": 7,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 128
+      },
+      {
+        "batch": 31,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 128
+      },
+      {
+        "batch": 64,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 128
+      },
+      {
+        "batch": 257,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 128
+      },
+      {
+        "batch": 1024,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 128
+      },
+      {
+        "batch": 4096,
+        "double_accumulate": true,
+        "ignore_exact": true,
+        "overwrite_equals_accumulate": true,
+        "width": 128
+      }
+    ]
+  }
+}

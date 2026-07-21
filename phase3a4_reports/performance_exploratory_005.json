@@ -1,0 +1,66 @@
+{
+  "cases": [
+    {
+      "activation": "None",
+      "forward_backward_ms": 3.488663911819458,
+      "forward_backward_ratio": 0.6828103804697442,
+      "forward_ms": 0.09242049977183342,
+      "forward_ratio": 0.8842247949418555,
+      "name": "large_4096_w64_none",
+      "warm_cache_counter_delta": {
+        "handle_creations": 0,
+        "heuristic_misses": 0
+      }
+    },
+    {
+      "activation": "ReLU",
+      "forward_backward_ms": 0.8178854882717133,
+      "forward_backward_ratio": 1.983127264660505,
+      "forward_ms": 0.09346000105142593,
+      "forward_ratio": 1.0058848505048912,
+      "name": "large_1024_w64_relu",
+      "warm_cache_counter_delta": {
+        "handle_creations": 0,
+        "heuristic_misses": 0
+      }
+    },
+    {
+      "activation": "ReLU",
+      "forward_backward_ms": 1.1433680057525635,
+      "forward_backward_ratio": 1.4994044060502545,
+      "forward_ms": 0.10006099939346313,
+      "forward_ratio": 1.0013991851055402,
+      "name": "large_1024_w128_relu",
+      "warm_cache_counter_delta": {
+        "handle_creations": 0,
+        "heuristic_misses": 0
+      }
+    },
+    {
+      "activation": "ReLU",
+      "forward_backward_ms": 1.894773006439209,
+      "forward_backward_ratio": 1.815870802669702,
+      "forward_ms": 0.09272050112485886,
+      "forward_ratio": 1.0064710498053997,
+      "name": "large_4096_w64_relu",
+      "warm_cache_counter_delta": {
+        "handle_creations": 0,
+        "heuristic_misses": 0
+      }
+    }
+  ],
+  "counters": {
+    "handle_creations": 1,
+    "heuristic_misses": 30
+  },
+  "official_run": null,
+  "result": "FAIL",
+  "summary": {
+    "forward_geomean": 0.9730381529171503,
+    "maximum_relu_forward_backward": 1.983127264660505,
+    "minimum_relu_forward_backward": 1.4994044060502545,
+    "none_forward_backward": 0.6828103804697442,
+    "relu_forward_backward_geomean": 1.7543575272645753
+  },
+  "warm_cache_counters_clean": true
+}

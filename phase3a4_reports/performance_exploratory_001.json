@@ -1,0 +1,49 @@
+{
+  "cases": [
+    {
+      "activation": "ReLU",
+      "forward_backward_ms": 0.7583664953708649,
+      "forward_backward_ratio": 2.1387693431374624,
+      "forward_ms": 0.09425050020217896,
+      "forward_ratio": 0.9974482786206704,
+      "name": "large_1024_w64_relu"
+    },
+    {
+      "activation": "ReLU",
+      "forward_backward_ms": 1.1320300102233887,
+      "forward_backward_ratio": 1.5144218881829659,
+      "forward_ms": 0.09920100122690201,
+      "forward_ratio": 1.0100805638470385,
+      "name": "large_1024_w128_relu"
+    },
+    {
+      "activation": "ReLU",
+      "forward_backward_ms": 1.6939945220947266,
+      "forward_backward_ratio": 2.0310945137089718,
+      "forward_ms": 0.08448100090026855,
+      "forward_ratio": 1.1046329838798439,
+      "name": "large_4096_w64_relu"
+    },
+    {
+      "activation": "None",
+      "forward_backward_ms": 2.4486210346221924,
+      "forward_backward_ratio": 0.9728316057401073,
+      "forward_ms": 0.08448100090026855,
+      "forward_ratio": 0.9673239732995803,
+      "name": "large_4096_w64_none"
+    }
+  ],
+  "counters": {
+    "handle_creations": 1,
+    "heuristic_misses": 29
+  },
+  "official_run": null,
+  "result": "FAIL",
+  "summary": {
+    "forward_geomean": 1.0186127064915196,
+    "maximum_relu_forward_backward": 2.1387693431374624,
+    "minimum_relu_forward_backward": 1.5144218881829659,
+    "none_forward_backward": 0.9728316057401073,
+    "relu_forward_backward_geomean": 1.87375866315231
+  }
+}
