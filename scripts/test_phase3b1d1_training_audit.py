@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""TCNN_RDNA4_P3B1D1_TRAINING_AUDIT_001 focused training audit."""
+"""TCNN_RDNA4_P3B1D1_TRAINING_AUDIT_001 focused training audit.
+
+TCNN_RDNA4_P3B1D1A_FINAL_TRAINING_AUDIT_001 corrects reference semantics.
+"""
 import argparse,copy,hashlib,json,os,pathlib,subprocess,sys
 import torch,tinycudann as tcnn
 from tinycudann.modules import _C
@@ -51,16 +54,21 @@ def range_tests():
  under=None
  for exp in range(12,31):
   coeff=2.0**(-exp);x=torch.randn(256,16,device="cuda")*.1;target=torch.zeros_like(x);grads=[]
+  master=None
   for scale in (1.,SCALE):
-   m=tcnn.Network(16,16,dtrain.cfg(16,1,"None","None"),seed=777);m.loss_scale=scale;((m(x).float()-target).square().mean()*coeff).backward();grads.append(m.params.grad.detach().clone())
-  rescued=(grads[0]==0)&(grads[1]!=0)
-  if rescued.any():under={"coefficient":coeff,"scale1_zero_count":int((grads[0]==0).sum()),"scale128_rescued_count":int(rescued.sum()),"after_unscale_max_abs_vs_fp32_quantized_reference":float((grads[1]-grads[1].float()).abs().max()),"inputs_finite":bool(torch.isfinite(x).all()),"passed":True};break
+   m=tcnn.Network(16,16,dtrain.cfg(16,1,"None","None"),seed=777);master=m.params.detach().clone() if master is None else master;m.params.data.copy_(master);m.loss_scale=scale;((m(x).float()-target).square().mean()*coeff).backward();grads.append(m.params.grad.detach().clone())
+  # Independent quantized reference: FP32 master -> FP16 params/input, explicit
+  # FP32 matmul reference, FP16 native-gradient quantization, then one unscale.
+  ss=dtrain.bw.shapes(16,16,16,1);p16=master.half().cpu();acts=dtrain.bw.quant_forward(x.cpu(),p16,ss,"None","None");scaled_go=(2.0*acts[-1].float()/acts[-1].numel()*coeff*SCALE).half();_,rdp,*_=dtrain.bw.quant_backward(x.cpu(),p16,ss,acts,scaled_go,"None","None");independent=rdp.float().cuda()/SCALE
+  rescued=(grads[0]==0)&(grads[1]!=0)&(independent!=0);max_abs=float((grads[1]-independent).abs().max())
+  if rescued.any():under={"coefficient":coeff,"scale1_zero_count":int((grads[0]==0).sum()),"rescued_positions":int(rescued.sum()),"max_abs_vs_independent_quantized_reference":max_abs,"reference_independent":True,"inputs_finite":bool(torch.isfinite(x).all()),"passed":max_abs<=2e-3};break
  if under is None:under={"passed":False}
  # Finite unscaled calculation, deliberate overflow only at final native FP16 gradient.
  m=tcnn.Network(16,16,dtrain.cfg(16,1,"None","None"),seed=888);opt=dtrain.optimizer("Adam",m.params);x=torch.full((256,16),300.,device="cuda");target=torch.zeros_like(x);m.loss_scale=8192.;opt.zero_grad(set_to_none=True);y=m(x);loss=y.float().square().mean();scaled_loss=loss*8192.;loss.backward();before=m.params.detach().clone();os=copy.deepcopy(opt.state_dict());nonfinite=not bool(torch.isfinite(m.params.grad).all());skipped=nonfinite
+ proxy=tcnn.Network(16,16,dtrain.cfg(16,1,"None","None"),seed=888);proxy.params.data.copy_(before);proxy.loss_scale=1.;(proxy(x).float().square().mean()).backward();external_proxy=bool(torch.isfinite(proxy.params.grad).all())
  if not skipped:opt.step()
- unchanged=torch.equal(before,m.params) and state_equal(os,opt.state_dict());opt.zero_grad(set_to_none=True);m.loss_scale=128.;nx=torch.randn(256,16,device="cuda")*.1;nl=m(nx).float().square().mean();nl.backward();recovery=bool(torch.isfinite(m.params.grad).all());fp32_internal=torch.isfinite((x.float().t()@torch.ones_like(x).float())).all().item()
- overflow={"inputs_finite":bool(torch.isfinite(x).all()),"unscaled_loss_finite":bool(torch.isfinite(loss)),"scaled_loss_finite":bool(torch.isfinite(scaled_loss)),"fp32_internal_gradient_finite":bool(fp32_internal),"native_fp16_gradient_nonfinite":nonfinite,"step_skipped":skipped and unchanged,"recovery_passed":recovery};overflow["passed"]=all(overflow.values())
+ unchanged=torch.equal(before,m.params) and state_equal(os,opt.state_dict());opt.zero_grad(set_to_none=True);m.loss_scale=128.;nx=torch.randn(256,16,device="cuda")*.1;nl=m(nx).float().square().mean();nl.backward();recovery=bool(torch.isfinite(m.params.grad).all())
+ overflow={"inputs_finite":bool(torch.isfinite(x).all()),"unscaled_loss_finite":bool(torch.isfinite(loss)),"scaled_loss_finite":bool(torch.isfinite(scaled_loss)),"actual_internal_fp32_gradient_observed":False,"external_fp32_finiteness_proxy":external_proxy,"native_fp16_gradient_nonfinite":nonfinite,"step_skipped":skipped and unchanged,"recovery_passed":recovery};overflow["passed"]=all(overflow[k] for k in ("inputs_finite","unscaled_loss_finite","scaled_loss_finite","external_fp32_finiteness_proxy","native_fp16_gradient_nonfinite","step_skipped","recovery_passed")) and overflow["actual_internal_fp32_gradient_observed"] is False
  return {"underflow_rescue":under,"finite_to_fp16_overflow":overflow,"passed":under.get("passed") is True and overflow["passed"]}
 def main():
  ap=argparse.ArgumentParser();ap.add_argument("--output",type=pathlib.Path);ap.add_argument("--resume",type=pathlib.Path);ap.add_argument("--worker-output",type=pathlib.Path);a=ap.parse_args()
