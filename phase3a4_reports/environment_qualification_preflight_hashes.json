@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "sha256": {
+    "phase3a4_reports/ENVIRONMENT_QUALIFICATION_PROTOCOL.md": "bbbb7ad8f7f342ae4d4424c3e581b314dae69119ba110959cdf5efed894d5bc4",
+    "phase3a4_reports/environment_qualification_bindings.json": "b953bf75504528171d8febcf24496f103764347d42091228b6e6808781d7c0a2",
+    "scripts/benchmark_phase3a4_conditioned_metric_v4.py": "dde22b68e643f77080977bcca28d547df2eee0cd3595e6ab8dfbffa658817250",
+    "scripts/build_phase3a4_conditioned_v4.py": "af353edd1cf772c5109e88f41a9327756211e51faa7ac47b05de4d7976234373",
+    "scripts/phase3a4_v4_native_window.patch": "77172047e889b0d56bfabda3e475684d2e8bb2883552a699ea9d4bffe974acdd",
+    "scripts/run_phase3a4_environment_qualification.py": "22ce372f307e8e2aafea0e4d078b4658c5837d9bd1d10062d0fe64fdfcb98e6a",
+    "scripts/start_environment_qualification.sh": "6b86ee4c2d0040b8b9d18d1da9b2db8761448c06787634814b13b8eef6a0afa5"
+  }
+}

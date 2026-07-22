@@ -6,7 +6,8 @@ WORKSPACE="/home/oem/therock_test/tcnn_rdna4_port/workspace"
 REPO="${WORKSPACE}/repos/tiny-cuda-nn-phase2"
 REPORTS="${WORKSPACE}/phase3a4_reports"
 LOG="${REPORTS}/environment_qualification_run.log"
-MANIFEST="${REPO}/phase3a4_reports/conditioned_bindings_v4.json"
+MANIFEST="${REPO}/phase3a4_reports/environment_qualification_bindings.json"
+HASH_INVENTORY="${REPO}/phase3a4_reports/environment_qualification_preflight_hashes.json"
 PYTHON="/home/oem/therock_test/venv/bin/python"
 RUNNER="${REPO}/scripts/run_phase3a4_environment_qualification.py"
 RAW="${REPORTS}/environment_qualification_raw"
@@ -89,27 +90,38 @@ STATUS="$(git -C "${REPO}" status --porcelain=v1 --untracked-files=all)"
 [[ -z "${STATUS}" ]] || invalid "Phase-3A4 worktree is not clean: ${STATUS//$'\n'/; }"
 log "PRECHECK_PASS git_worktree_clean head=$(git -C "${REPO}" rev-parse HEAD)"
 
-declare -A EXPECTED_HASHES=(
-    [scripts/benchmark_phase3a4_conditioned_metric_v4.py]=dde22b68e643f77080977bcca28d547df2eee0cd3595e6ab8dfbffa658817250
-    [scripts/phase3a4_v4_native_window.patch]=77172047e889b0d56bfabda3e475684d2e8bb2883552a699ea9d4bffe974acdd
-    [phase3a4_reports/conditioned_bindings_v4.json]=a6e07f76a222ed1de2cbaac48e5d42a87e489b168b7e2368e9ab9acf8de2c838
-)
-for relative in "${!EXPECTED_HASHES[@]}"; do
-    actual="$(sha256sum "${REPO}/${relative}" | awk '{print $1}')"
-    [[ "${actual}" == "${EXPECTED_HASHES[${relative}]}" ]] \
-        || invalid "v4 harness hash mismatch: ${relative}"
-    log "PRECHECK_PASS sha256 ${relative}=${actual}"
-done
+"${PYTHON}" - "${REPO}" "${HASH_INVENTORY}" <<'PY' >>"${LOG}" 2>&1 \
+    || invalid "qualification infrastructure hash check failed"
+import hashlib, json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+inventory = json.loads(pathlib.Path(sys.argv[2]).read_text())["sha256"]
+for relative, expected in sorted(inventory.items()):
+    actual = hashlib.sha256((root / relative).read_bytes()).hexdigest()
+    assert actual == expected, (relative, expected, actual)
+    print(f"PRECHECK_PASS sha256 {relative}={actual}")
+PY
+log "PRECHECK_PASS qualification infrastructure hashes"
 
 "${PYTHON}" - "${MANIFEST}" <<'PY' >>"${LOG}" 2>&1 || invalid "A3/A4 binding identity check failed"
 import hashlib, json, pathlib, sys
 manifest = json.loads(pathlib.Path(sys.argv[1]).read_text())
+assert manifest["source_commits"] == {
+    "phase3a3": "a26a0c1218d7ddeaad174c86a33255189ca5c2cc",
+    "phase3a4": "6258184d8d9d032ef423b75eddeeaf8168c7e45a",
+}
+libraries = {}
 for variant in ("phase3a3", "phase3a4"):
     matches = list((pathlib.Path(manifest["bindings"][variant]) / "tinycudann_bindings").glob("_120_C*.so"))
     assert len(matches) == 1, (variant, matches)
     digest = hashlib.sha256(matches[0].read_bytes()).hexdigest()
     assert digest == manifest["binding_sha256"][variant], (variant, digest)
+    libraries[variant] = matches[0].resolve()
     print(f"PRECHECK_PASS binding {variant} {matches[0]} sha256={digest}")
+assert libraries["phase3a3"] != libraries["phase3a4"]
+assert libraries["phase3a3"].stat().st_ino != libraries["phase3a4"].stat().st_ino
+assert manifest["binding_sha256"]["phase3a3"] != manifest["binding_sha256"]["phase3a4"]
+patch = pathlib.Path(manifest["test_only_native_patch"])
+assert hashlib.sha256(patch.read_bytes()).hexdigest() == manifest["test_only_native_patch_sha256"]
 PY
 log "PRECHECK_PASS A3/A4 bindings"
 

@@ -18,11 +18,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 AMD_SMI = "/opt/rocm/bin/amd-smi"
 DECLARED_PAIRS = 28
 MINIMUM_VALID_PAIRS = 18
-EXPECTED = {
-    "scripts/benchmark_phase3a4_conditioned_metric_v4.py": "dde22b68e643f77080977bcca28d547df2eee0cd3595e6ab8dfbffa658817250",
-    "scripts/phase3a4_v4_native_window.patch": "77172047e889b0d56bfabda3e475684d2e8bb2883552a699ea9d4bffe974acdd",
-    "phase3a4_reports/conditioned_bindings_v4.json": "a6e07f76a222ed1de2cbaac48e5d42a87e489b168b7e2368e9ab9acf8de2c838",
-}
+HASH_INVENTORY = ROOT / "phase3a4_reports/environment_qualification_preflight_hashes.json"
 FORBIDDEN_NAMES = {
     "amd-smi", "rocm-smi", "nvtop", "radeontop", "watch", "firefox", "chrome",
     "chromium", "brave", "vlc", "mpv", "totem", "celluloid", "obs", "obs-studio",
@@ -264,11 +260,21 @@ def main():
         preflight["git_status"] = git_status
         if git_status["returncode"] or git_status["stdout"]:
             raise RuntimeError("worktree is not clean")
-        hashes = {relative: sha256(ROOT / relative) for relative in EXPECTED}
+        expected = json.loads(HASH_INVENTORY.read_text())["sha256"]
+        hashes = {relative: sha256(ROOT / relative) for relative in expected}
         preflight["harness_sha256"] = hashes
-        if hashes != EXPECTED:
-            raise RuntimeError("v4 harness or binding manifest hash mismatch")
+        if hashes != expected:
+            raise RuntimeError("qualification infrastructure hash mismatch")
         manifest = json.loads(pathlib.Path(args.manifest).read_text())
+        expected_commits = {
+            "phase3a3": "a26a0c1218d7ddeaad174c86a33255189ca5c2cc",
+            "phase3a4": "6258184d8d9d032ef423b75eddeeaf8168c7e45a",
+        }
+        if manifest.get("source_commits") != expected_commits:
+            raise RuntimeError("qualification binding source identity mismatch")
+        patch_path = pathlib.Path(manifest["test_only_native_patch"])
+        if sha256(patch_path) != manifest.get("test_only_native_patch_sha256"):
+            raise RuntimeError("qualification patch identity mismatch")
         binding_checks = {}
         for variant in ("phase3a3", "phase3a4"):
             libraries = list((pathlib.Path(manifest["bindings"][variant]) / "tinycudann_bindings").glob("_120_C*.so"))
@@ -284,6 +290,11 @@ def main():
         preflight["bindings"] = binding_checks
         if not all(item["pass"] for item in binding_checks.values()):
             raise RuntimeError("binding identity mismatch")
+        libraries = [pathlib.Path(binding_checks[v]["path"]).resolve() for v in ("phase3a3", "phase3a4")]
+        if libraries[0] == libraries[1] or libraries[0].stat().st_ino == libraries[1].stat().st_ino:
+            raise RuntimeError("A3 and A4 binding paths or inodes are not distinct")
+        if binding_checks["phase3a3"]["sha256"] == binding_checks["phase3a4"]["sha256"]:
+            raise RuntimeError("A3 and A4 binding SHA-256 values are not distinct")
         amd_process = capture([AMD_SMI, "process", "--general", "--gpu", "0", "--json"])
         preflight["amd_smi_process"] = amd_process
         if amd_process["returncode"]:

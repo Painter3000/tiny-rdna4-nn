@@ -42,6 +42,16 @@ are retained and are never repeated, replaced, or selectively discarded.
 The number 28 was fixed in advance: at the v4 pair-validity rate of 0.7225 it
 yields 20.2 valid pairs in expectation; the quiet TTY is only a safety margin.
 
+The qualification bindings are rebuilt from the fixed A3 commit
+`a26a0c1218d7ddeaad174c86a33255189ca5c2cc` (tag
+`phase3a3-capability-blocked-gfx1201-rocm72`) and fixed A4 commit
+`6258184d8d9d032ef423b75eddeeaf8168c7e45a`. Both receive only the predeclared
+test patch with SHA-256
+`77172047e889b0d56bfabda3e475684d2e8bb2883552a699ea9d4bffe974acdd`.
+Their persistent roots and binary identities are recorded in
+`phase3a4_reports/environment_qualification_bindings.json`; the historical
+`conditioned_bindings_v4.json` remains unchanged.
+
 ## Qualification gate and labels
 
 At least 18 of the 28 complete pairs must be valid. Otherwise the result is

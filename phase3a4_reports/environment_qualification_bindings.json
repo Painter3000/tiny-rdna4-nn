@@ -1,0 +1,112 @@
+{
+  "binding_libraries": {
+    "phase3a3": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a3/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "phase3a4": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a4/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so"
+  },
+  "binding_sha256": {
+    "phase3a3": "27253c9c9d90e926ba3a6479747267784c7502f1823634d815b1f53d967c3717",
+    "phase3a4": "2b7907793cffd6551cc793e48aebc1cf99b33e0fbbaff4b34b1318651d9a5fd3"
+  },
+  "bindings": {
+    "phase3a3": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a3",
+    "phase3a4": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a4"
+  },
+  "build_timestamp_utc_metadata_only": "2026-07-22T01:14:13.005325+00:00",
+  "environment": {
+    "device": "AMD Radeon Graphics",
+    "gcn_arch": "gfx1201",
+    "hip": "7.2.53211",
+    "python": "3.12.3",
+    "pytorch": "2.13.0+rocm7.2"
+  },
+  "protocol": "conditioning_v4_native_window",
+  "purpose": "phase3a4_environment_qualification",
+  "schema": 1,
+  "source_commits": {
+    "phase3a3": "a26a0c1218d7ddeaad174c86a33255189ca5c2cc",
+    "phase3a4": "6258184d8d9d032ef423b75eddeeaf8168c7e45a"
+  },
+  "source_tags": {
+    "phase3a3": [
+      "phase3a3-capability-blocked-gfx1201-rocm72"
+    ],
+    "phase3a4": []
+  },
+  "test_only_native_patch": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/phase3a4_v4_native_window.patch",
+  "test_only_native_patch_sha256": "77172047e889b0d56bfabda3e475684d2e8bb2883552a699ea9d4bffe974acdd",
+  "validation": {
+    "identity_checks": {
+      "binding_paths_distinct": true,
+      "library_inodes_distinct": true,
+      "library_sha256_distinct": true,
+      "patch_sha256_matches_predeclared": true,
+      "source_commits_resolved": true
+    },
+    "variants": {
+      "phase3a3": {
+        "binding_root": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a3",
+        "counter_values": {
+          "_hipblaslt_execution_handle_creations": {
+            "availability": "native",
+            "value": 0
+          },
+          "_hipblaslt_fused_partial_bytes_live": {
+            "availability": "v4_fallback_zero",
+            "value": 0
+          },
+          "_hipblaslt_fused_partial_bytes_peak": {
+            "availability": "v4_fallback_zero",
+            "value": 0
+          },
+          "_hipblaslt_mlp_cache_misses": {
+            "availability": "native",
+            "value": 0
+          }
+        },
+        "device": "AMD Radeon Graphics",
+        "forward_smoke": "PASS",
+        "gcn_arch": "gfx1201",
+        "hip": "7.2.53211",
+        "library_inode": 26619523,
+        "library_sha256": "27253c9c9d90e926ba3a6479747267784c7502f1823634d815b1f53d967c3717",
+        "loaded_module": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a3/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+        "native_window_present": true,
+        "python": "3.12.3",
+        "pytorch": "2.13.0+rocm7.2",
+        "variant": "phase3a3"
+      },
+      "phase3a4": {
+        "binding_root": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a4",
+        "counter_values": {
+          "_hipblaslt_execution_handle_creations": {
+            "availability": "native",
+            "value": 0
+          },
+          "_hipblaslt_fused_partial_bytes_live": {
+            "availability": "native",
+            "value": 0
+          },
+          "_hipblaslt_fused_partial_bytes_peak": {
+            "availability": "native",
+            "value": 0
+          },
+          "_hipblaslt_mlp_cache_misses": {
+            "availability": "native",
+            "value": 0
+          }
+        },
+        "device": "AMD Radeon Graphics",
+        "forward_smoke": "PASS",
+        "gcn_arch": "gfx1201",
+        "hip": "7.2.53211",
+        "library_inode": 26620481,
+        "library_sha256": "2b7907793cffd6551cc793e48aebc1cf99b33e0fbbaff4b34b1318651d9a5fd3",
+        "loaded_module": "/home/oem/therock_test/tcnn_rdna4_port/workspace/artifacts/environment_qualification_bindings/phase3a4/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+        "native_window_present": true,
+        "python": "3.12.3",
+        "pytorch": "2.13.0+rocm7.2",
+        "variant": "phase3a4"
+      }
+    }
+  }
+}
