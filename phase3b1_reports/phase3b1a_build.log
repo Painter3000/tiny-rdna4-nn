@@ -1,0 +1,52 @@
+MARKER=TCNN_RDNA4_P3B1A_FP16_CAPABILITY_001
+COMMAND=["/opt/rocm/bin/hipcc", "-std=c++17", "-O2", "--offload-arch=gfx1201", "-I/opt/rocm/include", "-I/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies", "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp", "-L/opt/rocm/lib", "-lhipblaslt", "-lamdhip64", "-o", "/tmp/tcnn_phase3b1a_0a49o11t/probe_phase3b1a"]
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:6:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:66:37: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   66 |         ~GuardedDeviceBuffer() { if (base) hipFree(base); }
+      |                                            ^~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:309:19: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  309 |                 if (streams[i]) hipStreamDestroy(streams[i]);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:312:13: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  312 |         if (dev_c) hipFree(dev_c);
+      |                    ^~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:313:13: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  313 |         if (dev_b) hipFree(dev_b);
+      |                    ^~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:314:13: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  314 |         if (dev_a) hipFree(dev_a);
+      |                    ^~~~~~~~~~~~~~
+7 warnings generated when compiling for gfx1201.
+In file included from /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:6:
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26511:35: warning: identifier '_json' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26511 | inline nlohmann::json operator "" _json(const char* s, std::size_t n)
+       |                       ~~~~~~~~~~~~^~~~~
+       |                       operator""_json
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/dependencies/json/json.hpp:26530:49: warning: identifier '_json_pointer' preceded by whitespace in a literal operator declaration is deprecated [-Wdeprecated-literal-operator]
+ 26530 | inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std::size_t n)
+       |                                     ~~~~~~~~~~~~^~~~~~~~~~~~~
+       |                                     operator""_json_pointer
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:66:37: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+   66 |         ~GuardedDeviceBuffer() { if (base) hipFree(base); }
+      |                                            ^~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:309:19: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  309 |                 if (streams[i]) hipStreamDestroy(streams[i]);
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:312:13: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  312 |         if (dev_c) hipFree(dev_c);
+      |                    ^~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:313:13: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  313 |         if (dev_b) hipFree(dev_b);
+      |                    ^~~~~~~~~~~~~~
+/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts/probe_phase3b1a_fp16_hipblaslt.cpp:314:13: warning: ignoring return value of type 'hipError_t' declared with 'nodiscard' attribute [-Wunused-value]
+  314 |         if (dev_a) hipFree(dev_a);
+      |                    ^~~~~~~~~~~~~~
+7 warnings generated when compiling for host.
