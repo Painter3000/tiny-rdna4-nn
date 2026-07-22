@@ -195,6 +195,11 @@ private:
 Module* create_network_with_input_encoding(uint32_t n_input_dims, uint32_t n_output_dims, const json& encoding, const json& network) {
 #if defined(__HIP_PLATFORM_AMD__) && defined(TCNN_PORTABLE_MLP_ONLY)
 	// TCNN_RDNA4_P2_FIX_007: explicit FP32 network while encodings retain FP16/FP32 API.
+	// TCNN_RDNA4_P3B1B_FP16_FORWARD_001: only the explicitly named backend
+	// selects the FP16-parameter/output module; the FP32 default is unchanged.
+	if (equals_case_insensitive(network.value("otype", "PortableMLP"), "HipBLASLtMLPFP16")) {
+		return new DifferentiableObject<__half>{new tcnn::NetworkWithInputEncoding<__half>{n_input_dims, n_output_dims, encoding, network}};
+	}
 	return new DifferentiableObject<float>{new tcnn::NetworkWithInputEncoding<float>{n_input_dims, n_output_dims, encoding, network}};
 #else
 	return new DifferentiableObject<network_precision_t>{new tcnn::NetworkWithInputEncoding<network_precision_t>{n_input_dims, n_output_dims, encoding, network}};

@@ -204,6 +204,8 @@ if include_networks:
 			"../../src/portable_mlp.cu",
 			# TCNN_RDNA4_P3A1_HIPBLASLT_003: explicit unfused FP32 backend.
 			"../../src/hipblaslt_mlp.cu",
+			# TCNN_RDNA4_P3B1B_FP16_FORWARD_001: explicit forward-only FP16 backend.
+			"../../src/hipblaslt_mlp_fp16.cu",
 			"../../src/hipblaslt_relu_biasgrad.cu",
 		]
 	else:

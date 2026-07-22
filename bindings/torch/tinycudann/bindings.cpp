@@ -58,6 +58,7 @@
 #include <tiny-cuda-nn/object.h>
 #if defined(__HIP_PLATFORM_AMD__) && !defined(TCNN_NO_NETWORKS)
 #include <tiny-cuda-nn/networks/hipblaslt_mlp.h>
+#include <tiny-cuda-nn/networks/hipblaslt_mlp_fp16.h>
 #endif
 
 #define STRINGIFY(x) #x
@@ -429,6 +430,19 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	m.def("_hipblaslt_legacy_bias_grad_launches", &tcnn::hipblaslt_legacy_bias_grad_launches);
 	m.def("_hipblaslt_fused_partial_bytes_live", &tcnn::hipblaslt_fused_partial_bytes_live);
 	m.def("_hipblaslt_fused_partial_bytes_peak", &tcnn::hipblaslt_fused_partial_bytes_peak);
+	// TCNN_RDNA4_P3B1B_FP16_FORWARD_001: private structural diagnostics.
+	m.def("_hipblaslt_fp16_cache_hits", &tcnn::hipblaslt_fp16_cache_hits);
+	m.def("_hipblaslt_fp16_cache_misses", &tcnn::hipblaslt_fp16_cache_misses);
+	m.def("_hipblaslt_fp16_cache_size", &tcnn::hipblaslt_fp16_cache_size);
+	m.def("_hipblaslt_fp16_heuristic_queries", &tcnn::hipblaslt_fp16_heuristic_queries);
+	m.def("_hipblaslt_fp16_execution_handle_count", &tcnn::hipblaslt_fp16_execution_handle_count);
+	m.def("_hipblaslt_fp16_execution_handle_creations", &tcnn::hipblaslt_fp16_execution_handle_creations);
+	m.def("_hipblaslt_fp16_execution_handle_reuses", &tcnn::hipblaslt_fp16_execution_handle_reuses);
+	m.def("_hipblaslt_fp16_descriptor_count", &tcnn::hipblaslt_fp16_descriptor_count);
+	m.def("_hipblaslt_fp16_bias_launches", &tcnn::hipblaslt_fp16_bias_launches);
+	m.def("_hipblaslt_fp16_relu_bias_launches", &tcnn::hipblaslt_fp16_relu_bias_launches);
+	m.def("_hipblaslt_fp16_scratch_bytes_live", &tcnn::hipblaslt_fp16_scratch_bytes_live);
+	m.def("_hipblaslt_fp16_scratch_bytes_peak", &tcnn::hipblaslt_fp16_scratch_bytes_peak);
 	#endif
 #endif
 
