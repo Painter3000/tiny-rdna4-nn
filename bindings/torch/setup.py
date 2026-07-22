@@ -206,6 +206,8 @@ if include_networks:
 			"../../src/hipblaslt_mlp.cu",
 			# TCNN_RDNA4_P3B1B_FP16_FORWARD_001: explicit forward-only FP16 backend.
 			"../../src/hipblaslt_mlp_fp16.cu",
+			# TCNN_RDNA4_P3B1C_FP16_BACKWARD_001: deterministic FP16 backward reductions.
+			"../../src/hipblaslt_mlp_fp16_backward.cu",
 			"../../src/hipblaslt_relu_biasgrad.cu",
 		]
 	else:

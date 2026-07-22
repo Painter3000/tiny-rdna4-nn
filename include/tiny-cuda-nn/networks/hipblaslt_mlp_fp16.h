@@ -19,8 +19,16 @@ uint64_t hipblaslt_fp16_bias_launches();
 uint64_t hipblaslt_fp16_relu_bias_launches();
 uint64_t hipblaslt_fp16_scratch_bytes_live();
 uint64_t hipblaslt_fp16_scratch_bytes_peak();
+uint64_t hipblaslt_fp16_dx_launches();
+uint64_t hipblaslt_fp16_dw_launches();
+uint64_t hipblaslt_fp16_dz_launches();
+uint64_t hipblaslt_fp16_db_launches();
 bool hipblaslt_fp16_test_null_parameter_guard();
 bool hipblaslt_fp16_test_invalid_descriptor_counter();
+// TCNN_RDNA4_P3B1C_FP16_BACKWARD_001: test-only direct oracle hook for the
+// fused dZ/FP32-db kernel; production dispatch does not use this entry point.
+void launch_fp16_activation_biasgrad(uint32_t, uint32_t, hipStream_t, const __half*,
+	const __half*, __half*, float*, float*, uint32_t, bool, bool);
 
 class HipBLASLtMLPFP16 final : public Network<__half> {
 public:

@@ -1,0 +1,818 @@
+{
+  "contracts": {
+    "hipblaslt": {
+      "encoding": {
+        "offset": 0.0,
+        "otype": "Identity",
+        "scale": 1.0
+      },
+      "network": {
+        "activation": "ReLU",
+        "bias": true,
+        "n_hidden_layers": 1,
+        "n_neurons": 16,
+        "otype": "HipBLASLtMLP",
+        "output_activation": "None",
+        "precision": "Fp32"
+      },
+      "otype": "NetworkWithInputEncoding"
+    },
+    "portable": {
+      "encoding": {
+        "offset": 0.0,
+        "otype": "Identity",
+        "scale": 1.0
+      },
+      "network": {
+        "activation": "ReLU",
+        "bias": true,
+        "n_hidden_layers": 1,
+        "n_neurons": 16,
+        "otype": "PortableMLP",
+        "output_activation": "None",
+        "precision": "Fp32"
+      },
+      "otype": "NetworkWithInputEncoding"
+    },
+    "unsupported_rejected": [
+      true,
+      true,
+      true
+    ]
+  },
+  "encodings": [
+    {
+      "encoding": "Identity",
+      "encoding_params": 0,
+      "input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "network_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.960464477539063e-08,
+        "mean_abs": 2.2505550756335424e-09,
+        "nan": 0,
+        "relative_l2": 3.395182535413509e-07
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "encoding": "Frequency",
+      "encoding_params": 0,
+      "input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "network_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 1.7881393432617188e-07,
+        "mean_abs": 4.890682081537534e-09,
+        "nan": 0,
+        "relative_l2": 1.7665110687074465e-07
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "encoding": "OneBlob",
+      "encoding_params": 0,
+      "input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "network_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 3.725290298461914e-08,
+        "mean_abs": 1.07164221940792e-09,
+        "nan": 0,
+        "relative_l2": 1.7441165299573712e-07
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "encoding": "HashGrid",
+      "encoding_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 7.450580596923828e-09,
+        "mean_abs": 2.890924166720765e-10,
+        "nan": 0,
+        "relative_l2": 1.1366244084281238e-07
+      },
+      "encoding_params": 688,
+      "input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "network_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 2.7284841053187847e-12,
+        "mean_abs": 1.1295230430228426e-13,
+        "nan": 0,
+        "relative_l2": 1.3883196570470709e-11
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    }
+  ],
+  "environment": {
+    "arch": "gfx1201",
+    "binding": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/lib.linux-x86_64-cpython-312/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+    "device": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "torch": "2.13.0+rocm7.2"
+  },
+  "fresh_checkpoint_resume": {
+    "child_stdout": "PHASE3A1_RESUME_CHILD=PASS",
+    "final_loss": 1.6557953131268732e-05,
+    "fresh_process_returncode": 0,
+    "parameters": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "probe_output": {
+      "exact": true,
+      "inf": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0,
+      "nan": 0,
+      "relative_l2": 0.0
+    },
+    "split_steps": [
+      100,
+      100
+    ]
+  },
+  "fresh_processes": [
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 0,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "D",
+      "returncode": 0,
+      "run": 1,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "G",
+      "returncode": 0,
+      "run": 2,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "H",
+      "returncode": 0,
+      "run": 3,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "HASH",
+      "returncode": 0,
+      "run": 4,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 5,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "D",
+      "returncode": 0,
+      "run": 6,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "G",
+      "returncode": 0,
+      "run": 7,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "H",
+      "returncode": 0,
+      "run": 8,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "HASH",
+      "returncode": 0,
+      "run": 9,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 10,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "D",
+      "returncode": 0,
+      "run": 11,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "G",
+      "returncode": 0,
+      "run": 12,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "H",
+      "returncode": 0,
+      "run": 13,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "HASH",
+      "returncode": 0,
+      "run": 14,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": null,
+      "case": "A",
+      "returncode": 0,
+      "run": 15,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": "1",
+      "case": "D",
+      "returncode": 0,
+      "run": 16,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": "1",
+      "case": "G",
+      "returncode": 0,
+      "run": 17,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": "1",
+      "case": "H",
+      "returncode": 0,
+      "run": 18,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    },
+    {
+      "blocking": "1",
+      "case": "HASH",
+      "returncode": 0,
+      "run": 19,
+      "stderr": "_grad=True to a scalar may lead to unexpected behavior.\nConsider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)\n  d=(a-b).float(); n=float(b.float().norm()); return {\"max_abs\":float(d.abs().max()) if d.numel() else 0.,\"mean_abs\":float(d.abs().mean()) if d.numel() else 0.,\"relative_l2\":float(d.norm())/(n or 1.),\"nan\":int(torch.isnan(a).sum()),\"inf\":int(torch.isinf(a).sum()),\"exact\":bool(torch.equal(a,b))}\n"
+    }
+  ],
+  "gradient_modes": [
+    {
+      "accumulate": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "case": "B",
+      "double": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "ignore_exact": true,
+      "ignore_input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "overwrite": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      }
+    },
+    {
+      "accumulate": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "case": "G",
+      "double": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "ignore_exact": true,
+      "ignore_input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "input": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "overwrite": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 7.450580596923828e-08,
+        "mean_abs": 9.333871453520715e-10,
+        "nan": 0,
+        "relative_l2": 3.302919280365342e-07
+      }
+    }
+  ],
+  "public_cases": [
+    {
+      "case": "A",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "params": 161,
+      "stream": "default"
+    },
+    {
+      "case": "B",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "params": 387,
+      "stream": "default"
+    },
+    {
+      "case": "C",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 1.1175870895385742e-08,
+        "mean_abs": 2.0970888914284558e-10,
+        "nan": 0,
+        "relative_l2": 7.007065969057361e-08
+      },
+      "params": 433,
+      "stream": "default"
+    },
+    {
+      "case": "D",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 2.384185791015625e-06,
+        "mean_abs": 3.9929876294309e-08,
+        "nan": 0,
+        "relative_l2": 2.0270394032134877e-07
+      },
+      "params": 1608,
+      "stream": "default"
+    },
+    {
+      "case": "E",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 4.76837158203125e-07,
+        "mean_abs": 2.223313622096157e-08,
+        "nan": 0,
+        "relative_l2": 3.721905247256641e-07
+      },
+      "params": 4931,
+      "stream": "default"
+    },
+    {
+      "case": "F",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.21540641784668e-08,
+        "mean_abs": 2.1958836138313842e-10,
+        "nan": 0,
+        "relative_l2": 6.873426099568857e-08
+      },
+      "params": 3489,
+      "stream": "default"
+    },
+    {
+      "case": "G",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 1.5832483768463135e-07,
+        "mean_abs": 2.2134041266497206e-09,
+        "nan": 0,
+        "relative_l2": 4.6204780689843617e-07
+      },
+      "params": 13251,
+      "stream": "default"
+    },
+    {
+      "case": "H",
+      "input_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 3.9814040064811707e-08,
+        "mean_abs": 4.184513180405247e-09,
+        "nan": 0,
+        "relative_l2": 3.04153489688046e-07
+      },
+      "output": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.587935447692871e-08,
+        "mean_abs": 5.022753768457733e-09,
+        "nan": 0,
+        "relative_l2": 3.014114477323586e-07
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 4.0531158447265625e-06,
+        "mean_abs": 1.6956404280676907e-08,
+        "nan": 0,
+        "relative_l2": 4.319064576373477e-07
+      },
+      "params": 51720,
+      "stream": "default"
+    },
+    {
+      "case": "D",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 2.384185791015625e-06,
+        "mean_abs": 3.9929876294309e-08,
+        "nan": 0,
+        "relative_l2": 2.0270394032134877e-07
+      },
+      "params": 1608,
+      "stream": "explicit"
+    },
+    {
+      "case": "G",
+      "input_gradient": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "output": {
+        "exact": true,
+        "inf": 0,
+        "max_abs": 0.0,
+        "mean_abs": 0.0,
+        "nan": 0,
+        "relative_l2": 0.0
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 1.5832483768463135e-07,
+        "mean_abs": 2.2134041266497206e-09,
+        "nan": 0,
+        "relative_l2": 4.6204780689843617e-07
+      },
+      "params": 13251,
+      "stream": "explicit"
+    },
+    {
+      "case": "H",
+      "input_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 3.9814040064811707e-08,
+        "mean_abs": 4.184513180405247e-09,
+        "nan": 0,
+        "relative_l2": 3.04153489688046e-07
+      },
+      "output": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 5.587935447692871e-08,
+        "mean_abs": 5.022753768457733e-09,
+        "nan": 0,
+        "relative_l2": 3.014114477323586e-07
+      },
+      "parameter_gradient": {
+        "exact": false,
+        "inf": 0,
+        "max_abs": 4.0531158447265625e-06,
+        "mean_abs": 1.6956404280676907e-08,
+        "nan": 0,
+        "relative_l2": 4.319064576373477e-07
+      },
+      "params": 51720,
+      "stream": "explicit"
+    }
+  ],
+  "repeat_memory": {
+    "allocated_growth": 1024,
+    "iterations": 200,
+    "samples": [
+      {
+        "allocated": 107520,
+        "i": 49,
+        "reserved": 23068672
+      },
+      {
+        "allocated": 108544,
+        "i": 199,
+        "reserved": 23068672
+      }
+    ]
+  },
+  "result": "PASS",
+  "streams": [
+    {
+      "finite": true,
+      "iterations": 50,
+      "mode": "default"
+    },
+    {
+      "finite": true,
+      "iterations": 50,
+      "mode": "same"
+    },
+    {
+      "finite": true,
+      "iterations": 50,
+      "mode": "rotating"
+    },
+    {
+      "finite": true,
+      "mode": "three_stream_events"
+    }
+  ],
+  "training_checkpoint": {
+    "final": 7.055014430079609e-05,
+    "initial": 0.23284004628658295,
+    "ratio": 0.0003029983262155941,
+    "state_interchange": {
+      "exact": false,
+      "inf": 0,
+      "max_abs": 1.2293457984924316e-07,
+      "mean_abs": 4.27779127676331e-08,
+      "nan": 0,
+      "relative_l2": 1.272722184349642e-07
+    },
+    "steps": 500
+  }
+}

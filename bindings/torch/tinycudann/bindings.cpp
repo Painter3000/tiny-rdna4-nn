@@ -443,6 +443,25 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	m.def("_hipblaslt_fp16_relu_bias_launches", &tcnn::hipblaslt_fp16_relu_bias_launches);
 	m.def("_hipblaslt_fp16_scratch_bytes_live", &tcnn::hipblaslt_fp16_scratch_bytes_live);
 	m.def("_hipblaslt_fp16_scratch_bytes_peak", &tcnn::hipblaslt_fp16_scratch_bytes_peak);
+	// TCNN_RDNA4_P3B1C_FP16_BACKWARD_001: backward structural counters.
+	m.def("_hipblaslt_fp16_dx_launches", &tcnn::hipblaslt_fp16_dx_launches);
+	m.def("_hipblaslt_fp16_dw_launches", &tcnn::hipblaslt_fp16_dw_launches);
+	m.def("_hipblaslt_fp16_dz_launches", &tcnn::hipblaslt_fp16_dz_launches);
+	m.def("_hipblaslt_fp16_db_launches", &tcnn::hipblaslt_fp16_db_launches);
+	m.def("_hipblaslt_fp16_test_activation_biasgrad", [](torch::Tensor upstream, torch::Tensor activation, bool relu) {
+		CHECK_INPUT(upstream); CHECK_INPUT(activation);
+		CHECK_THROW(upstream.scalar_type() == torch::kFloat16 && activation.scalar_type() == torch::kFloat16);
+		CHECK_THROW(upstream.dim() == 2 && upstream.sizes() == activation.sizes());
+		const uint32_t batch = upstream.size(0), width = upstream.size(1), tiles = tcnn::div_round_up(batch, 256u);
+		auto dz = torch::empty_like(upstream);
+		auto partials = torch::empty({tiles, width}, torch::TensorOptions().dtype(torch::kFloat32).device(upstream.device()));
+		auto db = torch::empty({width}, torch::TensorOptions().dtype(torch::kFloat32).device(upstream.device()));
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		tcnn::launch_fp16_activation_biasgrad(width, batch, stream, (__half*)upstream.data_ptr<at::Half>(),
+			(__half*)activation.data_ptr<at::Half>(), (__half*)dz.data_ptr<at::Half>(),
+			partials.data_ptr<float>(), db.data_ptr<float>(), tiles, relu, true);
+		return std::make_tuple(dz, db);
+	});
 	// TCNN_RDNA4_P3B1B1_FP16_FORWARD_HARDENING_001: controlled failure-path tests.
 	m.def("_hipblaslt_fp16_test_null_parameter_guard", &tcnn::hipblaslt_fp16_test_null_parameter_guard);
 	m.def("_hipblaslt_fp16_test_invalid_descriptor_counter", &tcnn::hipblaslt_fp16_test_invalid_descriptor_counter);
