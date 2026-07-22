@@ -19,6 +19,8 @@ uint64_t hipblaslt_fp16_bias_launches();
 uint64_t hipblaslt_fp16_relu_bias_launches();
 uint64_t hipblaslt_fp16_scratch_bytes_live();
 uint64_t hipblaslt_fp16_scratch_bytes_peak();
+bool hipblaslt_fp16_test_null_parameter_guard();
+bool hipblaslt_fp16_test_invalid_descriptor_counter();
 
 class HipBLASLtMLPFP16 final : public Network<__half> {
 public:
@@ -48,6 +50,10 @@ public:
 	json hyperparams() const override;
 
 private:
+	// TCNN_RDNA4_P3B1B1_FP16_FORWARD_HARDENING_001: private diagnostic
+	// friends exercise failure paths without exposing a production fallback.
+	friend bool hipblaslt_fp16_test_null_parameter_guard();
+	friend bool hipblaslt_fp16_test_invalid_descriptor_counter();
 	struct DescriptorState;
 	struct Layer { uint32_t in, out; size_t weights, bias; };
 	struct ForwardContext final : Context {

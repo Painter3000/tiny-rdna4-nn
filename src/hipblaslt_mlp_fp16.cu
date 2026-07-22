@@ -32,7 +32,39 @@ bool width_ok(uint32_t w){return w==16||w==32||w==64||w==128;}
 void contiguous(const GPUMatrixDynamic<__half>&x){if(x.layout()!=MatrixLayout::ColumnMajor||x.stride()!=x.m())throw std::runtime_error{"HipBLASLtMLPFP16 requires contiguous ColumnMajor matrices; no fallback is permitted."};}
 } // namespace
 
-struct HipBLASLtMLPFP16::DescriptorState {struct Entry{FKey key;const __half*bias;hipblasLtMatmulDesc_t desc=nullptr;~Entry(){if(desc)hipblasLtMatmulDescDestroy(desc);--f_desc;}};std::mutex mutex;std::vector<std::shared_ptr<Entry>> entries;hipblasLtMatmulDesc_t get(const FKey&key,const __half*bias){std::lock_guard<std::mutex>g{mutex};for(auto&e:entries)if(e->key==key&&e->bias==bias)return e->desc;auto e=std::make_shared<Entry>();e->key=key;e->bias=bias;check(hipblasLtMatmulDescCreate(&e->desc,key.compute_type,key.scale_type),"create launch descriptor");configure(e->desc,key);const void*p=bias;check(hipblasLtMatmulDescSetAttribute(e->desc,HIPBLASLT_MATMUL_DESC_BIAS_POINTER,&p,sizeof(p)),"set bias pointer");int32_t type=(int32_t)key.bias_type;check(hipblasLtMatmulDescSetAttribute(e->desc,HIPBLASLT_MATMUL_DESC_BIAS_DATA_TYPE,&type,sizeof(type)),"set bias type");entries.emplace_back(e);++f_desc;return e->desc;}};
+// TCNN_RDNA4_P3B1B1_FP16_FORWARD_HARDENING_001: descriptor ownership and
+// accounting are committed together. A partially initialized Entry never
+// decrements the global counter.
+struct HipBLASLtMLPFP16::DescriptorState {
+	struct Entry {
+		FKey key{};
+		hipStream_t stream = nullptr;
+		hipblasLtMatmulDesc_t desc = nullptr;
+		bool counted = false;
+		std::mutex submit_mutex;
+		~Entry() {
+			if (desc) hipblasLtMatmulDescDestroy(desc);
+			if (counted) --f_desc;
+		}
+	};
+	std::mutex mutex;
+	std::vector<std::shared_ptr<Entry>> entries;
+	std::shared_ptr<Entry> get(const FKey& key, hipStream_t stream) {
+		std::lock_guard<std::mutex> guard{mutex};
+		for (auto& entry : entries) if (entry->key == key && entry->stream == stream) return entry;
+		auto entry = std::make_shared<Entry>();
+		entry->key = key;
+		entry->stream = stream;
+		check(hipblasLtMatmulDescCreate(&entry->desc,key.compute_type,key.scale_type),"create launch descriptor");
+		configure(entry->desc,key);
+		int32_t type = (int32_t)key.bias_type;
+		check(hipblasLtMatmulDescSetAttribute(entry->desc,HIPBLASLT_MATMUL_DESC_BIAS_DATA_TYPE,&type,sizeof(type)),"set bias type");
+		entries.emplace_back(entry);
+		++f_desc;
+		entry->counted = true;
+		return entry;
+	}
+};
 
 uint64_t hipblaslt_fp16_cache_hits(){return f_hits;}uint64_t hipblaslt_fp16_cache_misses(){return f_misses;}uint64_t hipblaslt_fp16_heuristic_queries(){return f_queries;}uint64_t hipblaslt_fp16_execution_handle_creations(){return f_handle_create;}uint64_t hipblaslt_fp16_execution_handle_reuses(){return f_handle_reuse;}uint64_t hipblaslt_fp16_descriptor_count(){return f_desc;}uint64_t hipblaslt_fp16_bias_launches(){return f_bias;}uint64_t hipblaslt_fp16_relu_bias_launches(){return f_relu;}
 // All selected Phase-3B1-B plans are contractually zero-workspace.
@@ -42,9 +74,29 @@ uint64_t hipblaslt_fp16_execution_handle_count(){int d=0;CUDA_CHECK_THROW(hipGet
 
 HipBLASLtMLPFP16::HipBLASLtMLPFP16(uint32_t input,uint32_t hidden,uint32_t output,uint32_t layers,Activation activation,Activation output_activation):m_input_width{input},m_hidden_width{hidden},m_output_width{output},m_n_hidden_layers{layers},m_activation{activation},m_output_activation{output_activation}{int d=0;CUDA_CHECK_THROW(hipGetDevice(&d));hipDeviceProp_t p{};CUDA_CHECK_THROW(hipGetDeviceProperties(&p,d));if(std::strcmp(p.gcnArchName,"gfx1201")!=0)throw std::runtime_error{"HipBLASLtMLPFP16 supports gfx1201 only."};if(!width_ok(input)||!width_ok(hidden)||!width_ok(output))throw std::runtime_error{"HipBLASLtMLPFP16 supports input, hidden, and output widths 16, 32, 64, or 128 only."};if(layers!=1&&layers!=2&&layers!=4)throw std::runtime_error{"HipBLASLtMLPFP16 supports 1, 2, or 4 hidden layers."};if((activation!=Activation::None&&activation!=Activation::ReLU)||(output_activation!=Activation::None&&output_activation!=Activation::ReLU))throw std::runtime_error{"HipBLASLtMLPFP16 supports None and ReLU only."};for(uint32_t i=0;i<=layers;++i){uint32_t in=i?hidden:input,out=i==layers?output:hidden;size_t w=m_total_n_params,b=w+(size_t)in*out;m_layers.push_back({in,out,w,b});m_total_n_params=b+out;}m_descriptors=std::make_unique<DescriptorState>();}
 HipBLASLtMLPFP16::~HipBLASLtMLPFP16()=default;
-void HipBLASLtMLPFP16::linear(hipStream_t stream,const GPUMatrixDynamic<__half>&input,const __half*weights,const __half*bias,GPUMatrixDynamic<__half>&output,uint32_t in,uint32_t out,Activation activation){contiguous(input);contiguous(output);if(input.n()==0)throw std::runtime_error{"HipBLASLtMLPFP16 rejects zero-batch input explicitly."};int device=0;CUDA_CHECK_THROW(hipGetDevice(&device));FKey key{device,in,out,in,input.n(),out,input.n(),true,false,activation==Activation::ReLU?FEpi::ReluBias:FEpi::Bias,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_32F,HIPBLAS_COMPUTE_32F,MatrixLayout::ColumnMajor,MatrixLayout::ColumnMajor,MatrixLayout::ColumnMajor};auto plan=fplan(key);auto desc=m_descriptors->get(key,bias);auto handle=fhandle(device,stream);const float alpha=1,beta=0;std::lock_guard<std::mutex>g{handle->mutex};check(hipblasLtMatmul(handle->handle,desc,&alpha,weights,plan->a,input.data(),plan->b,&beta,output.data(),plan->c,output.data(),plan->d,&plan->algo,nullptr,0,stream),"FP16 forward matmul");if(activation==Activation::ReLU)++f_relu;else++f_bias;}
+void HipBLASLtMLPFP16::linear(hipStream_t stream,const GPUMatrixDynamic<__half>&input,const __half*weights,const __half*bias,GPUMatrixDynamic<__half>&output,uint32_t in,uint32_t out,Activation activation){contiguous(input);contiguous(output);if(input.n()==0)throw std::runtime_error{"HipBLASLtMLPFP16 rejects zero-batch input explicitly."};int device=0;CUDA_CHECK_THROW(hipGetDevice(&device));FKey key{device,in,out,in,input.n(),out,input.n(),true,false,activation==Activation::ReLU?FEpi::ReluBias:FEpi::Bias,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_32F,HIPBLAS_COMPUTE_32F,MatrixLayout::ColumnMajor,MatrixLayout::ColumnMajor,MatrixLayout::ColumnMajor};auto plan=fplan(key);auto descriptor=m_descriptors->get(key,stream);auto handle=fhandle(device,stream);const float alpha=1,beta=0;std::lock_guard<std::mutex>descriptor_guard{descriptor->submit_mutex};const void*pointer=bias;check(hipblasLtMatmulDescSetAttribute(descriptor->desc,HIPBLASLT_MATMUL_DESC_BIAS_POINTER,&pointer,sizeof(pointer)),"update bias pointer");std::lock_guard<std::mutex>handle_guard{handle->mutex};check(hipblasLtMatmul(handle->handle,descriptor->desc,&alpha,weights,plan->a,input.data(),plan->b,&beta,output.data(),plan->c,output.data(),plan->d,&plan->algo,nullptr,0,stream),"FP16 forward matmul");if(activation==Activation::ReLU)++f_relu;else++f_bias;}
 void HipBLASLtMLPFP16::inference_mixed_precision_impl(hipStream_t stream,const GPUMatrixDynamic<__half>&input,GPUMatrixDynamic<__half>&output,bool inference){std::vector<GPUMatrixDynamic<__half>> buffers;buffers.reserve(m_n_hidden_layers);auto current=&input;const auto*p=selected_params(inference);if(!p)throw std::runtime_error{"HipBLASLtMLPFP16 parameters were not provided."};for(uint32_t i=0;i<m_n_hidden_layers;++i){buffers.emplace_back(m_hidden_width,input.n(),stream,MatrixLayout::ColumnMajor);auto&l=m_layers[i];linear(stream,*current,p+l.weights,p+l.bias,buffers.back(),l.in,l.out,m_activation);current=&buffers.back();}auto&l=m_layers.back();linear(stream,*current,p+l.weights,p+l.bias,output,l.in,l.out,m_output_activation);}
-std::unique_ptr<Context> HipBLASLtMLPFP16::forward_impl(hipStream_t stream,const GPUMatrixDynamic<__half>&input,GPUMatrixDynamic<__half>*output,bool inference,bool){auto f=std::make_unique<ForwardContext>();f->activations.reserve(m_n_hidden_layers);auto current=&input;const auto*p=selected_params(inference);for(uint32_t i=0;i<m_n_hidden_layers;++i){f->activations.emplace_back(m_hidden_width,input.n(),stream,MatrixLayout::ColumnMajor);auto&l=m_layers[i];linear(stream,*current,p+l.weights,p+l.bias,f->activations.back(),l.in,l.out,m_activation);current=&f->activations.back();}if(!output){f->owned_output={m_output_width,input.n(),stream,MatrixLayout::ColumnMajor};output=&f->owned_output;}auto&l=m_layers.back();linear(stream,*current,p+l.weights,p+l.bias,*output,l.in,l.out,m_output_activation);return f;}
+std::unique_ptr<Context> HipBLASLtMLPFP16::forward_impl(hipStream_t stream,const GPUMatrixDynamic<__half>&input,GPUMatrixDynamic<__half>*output,bool inference,bool){auto f=std::make_unique<ForwardContext>();f->activations.reserve(m_n_hidden_layers);auto current=&input;const auto*p=selected_params(inference);if(!p)throw std::runtime_error{"HipBLASLtMLPFP16 parameters were not provided."};for(uint32_t i=0;i<m_n_hidden_layers;++i){f->activations.emplace_back(m_hidden_width,input.n(),stream,MatrixLayout::ColumnMajor);auto&l=m_layers[i];linear(stream,*current,p+l.weights,p+l.bias,f->activations.back(),l.in,l.out,m_activation);current=&f->activations.back();}if(!output){f->owned_output={m_output_width,input.n(),stream,MatrixLayout::ColumnMajor};output=&f->owned_output;}auto&l=m_layers.back();linear(stream,*current,p+l.weights,p+l.bias,*output,l.in,l.out,m_output_activation);return f;}
+
+bool hipblaslt_fp16_test_null_parameter_guard() {
+	HipBLASLtMLPFP16 model{16,16,16,1,Activation::None,Activation::None};
+	model.set_params(nullptr,nullptr,nullptr);
+	GPUMatrixDynamic<__half> input{16,16,nullptr,MatrixLayout::ColumnMajor};
+	GPUMatrixDynamic<__half> output{16,16,nullptr,MatrixLayout::ColumnMajor};
+	try { model.forward_impl(nullptr,input,&output,false,false); }
+	catch (const std::exception& error) { return std::string{error.what()}.find("parameters were not provided") != std::string::npos; }
+	return false;
+}
+
+bool hipblaslt_fp16_test_invalid_descriptor_counter() {
+	const uint64_t before = f_desc.load();
+	try {
+		HipBLASLtMLPFP16::DescriptorState state;
+		FKey invalid{0,16,16,16,16,16,16,true,false,FEpi::Bias,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_16F,HIP_R_32F,(hipblasComputeType_t)-1,MatrixLayout::ColumnMajor,MatrixLayout::ColumnMajor,MatrixLayout::ColumnMajor};
+		state.get(invalid,nullptr);
+	} catch (const std::runtime_error&) { return f_desc.load() == before; }
+	return false;
+}
 void HipBLASLtMLPFP16::backward_impl(hipStream_t,const Context&,const GPUMatrixDynamic<__half>&,const GPUMatrixDynamic<__half>&,const GPUMatrixDynamic<__half>&,GPUMatrixDynamic<__half>*,bool,GradientMode){throw std::runtime_error{"HipBLASLtMLPFP16 is forward-only in Phase 3B1-B; backward is unsupported."};}
 void HipBLASLtMLPFP16::initialize_params(pcg32&r,float*p,float scale){for(auto&l:m_layers){float bound=scale*std::sqrt(6.f/(l.in+l.out));generate_random_uniform<float>(r,(size_t)l.in*l.out,p+l.weights,-bound,bound);CUDA_CHECK_THROW(hipMemset(p+l.bias,0,l.out*sizeof(float)));}}
 std::vector<std::pair<uint32_t,uint32_t>> HipBLASLtMLPFP16::layer_sizes()const{std::vector<std::pair<uint32_t,uint32_t>>r;for(auto&l:m_layers)r.emplace_back(l.in,l.out);return r;}uint32_t HipBLASLtMLPFP16::width(uint32_t l)const{if(l>=m_n_hidden_layers)throw std::runtime_error{"HipBLASLtMLPFP16 layer out of range."};return m_hidden_width;}std::pair<const __half*,MatrixLayout> HipBLASLtMLPFP16::forward_activations(const Context&c,uint32_t l)const{if(l>=m_n_hidden_layers)throw std::runtime_error{"HipBLASLtMLPFP16 activation out of range."};auto&f=dynamic_cast<const ForwardContext&>(c);return{f.activations[l].data(),f.activations[l].layout()};}json HipBLASLtMLPFP16::hyperparams()const{return{{"otype","HipBLASLtMLPFP16"},{"activation",to_string(m_activation)},{"output_activation",to_string(m_output_activation)},{"n_neurons",m_hidden_width},{"n_hidden_layers",m_n_hidden_layers},{"bias",true},{"operand_precision","Fp16"},{"accumulation_precision","Fp32"},{"hidden_output_precision","Fp16"},{"final_output_precision","Fp16"},{"backward",false}};}

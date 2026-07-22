@@ -443,6 +443,9 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	m.def("_hipblaslt_fp16_relu_bias_launches", &tcnn::hipblaslt_fp16_relu_bias_launches);
 	m.def("_hipblaslt_fp16_scratch_bytes_live", &tcnn::hipblaslt_fp16_scratch_bytes_live);
 	m.def("_hipblaslt_fp16_scratch_bytes_peak", &tcnn::hipblaslt_fp16_scratch_bytes_peak);
+	// TCNN_RDNA4_P3B1B1_FP16_FORWARD_HARDENING_001: controlled failure-path tests.
+	m.def("_hipblaslt_fp16_test_null_parameter_guard", &tcnn::hipblaslt_fp16_test_null_parameter_guard);
+	m.def("_hipblaslt_fp16_test_invalid_descriptor_counter", &tcnn::hipblaslt_fp16_test_invalid_descriptor_counter);
 	#endif
 #endif
 
