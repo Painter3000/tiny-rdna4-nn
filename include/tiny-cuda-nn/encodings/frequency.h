@@ -49,6 +49,7 @@ __global__ void frequency_encoding(
 	const uint32_t n_frequencies,
 	const uint32_t num_to_encode,
 	const uint32_t num_to_pad,
+	const T padding_value,
 	MatrixView<const float> data_in,
 	MatrixView<T> data_out,
 	float* __restrict__ dy_dx)
@@ -63,9 +64,7 @@ __global__ void frequency_encoding(
 	const uint32_t j = encoded_index - i * fan_out;
 
 	if (j >= fan_out_encoded) {
-		// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: padding must be inert at
-		// the Encoding -> FP16 MLP boundary.
-		data_out(j, i) = 0;
+		data_out(j, i) = padding_value;
 	} else {
 		const uint32_t encoded_input_feature_i = j / (n_frequencies * 2);
 		const uint32_t log2_frequency = (j / 2) % n_frequencies;
@@ -136,6 +135,7 @@ public:
 			m_n_frequencies,
 			m_n_dims_to_encode,
 			m_n_to_pad,
+			this->padding_value(),
 			input.view(),
 			output->view(),
 			forward->dy_dx.data()

@@ -50,6 +50,7 @@ __global__ void identity(
 	const uint32_t num_to_pad,
 	const float scale,
 	const float offset,
+	const T padding_value,
 	MatrixView<const float> data_in,
 	MatrixView<T> data_out)
 {
@@ -61,9 +62,7 @@ __global__ void identity(
 	const uint32_t j = encoded_index - i * fan_out;
 
 	if (j >= num_to_encode) {
-		// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: padding must be inert at
-		// the Encoding -> FP16 MLP boundary.
-		data_out(j, i) = 0;
+		data_out(j, i) = padding_value;
 	} else {
 		data_out(j, i) = data_in(j, i) * scale + offset;
 	}
@@ -113,6 +112,7 @@ public:
 			m_n_to_pad,
 			m_scale,
 			m_offset,
+			this->padding_value(),
 			input.view(),
 			output->view()
 		);

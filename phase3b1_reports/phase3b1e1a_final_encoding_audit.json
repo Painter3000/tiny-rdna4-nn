@@ -1,0 +1,896 @@
+{
+  "marker": "TCNN_RDNA4_P3B1E1A_FINAL_ENCODING_AUDIT_001",
+  "base_commit": "de2ce23ec7070aa7e5546b1942e80806bce17cb1",
+  "decision": "PROCEED_TO_3B1F_FP16_PERFORMANCE",
+  "gates": {
+    "raw": true,
+    "standalone_padding": true,
+    "fp32_padding": true,
+    "fp16_padding": true,
+    "hashgrid_unchanged": true,
+    "matrix": true,
+    "collision_strong": true,
+    "collision_low": true,
+    "dynamic_scale": true,
+    "dynamic_overflow": true,
+    "training": true,
+    "resume": true,
+    "events": true,
+    "maxima": true,
+    "historical_dinput_max": true,
+    "historical_reports": true,
+    "production_scope": true,
+    "manipulations": true,
+    "regressions": true
+  },
+  "blocking_gates": [],
+  "manipulation_tests": [
+    {
+      "name": "standalone_padding_globally_zero",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "fp16_padding_nonzero",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "collision_strong_without_collision",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "collision_low_rate_invalid",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "dynamic_without_scale_change",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "dynamic_without_overflow_skip_recovery",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "cpu_rng_mismatch",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "cuda_all_rng_mismatch",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "custom_generator_rng_mismatch",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    },
+    {
+      "name": "maximum_without_attribution",
+      "decision": "PHASE3B1E1A_BLOCKED",
+      "passed": true
+    }
+  ],
+  "padding_contracts": {
+    "standalone": {
+      "Identity": 1.0,
+      "Frequency": 1.0,
+      "OneBlob": 1.0,
+      "HashGrid": 1.0
+    },
+    "fp32_network_with_encoding": [
+      {
+        "encoding": "Identity",
+        "value": 1.0
+      },
+      {
+        "encoding": "Frequency",
+        "value": 1.0
+      },
+      {
+        "encoding": "OneBlob",
+        "value": 1.0
+      }
+    ],
+    "fp16_network_with_encoding": [
+      {
+        "encoding": "Identity",
+        "value": 0.0
+      },
+      {
+        "encoding": "Frequency",
+        "value": 0.0
+      },
+      {
+        "encoding": "OneBlob",
+        "value": 0.0
+      }
+    ],
+    "fp16_zero_execution": [
+      {
+        "encoding": "Identity",
+        "logical_width": 3,
+        "padded_width": 16,
+        "batch": 17,
+        "padding_max_abs": 0.0,
+        "padding_gradient_max_abs": 0.0,
+        "dinput_max_abs": 0.0,
+        "encoding_gradient_max_abs": 0.0,
+        "deterministic": true,
+        "passed": true
+      },
+      {
+        "encoding": "Frequency",
+        "logical_width": 56,
+        "padded_width": 64,
+        "batch": 31,
+        "padding_max_abs": 0.0,
+        "padding_gradient_max_abs": 0.0,
+        "dinput_max_abs": 0.0,
+        "encoding_gradient_max_abs": 0.0,
+        "deterministic": true,
+        "passed": true
+      },
+      {
+        "encoding": "OneBlob",
+        "logical_width": 16,
+        "padded_width": 16,
+        "batch": 31,
+        "padding_max_abs": 0.0,
+        "padding_gradient_max_abs": 0.0,
+        "dinput_max_abs": 0.0,
+        "encoding_gradient_max_abs": 0.0,
+        "deterministic": true,
+        "passed": true
+      }
+    ],
+    "hashgrid_unchanged": true,
+    "passed": true
+  },
+  "collision_proofs": {
+    "strong": {
+      "dense_entries_per_level": [
+        16
+      ],
+      "hash_table_entries_per_level": [
+        8
+      ],
+      "colliding_levels": [
+        0
+      ],
+      "collision_count": 12,
+      "maximum_bucket_occupancy": 4,
+      "collision_classification": "collision-strong",
+      "collision_witness": {
+        "level": 0,
+        "coordinate_a": [
+          0,
+          0
+        ],
+        "coordinate_b": [
+          1,
+          1
+        ],
+        "hash_target": 0
+      }
+    },
+    "low_3d": {
+      "dense_entries_per_level": [
+        64
+      ],
+      "hash_table_entries_per_level": [
+        64
+      ],
+      "colliding_levels": [],
+      "collision_count": 0,
+      "maximum_bucket_occupancy": 1,
+      "collision_classification": "collision-low",
+      "collision_witness": null
+    },
+    "low_2d": {
+      "dense_entries_per_level": [
+        16
+      ],
+      "hash_table_entries_per_level": [
+        16
+      ],
+      "colliding_levels": [],
+      "collision_count": 0,
+      "maximum_bucket_occupancy": 1,
+      "collision_classification": "collision-low",
+      "collision_witness": null
+    }
+  },
+  "training_runs": [
+    {
+      "encoding": "Identity",
+      "optimizer": "SGD",
+      "steps": 200,
+      "dims": 3,
+      "config": {
+        "otype": "Identity",
+        "scale": 1.25,
+        "offset": -0.125
+      },
+      "scaling": "none",
+      "collision": null,
+      "initial_scale": 1.0,
+      "minimum_scale": 1.0,
+      "maximum_scale": 1.0,
+      "scale_change_count": 0,
+      "overflow_count": 0,
+      "skip_count": 0,
+      "recovery_count": 0,
+      "final_scale": 1.0,
+      "growth_interval": null,
+      "overflow_observation": null,
+      "both_parameter_ranges_checked": true,
+      "start_loss": 0.039185505360364914,
+      "end_loss": 0.029445350170135498,
+      "counters_warm": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_end": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    },
+    {
+      "encoding": "HashGrid",
+      "optimizer": "Adam",
+      "steps": 1000,
+      "dims": 2,
+      "config": {
+        "otype": "HashGrid",
+        "n_levels": 1,
+        "n_features_per_level": 2,
+        "log2_hashmap_size": 3,
+        "base_resolution": 4,
+        "per_level_scale": 2.0,
+        "interpolation": "Linear"
+      },
+      "scaling": "none",
+      "collision": {
+        "dense_entries_per_level": [
+          16
+        ],
+        "hash_table_entries_per_level": [
+          8
+        ],
+        "colliding_levels": [
+          0
+        ],
+        "collision_count": 12,
+        "maximum_bucket_occupancy": 4,
+        "collision_classification": "collision-strong",
+        "collision_witness": {
+          "level": 0,
+          "coordinate_a": [
+            0,
+            0
+          ],
+          "coordinate_b": [
+            1,
+            1
+          ],
+          "hash_target": 0
+        }
+      },
+      "initial_scale": 1.0,
+      "minimum_scale": 1.0,
+      "maximum_scale": 1.0,
+      "scale_change_count": 0,
+      "overflow_count": 0,
+      "skip_count": 0,
+      "recovery_count": 0,
+      "final_scale": 1.0,
+      "growth_interval": null,
+      "overflow_observation": null,
+      "both_parameter_ranges_checked": true,
+      "start_loss": 0.03323758393526077,
+      "end_loss": 0.012424043379724026,
+      "counters_warm": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_end": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    },
+    {
+      "encoding": "HashGrid",
+      "optimizer": "Adam",
+      "steps": 1000,
+      "dims": 3,
+      "config": {
+        "otype": "HashGrid",
+        "n_levels": 1,
+        "n_features_per_level": 2,
+        "log2_hashmap_size": 12,
+        "base_resolution": 4,
+        "per_level_scale": 2.0,
+        "interpolation": "Linear"
+      },
+      "scaling": "dynamic",
+      "collision": {
+        "dense_entries_per_level": [
+          64
+        ],
+        "hash_table_entries_per_level": [
+          64
+        ],
+        "colliding_levels": [],
+        "collision_count": 0,
+        "maximum_bucket_occupancy": 1,
+        "collision_classification": "collision-low",
+        "collision_witness": null
+      },
+      "initial_scale": 128.0,
+      "minimum_scale": 64.0,
+      "maximum_scale": 2048.0,
+      "scale_change_count": 6,
+      "overflow_count": 1,
+      "skip_count": 1,
+      "recovery_count": 949,
+      "final_scale": 2048.0,
+      "growth_interval": 200,
+      "overflow_observation": {
+        "forward_output_finite": true,
+        "upstream_gradient_finite": true,
+        "network_gradient_nonfinite": true,
+        "encoding_gradient_nonfinite": true,
+        "full_step_skipped": true,
+        "scale_reduced": true,
+        "gradients_reset": true
+      },
+      "both_parameter_ranges_checked": true,
+      "start_loss": 0.032027192413806915,
+      "end_loss": 0.0010790135711431503,
+      "counters_warm": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_end": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    },
+    {
+      "encoding": "HashGrid",
+      "optimizer": "Adam",
+      "steps": 1000,
+      "dims": 2,
+      "config": {
+        "otype": "HashGrid",
+        "n_levels": 1,
+        "n_features_per_level": 2,
+        "log2_hashmap_size": 12,
+        "base_resolution": 4,
+        "per_level_scale": 2.0,
+        "interpolation": "Linear"
+      },
+      "scaling": "static",
+      "collision": {
+        "dense_entries_per_level": [
+          16
+        ],
+        "hash_table_entries_per_level": [
+          16
+        ],
+        "colliding_levels": [],
+        "collision_count": 0,
+        "maximum_bucket_occupancy": 1,
+        "collision_classification": "collision-low",
+        "collision_witness": null
+      },
+      "initial_scale": 128.0,
+      "minimum_scale": 128.0,
+      "maximum_scale": 128.0,
+      "scale_change_count": 0,
+      "overflow_count": 0,
+      "skip_count": 0,
+      "recovery_count": 0,
+      "final_scale": 128.0,
+      "growth_interval": null,
+      "overflow_observation": null,
+      "both_parameter_ranges_checked": true,
+      "start_loss": 0.03323762118816376,
+      "end_loss": 0.0007429046090692282,
+      "counters_warm": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_end": {
+        "cache_misses": 36,
+        "cache_size": 36,
+        "heuristic_queries": 36,
+        "execution_handle_count": 1,
+        "execution_handle_creations": 1,
+        "descriptor_count": 3,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    }
+  ],
+  "validated_training_steps": 7600,
+  "checkpoint_resume": [
+    {
+      "encoding": "Frequency",
+      "scaling": "none",
+      "fresh_process": true,
+      "cpu_rng_equal": true,
+      "cuda_all_rng_equal": true,
+      "custom_generator_rng_equal": true,
+      "parameters_bit_identical": true,
+      "optimizer_state_equal": true,
+      "passed": true
+    },
+    {
+      "encoding": "OneBlob",
+      "scaling": "none",
+      "fresh_process": true,
+      "cpu_rng_equal": true,
+      "cuda_all_rng_equal": true,
+      "custom_generator_rng_equal": true,
+      "parameters_bit_identical": true,
+      "optimizer_state_equal": true,
+      "passed": true
+    },
+    {
+      "encoding": "HashGrid",
+      "scaling": "none",
+      "fresh_process": true,
+      "cpu_rng_equal": true,
+      "cuda_all_rng_equal": true,
+      "custom_generator_rng_equal": true,
+      "parameters_bit_identical": true,
+      "optimizer_state_equal": true,
+      "passed": true
+    },
+    {
+      "encoding": "HashGrid",
+      "scaling": "dynamic",
+      "fresh_process": true,
+      "cpu_rng_equal": true,
+      "cuda_all_rng_equal": true,
+      "custom_generator_rng_equal": true,
+      "parameters_bit_identical": true,
+      "optimizer_state_equal": true,
+      "passed": true
+    }
+  ],
+  "event_chains": [
+    {
+      "encoding": "Identity",
+      "rounds": 64,
+      "event_recorded": true,
+      "backward_waited_on_event": true,
+      "terminal_sync_only": true,
+      "parameter_max_abs": 0.0,
+      "loss_max_abs": 0.0,
+      "network_gradient_max_abs": 0.0,
+      "encoding_gradient_max_abs": 0.0,
+      "optimizer_state_equal": true,
+      "counters_before": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 2,
+        "execution_handle_creations": 2,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_after": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 2,
+        "execution_handle_creations": 2,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    },
+    {
+      "encoding": "Frequency",
+      "rounds": 64,
+      "event_recorded": true,
+      "backward_waited_on_event": true,
+      "terminal_sync_only": true,
+      "parameter_max_abs": 0.0,
+      "loss_max_abs": 0.0,
+      "network_gradient_max_abs": 0.0,
+      "encoding_gradient_max_abs": 0.0,
+      "optimizer_state_equal": true,
+      "counters_before": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 3,
+        "execution_handle_creations": 3,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_after": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 3,
+        "execution_handle_creations": 3,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    },
+    {
+      "encoding": "OneBlob",
+      "rounds": 64,
+      "event_recorded": true,
+      "backward_waited_on_event": true,
+      "terminal_sync_only": true,
+      "parameter_max_abs": 0.0,
+      "loss_max_abs": 0.0,
+      "network_gradient_max_abs": 0.0,
+      "encoding_gradient_max_abs": 0.0,
+      "optimizer_state_equal": true,
+      "counters_before": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 4,
+        "execution_handle_creations": 4,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_after": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 4,
+        "execution_handle_creations": 4,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    },
+    {
+      "encoding": "HashGrid",
+      "rounds": 64,
+      "event_recorded": true,
+      "backward_waited_on_event": true,
+      "terminal_sync_only": true,
+      "parameter_max_abs": 0.0,
+      "loss_max_abs": 0.0,
+      "network_gradient_max_abs": 0.0,
+      "encoding_gradient_max_abs": 0.0,
+      "optimizer_state_equal": true,
+      "counters_before": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 5,
+        "execution_handle_creations": 5,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "counters_after": {
+        "cache_misses": 37,
+        "cache_size": 37,
+        "heuristic_queries": 37,
+        "execution_handle_count": 5,
+        "execution_handle_creations": 5,
+        "descriptor_count": 4,
+        "scratch_bytes_live": 0,
+        "scratch_bytes_peak": 450112
+      },
+      "passed": true
+    }
+  ],
+  "functional_cases": 204,
+  "functional_passed": 204,
+  "numerical_maxima": {
+    "output": {
+      "encoding": "Frequency",
+      "dims": 2,
+      "variant": 3,
+      "batch": 1024,
+      "interpolation": null,
+      "n_levels": null,
+      "n_features_per_level": null,
+      "absolute_error": 0.0009765625,
+      "normalized_l2": 0.00013900978258998595,
+      "max_relative_outside_near_zero": 0.1160639226436615,
+      "reference_norm": 54.42112350463867
+    },
+    "dinput": {
+      "encoding": "Frequency",
+      "dims": 2,
+      "variant": 3,
+      "batch": 1024,
+      "interpolation": null,
+      "n_levels": null,
+      "n_features_per_level": null,
+      "absolute_error": 0.02745274268090725,
+      "normalized_l2": 0.028579029471602468,
+      "max_relative_outside_near_zero": 0.9352390766143799,
+      "reference_norm": 1.1537230014801025
+    },
+    "network_gradient": {
+      "encoding": "HashGrid",
+      "dims": 2,
+      "variant": 3,
+      "batch": 1024,
+      "interpolation": "Smoothstep",
+      "n_levels": 16,
+      "n_features_per_level": 4,
+      "absolute_error": 0.0007190704345703125,
+      "normalized_l2": 0.10276123438550208,
+      "max_relative_outside_near_zero": 0.22668173909187317,
+      "reference_norm": 0.010350598022341728
+    },
+    "encoding_gradient": {
+      "encoding": "HashGrid",
+      "dims": 2,
+      "variant": 3,
+      "batch": 1024,
+      "interpolation": "Smoothstep",
+      "n_levels": 16,
+      "n_features_per_level": 4,
+      "absolute_error": 0.00013780593872070312,
+      "normalized_l2": 0.06784307793571621,
+      "max_relative_outside_near_zero": 0.0052956752479076385,
+      "reference_norm": 0.007708486169576645
+    }
+  },
+  "historical_e1_dinput_maximum_attribution": {
+    "encoding": "HashGrid",
+    "dims": 3,
+    "variant": 3,
+    "batch": 1024,
+    "interpolation": "Smoothstep",
+    "n_levels": 16,
+    "n_features_per_level": 4,
+    "absolute_error": 0.02607070654630661
+  },
+  "overflow_field_contract": {
+    "forward_output_finite": true,
+    "scaled_forward_output_finite": true,
+    "upstream_gradient_finite": true
+  },
+  "historical_reports": {
+    "phase3b1_reports/PHASE3B1A_FP16_CAPABILITY.md": {
+      "sha256": "fb134864807ef47dcba1a4b9397059e1daba3680aad92e0226c6e63fc7e91de8",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1B1_FP16_FORWARD_HARDENING.md": {
+      "sha256": "0d8bfb554f4eff519edcc7a74628ca8637f1e86a9076268779c33cd398d73925",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1B_FP16_FORWARD.md": {
+      "sha256": "e835b19cb91a1022c8a88341c88d30233e3ea6d74f64310fbfeb8ee2586d7b47",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1C1A_FINAL_AUDIT.md": {
+      "sha256": "026bed8aaa9a96bf1d14265cbb244183a0104a2a842bbb6199d76d0b841be6b5",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1C1_BACKWARD_AUDIT_HARDENING.md": {
+      "sha256": "216abc85ae6491c395c55dc77c293250c3ed864fa5b7c44c3d1dd5e552650878",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1C_API_AUDIT.md": {
+      "sha256": "5e3784e8ae6b20712f26307e0c35e5666a96a8f375b52a884b4ed4919f00cb9e",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1C_FP16_BACKWARD.md": {
+      "sha256": "bc91cd9b33ae8ba27d61b21f01b0f26aa2a99ef0f9e227c636c7f7aa5cf3f371",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1D1A_FINAL_TRAINING_AUDIT.md": {
+      "sha256": "fc5fc147b8e58772903ff584a425709ff0160eabd8407be8b4d06001b5ab0045",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1D1_TRAINING_AUDIT_HARDENING.md": {
+      "sha256": "057ac10d828ba4aa2f4e4dcae3687baf7543d895a292109ccd445204e4643469",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1D_FP16_TRAINING.md": {
+      "sha256": "91ae5c76722254daf8b5d0ac27232f115e1de4d2d689ef8b2df89d660267014a",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1D_TRAINING_CONTRACT.md": {
+      "sha256": "114db5dbe27e1ffd7ca64a361e03591fa073e94243177cac51bc822c544fd53d",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1E1_ENCODING_CLOSURE.md": {
+      "sha256": "79ac84dee98140cda5c2fa96af531f18aebdfd4230458eb668cab6ba3e3f6444",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1E1_HASHGRID_DIRECT_ORACLE.md": {
+      "sha256": "0902485ec68c012f8a4cfc8b7949592592a964ee9c686623e5938926cd9f77e6",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1E1_ORACLE_CONTRACT.md": {
+      "sha256": "bcb4aa0a1de08ab61d80e17c6099f1c54c2575ca53236968b2d23f355419849f",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1E_FP16_NETWORK_WITH_ENCODING.md": {
+      "sha256": "a6ce5fa3c8936f5540d22088a0adfcfd3d05d4655cfed98a2075d2831366f9f3",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1E_HASHGRID_BACKWARD_AUDIT.md": {
+      "sha256": "33a43ed02df9fbf1b5387c00fc05e88252babaf2c98e680ff6fa10ceded6c8bd",
+      "byte_equal": true
+    },
+    "phase3b1_reports/PHASE3B1E_INTEGRATION_CONTRACT.md": {
+      "sha256": "5f03b82275319360ab8bb897bedcc8daaf9f9de40db8885a976d1acbd04088ec",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1a_build.log": {
+      "sha256": "3388eee43386dae87ee3558618c4e99b2a688bab9b94de3e77ce6e1d3040c62f",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1a_fp16_capability.json": {
+      "sha256": "3696516c4b2997b4b43ab16c75ce2e6d7ae6392fde34e0ba099f4be788aff765",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1a_run.log": {
+      "sha256": "b83b31e71fd176b72e73776ba12a5c5e452f8ab468262378fd5c073c0287648a",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1b1_fp16_forward_hardening.json": {
+      "sha256": "c8bb7b752fdc3a6787451e11de975205d7fc3c2efb71df9890e8555921da00c6",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1b_epilogue_build.log": {
+      "sha256": "a3a635da69af1796d12af7f5e5e9ae873250f3bfaf9464dcefa0b9b22f6c45d0",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1b_epilogue_checkpoint.json": {
+      "sha256": "24c1800e78df7e187604e53e9ee7312e4385aa283a8489cc716ab0ef0d623899",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1b_epilogue_run.log": {
+      "sha256": "cffa2358f0d5945a331117518df4048d400e15d9a977e43019eeac6a9a3fe994",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1b_fp16_forward.json": {
+      "sha256": "a50d9e582957f6c0475dc8d2b6a820fee041d8566de320fc51321000f16f78b6",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1c1_backward_audit_hardening.json": {
+      "sha256": "f58fd0d8ccef2becd4521025cb2c732f466b62422d1a3a1d32f91b8d4d6196fe",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1c1_backward_audit_hardening_raw.json": {
+      "sha256": "3415323fa20898221b1b6aeaf5c51739a19c9ba2abb5868fa9abad8a11aac239",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1c1a_final_audit.json": {
+      "sha256": "bdefbdfdba2ceade2b5fecef94d2c5094db5381188f2a74c6cb5a356526e79de",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1c_backward_capability.json": {
+      "sha256": "1be4c4c6ca789a66c5c3bba7f35e744277e85893b6ae028e479312799d5d3012",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1c_fp16_backward.json": {
+      "sha256": "325d00186503eb8aaafac31cba4ea6a3d242efd15b4b392878ff79631f78d564",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1c_fp16_backward_raw.json": {
+      "sha256": "dd7974f4ceb6b04664d5b0da8f1a9285e844be3607df59dd2f28baca1fad892d",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1d1_training_audit_hardening.json": {
+      "sha256": "5b1791945a7e4034fab282c136fd7216355dfc61e244c16c31ca2e010f1899a7",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1d1a_final_training_audit.json": {
+      "sha256": "383a482bf0f7996b4da689f5f05bba0c47b760908562ede1b64d5a4acd417ac9",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1d_fp16_training.json": {
+      "sha256": "f91e8bd05722af8e82a6c9d95ef7868e505fdad9d4f15ebad8122967df3b5d66",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1e1_encoding_closure.json": {
+      "sha256": "5446c99c32b1362c438ce6ab8c81f53dee06081104ab8e388f75e31ca4f7c446",
+      "byte_equal": true
+    },
+    "phase3b1_reports/phase3b1e_fp16_network_with_encoding.json": {
+      "sha256": "0c05e883c15fc84bf06752cc9b68d64a829fdbcc48952f97d90d63b70ddbf353",
+      "byte_equal": true
+    }
+  },
+  "production_files": [
+    "bindings/torch/tinycudann/bindings.cpp",
+    "include/tiny-cuda-nn/encoding.h",
+    "include/tiny-cuda-nn/encodings/frequency.h",
+    "include/tiny-cuda-nn/encodings/identity.h",
+    "include/tiny-cuda-nn/encodings/oneblob.h",
+    "include/tiny-cuda-nn/network_with_input_encoding.h"
+  ],
+  "raw_data": {
+    "absolute_path": "/tmp/phase3b1e1a_final_encoding_audit_raw.json",
+    "size_bytes": 250374,
+    "sha256": "049d977ee88024017592c4649ff3f16ad21b2f24cbdcbfc90d7873eb1583bf9e"
+  },
+  "environment": {
+    "python": "3.12.3",
+    "pytorch": "2.13.0+rocm7.2",
+    "hip": "7.2.53211",
+    "device": "AMD Radeon Graphics"
+  },
+  "regressions": {
+    "phase1_encoding_via_phase3a1": true,
+    "phase3a1": true,
+    "phase3a4": true,
+    "phase3b1b_historical_forward_only": "PHASE3B1B_BLOCKED",
+    "phase3b1b1": true,
+    "phase3b1c": true,
+    "phase3b1d1": true,
+    "phase3b1e": true,
+    "phase3b1e1": true
+  }
+}

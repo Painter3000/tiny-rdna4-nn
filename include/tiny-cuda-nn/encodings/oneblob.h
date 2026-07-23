@@ -208,9 +208,8 @@ public:
 			);
 
 			// Padding
-			parallel_for_gpu_aos(stream, input.n(), m_n_to_pad, [n_output_dims=m_n_output_dims, out=output->pitched_ptr()] __device__ (size_t elem, size_t dim) {
-				// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: inert FP16-MLP padding.
-				out(elem)[n_output_dims + dim] = (T)0.0f;
+			parallel_for_gpu_aos(stream, input.n(), m_n_to_pad, [n_output_dims=m_n_output_dims, out=output->pitched_ptr(), padding_value=this->padding_value()] __device__ (size_t elem, size_t dim) {
+				out(elem)[n_output_dims + dim] = padding_value;
 			});
 		} else {
 			const uint32_t min_n_threads = N_THREADS_LINEAR;
@@ -227,9 +226,8 @@ public:
 			);
 
 			// Padding
-			parallel_for_gpu(stream, input.n() * m_n_to_pad, [out=output->data() + input.n() * m_n_output_dims] __device__ (size_t i) {
-				// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: inert FP16-MLP padding.
-				out[i] = (T)0.0f;
+			parallel_for_gpu(stream, input.n() * m_n_to_pad, [out=output->data() + input.n() * m_n_output_dims, padding_value=this->padding_value()] __device__ (size_t i) {
+				out[i] = padding_value;
 			});
 		}
 

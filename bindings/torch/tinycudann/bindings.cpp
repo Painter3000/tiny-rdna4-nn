@@ -478,6 +478,23 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 		}
 		return false;
 	});
+	// TCNN_RDNA4_P3B1E1A_FINAL_ENCODING_AUDIT_001: expose only the immutable
+	// default-padding contract for standalone audit coverage.
+	m.def("_phase3b1e1a_test_standalone_padding_values", []() {
+		py::dict result;
+		for (const auto& name : {"Identity", "Frequency", "OneBlob", "HashGrid"}) {
+			nlohmann::json config{{"otype", name}};
+			if (std::string{name} == "Frequency") config["n_frequencies"] = 2;
+			if (std::string{name} == "OneBlob") config["n_bins"] = 8;
+			if (std::string{name} == "HashGrid") {
+				config = {{"otype", "HashGrid"}, {"n_levels", 1}, {"n_features_per_level", 2},
+					{"log2_hashmap_size", 3}, {"base_resolution", 4}, {"per_level_scale", 2.0}};
+			}
+			auto encoding = std::unique_ptr<tcnn::Encoding<__half>>{tcnn::create_encoding<__half>(2, config, 16)};
+			result[py::str(name)] = (float)encoding->padding_value();
+		}
+		return result;
+	});
 	#endif
 #endif
 

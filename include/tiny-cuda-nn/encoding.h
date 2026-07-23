@@ -55,6 +55,17 @@ public:
 
 	virtual MatrixLayout preferred_output_layout() const = 0;
 
+	// TCNN_RDNA4_P3B1E1A_FINAL_ENCODING_AUDIT_001: Encodings historically
+	// fill alignment padding with one. Backends that have explicitly qualified
+	// a different boundary contract may override the value before execution.
+	void set_padding_value(T padding_value) {
+		m_padding_value = padding_value;
+	}
+
+	T padding_value() const {
+		return m_padding_value;
+	}
+
 	virtual size_t n_nested() const { return 0; }
 	virtual const std::shared_ptr<Encoding<T>>& nested(size_t idx = 0) const {
 		throw std::runtime_error{"Encoding does not support nesting."};
@@ -70,6 +81,9 @@ public:
 	void set_alignment(uint32_t alignment) {
 		this->set_padded_output_width(next_multiple(this->output_width(), lcm(alignment, this->required_output_alignment())));
 	}
+
+private:
+	T m_padding_value = (T)1.0f;
 };
 
 template <typename T>

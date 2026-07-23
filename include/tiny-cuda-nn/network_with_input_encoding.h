@@ -61,6 +61,10 @@ public:
 		const uint32_t alignment = minimum_alignment(network);
 		encoding->set_alignment(alignment);
 		if (m_fp16_hipblaslt) {
+			// TCNN_RDNA4_P3B1E1A_FINAL_ENCODING_AUDIT_001: zero padding is a
+			// backend-bound contract. Standalone encodings and all other
+			// backends retain the historical padding value of one.
+			encoding->set_padding_value((T)0.0f);
 			// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: the qualified
 			// hipBLASLt shapes are discrete, not merely multiples of sixteen.
 			const uint32_t logical = m_logical_encoding_width;
@@ -213,6 +217,7 @@ public:
 			// parameter ranges and integration widths for audit/checkpoint replay.
 			{"logical_encoding_width", m_logical_encoding_width},
 			{"padded_encoding_width", m_encoding->padded_output_width()},
+			{"encoding_padding_value", (float)m_encoding->padding_value()},
 			{"network_parameter_offset", 0},
 			{"network_parameter_count", m_network->n_params()},
 			{"encoding_parameter_offset", m_network->n_params()},
