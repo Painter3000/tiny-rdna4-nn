@@ -42,6 +42,48 @@ def geomean(values):
     return math.exp(sum(math.log(x) for x in values) / len(values))
 
 
+def paired_matrix_bootstrap(items, seed, resamples):
+    """Bootstrap case and fresh-process dimensions from paired speedups."""
+    usable = [item["speedups"] for item in items if item.get("speedups")]
+    if not usable:
+        return [None, None]
+    generator = random.Random(seed)
+    draws = []
+    for _ in range(resamples):
+        sampled_cases = [usable[generator.randrange(len(usable))] for _ in usable]
+        case_estimates = []
+        for values in sampled_cases:
+            sampled_processes = [values[generator.randrange(len(values))] for _ in values]
+            case_estimates.append(statistics.median(sampled_processes))
+        draws.append(geomean(case_estimates))
+    return [percentile(draws, 0.025), percentile(draws, 0.975)]
+
+
+def correctness_snapshot_valid(snapshot, manifest):
+    if not isinstance(snapshot, dict):
+        return False
+    limits = manifest["numerical_gates"]["frozen_absolute"]
+    required = (
+        "passed", "output_max_abs", "dinput_max_abs", "network_gradient_max_abs",
+        "encoding_gradient_max_abs", "nan_count", "inf_count",
+        "historical_reports_byte_equal", "production_files", "raw_sha256",
+    )
+    if not all(key in snapshot for key in required):
+        return False
+    return (
+        snapshot["passed"] is True
+        and snapshot["output_max_abs"] <= limits["network_output"]
+        and snapshot["dinput_max_abs"] <= limits["dinput"]
+        and snapshot["network_gradient_max_abs"] <= limits["network_gradient"]
+        and snapshot["encoding_gradient_max_abs"] <= limits["encoding_gradient"]
+        and snapshot["nan_count"] == 0
+        and snapshot["inf_count"] == 0
+        and snapshot["historical_reports_byte_equal"] is True
+        and snapshot["production_files"] == []
+        and snapshot["raw_sha256"] == "049d977ee88024017592c4649ff3f16ad21b2f24cbdcbfc90d7873eb1583bf9e"
+    )
+
+
 def derive(data, manifest):
     cases = {case["id"]: case for case in manifest["cases"] if case["supported"]}
     grouped = {case_id: [] for case_id in cases}
@@ -64,32 +106,100 @@ def derive(data, manifest):
             fp32 = [block["event_ms_per_iteration"] for block in blocks if block.get("backend") == "FP32"]
             calculated = statistics.median(fp32) / statistics.median(fp16) if fp16 and fp32 else None
             speedup_equal = calculated is not None and abs(calculated - item.get("process_speedup", -1)) <= 1e-12
+            process_index = item.get("process_index")
+            gemm_expected = item.get("backend_evidence", {}).get("gemm_expected")
+            warmup = item.get("warmup", {})
+            operation = cases[case_id]["operation"]
+            warmup_minimum = manifest["warmup"]["training_iterations_min"] if "adam" in operation else manifest["warmup"]["default_iterations_min"]
+            allowed_orders = [
+                order + list(reversed(order))
+                for order in manifest["measurement"]["orders"]
+            ]
+            rounds = {}
+            for block in blocks:
+                rounds.setdefault(block.get("round"), []).append(block)
+            timing_integrity = (
+                len(blocks) == 40
+                and sum(block.get("backend") == "FP16" for block in blocks) == 20
+                and sum(block.get("backend") == "FP32" for block in blocks) == 20
+                and set(rounds) == set(range(5))
+                and all(
+                    [block.get("position") for block in sorted(round_blocks, key=lambda x: x.get("position", -1))] == list(range(8))
+                    and [block.get("backend") for block in sorted(round_blocks, key=lambda x: x.get("position", -1))] in allowed_orders
+                    for round_blocks in rounds.values()
+                )
+                and len(iterations) == 1
+                and iterations
+                and 50 <= next(iter(iterations)) <= 5000
+                and item.get("calibrated_iterations") == next(iter(iterations))
+                and all(
+                    block.get("event_ms_per_iteration", 0) > 0
+                    and block.get("wall_ns_per_iteration", 0) > 0
+                    and block.get("source") == "steady_state"
+                    and block.get("profiler_active") is False
+                    for block in blocks
+                )
+            )
+            stable_fields = ("cache_size", "heuristic_queries", "execution_handle_count", "execution_handle_creations", "descriptor_count")
+            warmup_derived = (
+                warmup.get("iterations", 0) >= warmup_minimum
+                and all(
+                    warmup.get("stable_sample", {}).get(backend, {}).get(field)
+                    == warmup.get("after", {}).get(backend, {}).get(field)
+                    for backend in ("FP16", "FP32") for field in stable_fields
+                )
+                and all(
+                    warmup.get("after", {}).get(backend, {}).get("scratch_bytes_live") == 0
+                    for backend in ("FP16", "FP32")
+                )
+            )
+            telemetry = (item.get("before_system", {}), item.get("after_system", {}))
+            telemetry_valid = all(
+                sample.get("telemetry_available") is True
+                and sample.get("foreign_gpu_processes") == 0
+                and sample.get("temperature_c") is not None
+                and manifest["system_stability"]["temperature_c_min"] <= sample["temperature_c"] <= manifest["system_stability"]["temperature_c_max"]
+                and sample.get("clock_mhz") is not None
+                for sample in telemetry
+            )
+            numerical = item.get("numerical", {})
+            numerical_valid = (
+                all(name in numerical for name in ("output", "dinput", "network_gradient", "encoding_gradient"))
+                and all(value.get("nan_count") == 0 and value.get("inf_count") == 0 for value in numerical.values())
+            )
+            algorithm_valid = (
+                item.get("backend_evidence", {}).get("algorithm_ids") == "not_applicable"
+                if gemm_expected is False
+                else gemm_expected is True and bool(item.get("backend_evidence", {}).get("algorithm_ids"))
+            )
             integrity.append({
                 "process_index": item.get("process_index"),
-                "iterations_equal": len(iterations) == 1,
-                "block_count": len(blocks) == manifest["measurement"]["blocks_per_process"],
+                "process_index_valid": process_index in range(7) if isinstance(process_index, int) else False,
+                "timing_integrity": bool(timing_integrity),
                 "speedup_derived": speedup_equal,
                 "process_medians_derived": (
                     item.get("process_medians_ms", {}).get("FP16") == (statistics.median(fp16) if fp16 else None)
                     and item.get("process_medians_ms", {}).get("FP32") == (statistics.median(fp32) if fp32 else None)
                 ),
                 "case_config_exact": item.get("case") == cases[case_id],
-                "warmup_excluded": all(block.get("source", "steady_state") == "steady_state" for block in blocks),
+                "warmup_derived": warmup_derived,
+                "telemetry_valid": telemetry_valid,
+                "numerical_valid": numerical_valid,
                 "fallback_clear": all(
                     evidence.get("fallback") is False
                     for name, evidence in item.get("backend_evidence", {}).items()
                     if name in ("FP16", "FP32")
                 ),
-                "algorithm_id_present": item.get("backend_evidence", {}).get("algorithm_log", {}).get("algorithm_id_present") is True,
+                "algorithm_contract": algorithm_valid,
                 "scratch_zero": all(
                     counters.get("scratch_bytes_live") == 0
                     for counters in item.get("resources_after_release", {}).values()
                 ),
                 "descriptor_released": all(
-                    item.get("resources_after_release", {}).get(backend, {}).get("descriptor_count")
-                    == item.get("warmup", {}).get("before", {}).get(backend, {}).get("descriptor_count")
+                    item.get("resources_after_release", {}).get(backend, {}).get("scratch_bytes_live") == 0
                     for backend in ("FP16", "FP32")
-                ),
+                ) and item.get("descriptor_release_contract", {}).get("stable_after_warmup") is True
+                  and item.get("process_exit_verified") is True,
             })
             if item in valid and calculated is not None:
                 speedups.append(calculated)
@@ -99,6 +209,7 @@ def derive(data, manifest):
             "valid_process_count": len(valid),
             "invalid_processes": [item for item in processes if item not in valid],
             "integrity": integrity,
+            "process_indices": sorted(item.get("process_index") for item in processes if isinstance(item.get("process_index"), int)),
             "speedups": speedups,
         }
         if speedups:
@@ -128,9 +239,12 @@ def evaluate(data, manifest):
         "manifest_hash": data.get("manifest_sha256") == sha256(MANIFEST),
         "case_set": set(results) == {case["id"] for case in manifest["cases"] if case["supported"]} and not unknown,
         "process_total": len(data.get("primary_processes", [])) == expected["fresh_primary_processes"],
-        "seven_processes": all(item["process_count"] == 7 for item in results.values()),
+        "seven_processes": all(item["process_count"] == 7 and item["process_indices"] == list(range(7)) for item in results.values()),
         "invalid_limit": all(len(item["invalid_processes"]) <= 1 for item in results.values()),
-        "process_integrity": all(all(all(row.values()) for row in item["integrity"]) for item in results.values()),
+        "process_integrity": all(
+            all(all(value for key, value in row.items() if key != "process_index") for row in item["integrity"])
+            for item in results.values()
+        ),
         "statistics_complete": all("statistics" in item for item in results.values()),
         "cold_start": (
             data.get("cold_start", {}).get("status") == "complete"
@@ -140,10 +254,18 @@ def evaluate(data, manifest):
         "profiling": (
             data.get("profiling", {}).get("status") == "complete"
             and len(data.get("profiling", {}).get("results", [])) == expected["profiling_cases"]
-            and all(item.get("valid") is True for item in data["profiling"]["results"])
+            and all(
+                item.get("valid") is True
+                and item.get("parsed", {}).get("parsed_kernel_rows", 0) > 0
+                and all(key in item.get("parsed", {}) for key in (
+                    "kernels", "gemm_share", "encoding_share", "gradient_scratch_share",
+                    "optimizer_share", "unexpected_copies", "host_synchronizations",
+                ))
+                for item in data["profiling"]["results"]
+            )
         ),
-        "correctness_pre": data.get("correctness_pre", {}).get("passed") is True,
-        "correctness_post": data.get("correctness_post", {}).get("passed") is True,
+        "correctness_pre": correctness_snapshot_valid(data.get("correctness_pre"), manifest),
+        "correctness_post": correctness_snapshot_valid(data.get("correctness_post"), manifest),
         "no_untrusted_derived_fields": not any(key in data for key in ("reported_statistics", "reported_bootstrap", "reported_geomeans")),
     }
     network_gates = manifest["performance_gates"]["network_large_batch_geomean"]
@@ -153,10 +275,12 @@ def evaluate(data, manifest):
         selected = [item for item in results.values() if item["case"]["family"] == "network_only"
                     and item["case"]["operation"] == operation and item["case"]["batch"] >= network_gates["batch_min"]]
         medians = [item["statistics"]["median"] for item in selected if "statistics" in item]
-        lowers = [item["statistics"]["bootstrap_95"][0] for item in selected if "statistics" in item]
         network_summary[operation] = {
             "geomean": geomean(medians) if medians else None,
-            "bootstrap_lower_geomean": geomean(lowers) if lowers else None,
+            "matrix_bootstrap_95": paired_matrix_bootstrap(
+                selected, manifest["statistics"]["bootstrap"]["seed"] + sum(map(ord, operation)),
+                manifest["statistics"]["bootstrap"]["resamples"],
+            ),
             "required_geomean": network_gates[operation],
             "required_bootstrap_lower": network_ci[operation],
         }
@@ -168,11 +292,16 @@ def evaluate(data, manifest):
         medians = [item["statistics"]["median"] for item in selected if "statistics" in item]
         encoding_summary[operation] = {
             "geomean": geomean(medians) if medians else None,
+            "matrix_bootstrap_95": paired_matrix_bootstrap(
+                selected, manifest["statistics"]["bootstrap"]["seed"] + sum(map(ord, operation)),
+                manifest["statistics"]["bootstrap"]["resamples"],
+            ),
             "required_geomean": encoding_gates[operation],
         }
     checks["network_performance"] = all(
         item["geomean"] is not None and item["geomean"] >= item["required_geomean"]
-        and item["bootstrap_lower_geomean"] >= item["required_bootstrap_lower"]
+        and item["matrix_bootstrap_95"][0] is not None
+        and item["matrix_bootstrap_95"][0] >= item["required_bootstrap_lower"]
         for item in network_summary.values()
     )
     checks["encoding_performance"] = all(
@@ -259,19 +388,36 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--raw", type=pathlib.Path, required=True)
     args = parser.parse_args()
-    manifest = json.loads(MANIFEST.read_text())
-    data = json.loads(args.raw.read_text())
-    checks, cases, summaries = evaluate(data, manifest)
+    try:
+        manifest = json.loads(MANIFEST.read_text())
+        data = json.loads(args.raw.read_text())
+    except (OSError, json.JSONDecodeError) as error:
+        data = {}
+        manifest = {}
+        checks, cases, summaries = {"formal_input": False, "input_error": False}, {}, {"error": str(error)}
+    else:
+        try:
+            checks, cases, summaries = evaluate(data, manifest)
+            checks["formal_input"] = all((
+                data.get("complete") is True,
+                isinstance(data.get("primary_processes"), list),
+                isinstance(data.get("correctness_pre"), dict),
+                isinstance(data.get("correctness_post"), dict),
+            ))
+        except (KeyError, TypeError, ValueError, IndexError, statistics.StatisticsError, ZeroDivisionError) as error:
+            checks, cases, summaries = {"formal_input": False}, {}, {"error": str(error)}
     performance_only = ("network_performance", "encoding_performance", "no_large_regression")
-    correctness_stability = all(value for key, value in checks.items() if key not in performance_only)
-    performance = all(checks[key] for key in performance_only)
+    correctness_stability = checks.get("formal_input") is True and all(
+        value for key, value in checks.items() if key not in performance_only
+    )
+    performance = all(checks.get(key) is True for key in performance_only)
     if not correctness_stability:
         decision = "PHASE3B1F_BLOCKED"
     elif performance:
         decision = "PHASE3B1_FP16_PERFORMANCE_PASS"
     else:
         decision = "PHASE3B1F_CORRECT_BUT_NOT_PERFORMANT"
-    manipulations = run_manipulations(data, manifest)
+    manipulations = run_manipulations(data, manifest) if checks.get("formal_input") and checks.get("case_set") and checks.get("process_total") else []
     if [item["name"] for item in manipulations] != list(mutation_names()) or not all(item["passed"] for item in manipulations):
         decision = "PHASE3B1F_BLOCKED"
         checks["manipulations"] = False
@@ -281,7 +427,25 @@ def main():
         "manipulation_tests": manipulations,
     }
     OUT.write_text(json.dumps(result, indent=2) + "\n")
-    MD.write_text(f"# Phase 3B1-F – FP16 Performance Qualification\\n\\nDecision: `{decision}`\\n")
+    failed = [name for name, passed in checks.items() if passed is not True]
+    MD.write_text(
+        "# Phase 3B1-F – FP16 Performance Qualification\n\n"
+        f"Decision: `{decision}`\n\n"
+        "## Integrity and correctness\n\n"
+        f"- Failed gates: `{failed}`\n"
+        f"- Correctness pre/post: `{checks.get('correctness_pre')}` / `{checks.get('correctness_post')}`\n"
+        f"- Process integrity: `{checks.get('process_integrity')}`\n"
+        f"- Profiling: `{checks.get('profiling')}`\n\n"
+        "## Network matrix\n\n"
+        f"```json\n{json.dumps(summaries.get('network', {}), indent=2)}\n```\n\n"
+        "## Encoding matrix\n\n"
+        f"```json\n{json.dumps(summaries.get('encoding', {}), indent=2)}\n```\n\n"
+        "## Manipulation audit\n\n"
+        f"Executed and blocked: `{sum(item.get('passed') is True for item in manipulations)}/{len(manipulations)}`.\n\n"
+        "Timing values are paired FP32/FP16 fresh-process observations. Profiling runs are excluded "
+        "from timing statistics; the matrix confidence interval is bootstrapped jointly across cases "
+        "and fresh-process speedups.\n"
+    )
     print(decision)
     return 0 if decision == "PHASE3B1_FP16_PERFORMANCE_PASS" else 2
 

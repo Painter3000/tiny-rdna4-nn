@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "marker": "TCNN_RDNA4_P3B1F0A_HARNESS_HARDENING_001",
+  "base_commit": "4cdfb249ceff6fd920b20d5d92e4d46865819056",
+  "manifest_path": "phase3b1_reports/phase3b1f_protocol_manifest.json",
+  "manifest_sha256": "cf097d672595e72ca58a4090bff1135882f2181756f8e8ffb70281ea2fcfe0e3",
+  "changes_performance_gates": false,
+  "network_with_encoding_topology": {
+    "hidden_width": 64,
+    "hidden_layers": 2,
+    "output_dims": 16,
+    "activation": "ReLU",
+    "output_activation": "None"
+  },
+  "workspace_contract": {
+    "manifest_value_zero_means": "backend_default",
+    "explicit_workspace_limit_applied": false,
+    "required_report_value": "backend_default",
+    "measured_workspace_bytes_required_for_gemm": true,
+    "encoding_only_workspace_bytes": 0
+  },
+  "backend_evidence": {
+    "encoding_only": {
+      "backend_kind": "encoding_kernel",
+      "gemm_expected": false,
+      "algorithm_id": "not_applicable",
+      "fallback": "not_applicable"
+    },
+    "gemm": {
+      "gemm_expected": true,
+      "algorithm_ids_required": true,
+      "primary_source": "native counters plus concrete hipBLASLt log records",
+      "log_id_regexes": [
+        "(?i)(?:algo(?:rithm)?(?:_id|Id|Index)?|solution(?:_index|Index))[^0-9-]*(-?[0-9]+)",
+        "(?i)index[=: ]+(-?[0-9]+)"
+      ]
+    }
+  },
+  "correctness_snapshot": {
+    "source_raw": "/tmp/phase3b1e1a_final_encoding_audit_raw.json",
+    "source_sha256": "049d977ee88024017592c4649ff3f16ad21b2f24cbdcbfc90d7873eb1583bf9e",
+    "finalizer": "scripts/finalize_phase3b1e1a1_closure.py",
+    "required_fields": [
+      "passed",
+      "output_max_abs",
+      "dinput_max_abs",
+      "network_gradient_max_abs",
+      "encoding_gradient_max_abs",
+      "nan_count",
+      "inf_count",
+      "historical_reports_byte_equal",
+      "production_files",
+      "raw_sha256"
+    ]
+  },
+  "process_execution": {
+    "root": "/tmp/phase3b1f_runs",
+    "timeout_seconds": 1800,
+    "append_only_index": "process_index.jsonl",
+    "state_file": "run_state.json",
+    "stale_output_forbidden": true,
+    "silent_retry": false
+  },
+  "smoke": {
+    "fresh_processes_per_case": 1,
+    "paired_rounds": 1,
+    "fixed_iterations": 5,
+    "include_in_f1_statistics": false,
+    "cases": [
+      "network.N32-L2.b1024.forward",
+      "network.N64-L2.b1024.adam_training_step",
+      "encoding.HashGrid3D.b1024.network_with_encoding_forward_backward",
+      "encoding.Frequency.b1024.encoding_forward"
+    ]
+  },
+  "profiling_required_fields": [
+    "kernel_name",
+    "kernel_count",
+    "kernel_time",
+    "gemm_share",
+    "encoding_share",
+    "gradient_scratch_share",
+    "optimizer_share",
+    "unexpected_copies",
+    "host_synchronizations"
+  ]
+}

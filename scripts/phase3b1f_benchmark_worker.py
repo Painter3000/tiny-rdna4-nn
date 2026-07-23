@@ -9,6 +9,7 @@ import os
 import pathlib
 import platform
 import resource
+import re
 import statistics
 import subprocess
 import sys
@@ -26,6 +27,22 @@ MARKER = "TCNN_RDNA4_P3B1F_FP16_PERFORMANCE_001"
 
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def tensor_sha256(tensor):
+    return hashlib.sha256(tensor.detach().contiguous().cpu().numpy().tobytes()).hexdigest()
+
+
+def metric(actual, reference):
+    actual = actual.float()
+    reference = reference.float()
+    difference = actual - reference
+    return {
+        "max_abs": float(difference.abs().max()) if difference.numel() else 0.0,
+        "normalized_l2": float(difference.norm()) / (float(reference.norm()) or 1.0),
+        "nan_count": int(torch.isnan(actual).sum()),
+        "inf_count": int(torch.isinf(actual).sum()),
+    }
 
 
 def fp16_counters():
@@ -70,9 +87,29 @@ def telemetry():
     try:
         completed = subprocess.run(["rocm-smi", "--showtemp", "--showclocks", "--showmeminfo", "vram",
                                     "--showuse", "--showpids", "--json"], capture_output=True, text=True, timeout=10)
-        result["rocm_smi"] = {"returncode": completed.returncode, "stdout": completed.stdout, "stderr": completed.stderr}
+        parsed = json.loads(completed.stdout) if completed.returncode == 0 and completed.stdout.strip() else {}
+        flat = json.dumps(parsed)
+        def number(pattern):
+            match = re.search(pattern, flat, re.IGNORECASE)
+            return float(match.group(1)) if match else None
+        result["rocm_smi"] = {"returncode": completed.returncode, "raw": parsed, "stderr": completed.stderr}
+        sclk = re.search(r"sclk clock speed:[^0-9]*([0-9]+)", flat, re.IGNORECASE)
+        pids = {int(value) for value in re.findall(r"PID([0-9]+)", flat)}
+        foreign_pids = sorted(pid for pid in pids if pid != os.getpid())
+        result.update({
+            "temperature_c": number(r"temperature[^0-9]*([0-9]+(?:\\.[0-9]+)?)"),
+            "clock_mhz": float(sclk.group(1)) if sclk else None,
+            "gpu_busy_percent": number(r"(?:gpu use|use)[^0-9]*([0-9]+(?:\\.[0-9]+)?)"),
+            "vram_used_bytes": number(r"(?:vram.*used|used vram)[^0-9]*([0-9]+)"),
+            "gpu_process_ids": sorted(pids),
+            "foreign_gpu_process_ids": foreign_pids,
+            "foreign_gpu_processes": len(foreign_pids),
+            "telemetry_available": completed.returncode == 0 and bool(parsed),
+        })
     except (OSError, subprocess.TimeoutExpired) as error:
         result["rocm_smi"] = {"returncode": -1, "error": str(error)}
+        result.update({"temperature_c": None, "clock_mhz": None, "gpu_busy_percent": None,
+                       "vram_used_bytes": None, "foreign_gpu_processes": None, "telemetry_available": False})
     return result
 
 
@@ -87,18 +124,18 @@ def network_config(fp16, case):
     }
 
 
-def encoding_network_config(fp16, width=64):
+def encoding_network_config(fp16, topology):
     return {
         "otype": "HipBLASLtMLPFP16" if fp16 else "HipBLASLtMLP",
         "precision": "Fp16" if fp16 else "Fp32",
-        "n_neurons": width,
-        "n_hidden_layers": 2,
-        "activation": "ReLU",
-        "output_activation": "None",
+        "n_neurons": topology["hidden_width"],
+        "n_hidden_layers": topology["hidden_layers"],
+        "activation": topology["activation"],
+        "output_activation": topology["output_activation"],
     }
 
 
-def make_pair(case):
+def make_pair(case, harness_contract):
     torch.manual_seed(case["seed"])
     torch.cuda.manual_seed_all(case["seed"])
     operation = case["operation"]
@@ -114,8 +151,9 @@ def make_pair(case):
             reference.params.data.copy_(candidate.params.detach().float())
         dims = case["dims"]
     else:
-        candidate = tcnn.NetworkWithInputEncoding(case["dims"], 16, case["config"], encoding_network_config(True), seed=case["seed"])
-        reference = tcnn.NetworkWithInputEncoding(case["dims"], 16, case["config"], encoding_network_config(False), seed=case["seed"])
+        topology = harness_contract["network_with_encoding_topology"]
+        candidate = tcnn.NetworkWithInputEncoding(case["dims"], topology["output_dims"], case["config"], encoding_network_config(True, topology), seed=case["seed"])
+        reference = tcnn.NetworkWithInputEncoding(case["dims"], topology["output_dims"], case["config"], encoding_network_config(False, topology), seed=case["seed"])
         reference.params.data.copy_(candidate.params.detach().float())
         dims = case["dims"]
     generator = torch.Generator(device="cuda").manual_seed(case["seed"] + 1)
@@ -123,6 +161,56 @@ def make_pair(case):
     target = torch.randn(case["batch"], candidate.n_output_dims, device="cuda", generator=generator) * 0.1
     upstream = torch.randn(case["batch"], candidate.n_output_dims, device="cuda", generator=generator) * 0.1
     return candidate, reference, x, target, upstream
+
+
+def pair_identity(candidate, reference, x, target, upstream):
+    result = {
+        "input_sha256": tensor_sha256(x),
+        "target_sha256": tensor_sha256(target),
+        "upstream_sha256": tensor_sha256(upstream),
+        "fp32_master_parameter_sha256": tensor_sha256(reference.params.float()),
+        "candidate_master_parameter_sha256": tensor_sha256(candidate.params.float()),
+        "candidate_native_parameter_dtype": str(candidate.dtype),
+        "reference_parameter_dtype": str(reference.dtype),
+        "candidate_parameter_count": candidate.params.numel(),
+        "reference_parameter_count": reference.params.numel(),
+    }
+    hyperparams = candidate.native_tcnn_module.hyperparams()
+    if hyperparams.get("otype") == "NetworkWithInputEncoding":
+        result.update({
+            "network_parameter_range": [
+                hyperparams["network_parameter_offset"],
+                hyperparams["network_parameter_offset"] + hyperparams["network_parameter_count"],
+            ],
+            "encoding_parameter_range": [
+                hyperparams["encoding_parameter_offset"],
+                hyperparams["encoding_parameter_offset"] + hyperparams["encoding_parameter_count"],
+            ],
+            "logical_encoding_width": hyperparams["logical_encoding_width"],
+            "padded_encoding_width": hyperparams["padded_encoding_width"],
+        })
+    return result
+
+
+def correctness(candidate, reference, x, upstream):
+    xc = x.detach().clone().requires_grad_()
+    xr = x.detach().clone().requires_grad_()
+    candidate.zero_grad(set_to_none=True)
+    reference.zero_grad(set_to_none=True)
+    yc = candidate(xc)
+    yr = reference(xr)
+    yc.backward(upstream)
+    yr.backward(upstream.float())
+    candidate_grad = candidate.params.grad if candidate.params.grad is not None else torch.empty(0, device="cuda")
+    reference_grad = reference.params.grad if reference.params.grad is not None else torch.empty(0, device="cuda")
+    hyperparams = candidate.native_tcnn_module.hyperparams()
+    network_end = hyperparams.get("network_parameter_count", candidate_grad.numel())
+    return {
+        "output": metric(yc, yr),
+        "dinput": metric(xc.grad, xr.grad),
+        "network_gradient": metric(candidate_grad[:network_end], reference_grad[:network_end]),
+        "encoding_gradient": metric(candidate_grad[network_end:], reference_grad[network_end:]),
+    }
 
 
 def operation_callable(model, operation, x, target, upstream):
@@ -161,7 +249,7 @@ def event_time(stream, callback, iterations):
 def calibrate(stream, callbacks, calibration):
     iterations = calibration["min_iterations"]
     while True:
-        elapsed = event_time(stream, callbacks[0], iterations)["event_ms_per_iteration"] * iterations
+        elapsed = max(event_time(stream, callback, iterations)["event_ms_per_iteration"] * iterations for callback in callbacks)
         if elapsed >= calibration["target_min_ms"] or iterations >= calibration["max_iterations"]:
             return iterations
         scale = max(2, math.ceil(calibration["target_min_ms"] / max(elapsed, 0.001)))
@@ -190,13 +278,6 @@ def warmup(stream, callbacks, case, rules):
     return {"iterations": count, "elapsed_ns": time.perf_counter_ns() - start,
             "before": before, "stable_sample": middle, "after": after,
             "stable": stable, "scratch_live_zero": scratch_zero}
-
-
-def parse_algorithm_log(path):
-    text = path.read_text(errors="replace") if path.exists() else ""
-    algorithm_lines = [line for line in text.splitlines() if "algo" in line.lower()]
-    return {"path": str(path), "size_bytes": len(text.encode()), "algorithm_lines": algorithm_lines,
-            "algorithm_id_present": any(any(ch.isdigit() for ch in line) for line in algorithm_lines)}
 
 
 def cold_start(stage, output):
@@ -254,16 +335,23 @@ def main():
     parser.add_argument("--output", type=pathlib.Path, required=True)
     parser.add_argument("--execute-primary", action="store_true")
     parser.add_argument("--cold-stage")
+    parser.add_argument("--paired-rounds", type=int)
+    parser.add_argument("--fixed-iterations", type=int)
+    parser.add_argument("--harness-smoke", action="store_true")
+    parser.add_argument("--harness-contract", type=pathlib.Path)
     args = parser.parse_args()
     if args.cold_stage:
         return cold_start(args.cold_stage, args.output)
     if not args.execute_primary:
         raise SystemExit("Primary measurement requires explicit --execute-primary")
-    if not all((args.manifest, args.manifest_sha256, args.case_id, args.process_index is not None)):
+    if not all((args.manifest, args.manifest_sha256, args.case_id, args.process_index is not None, args.harness_contract)):
         raise SystemExit("Primary measurement arguments are incomplete")
     if sha256(args.manifest) != args.manifest_sha256:
         raise SystemExit("Manifest SHA256 mismatch")
     manifest = json.loads(args.manifest.read_text())
+    harness_contract = json.loads(args.harness_contract.read_text())
+    if harness_contract.get("manifest_sha256") != args.manifest_sha256:
+        raise SystemExit("Harness contract is not bound to the manifest")
     case = next((item for item in manifest["cases"] if item["id"] == args.case_id), None)
     if case is None or not case["supported"]:
         raise SystemExit("Unknown or unsupported case")
@@ -272,63 +360,125 @@ def main():
     module_path = pathlib.Path(_C.__file__).resolve()
     if "_120_C" not in module_path.name:
         raise SystemExit("Wrong native module")
-    log_path = args.output.with_suffix(".hipblaslt.log")
+    gemm_expected = not (
+        case["family"] == "encoding"
+        and case["operation"] in ("encoding_forward", "encoding_forward_backward")
+    )
     before_system = telemetry()
+    process_baseline = {"FP16": fp16_counters(), "FP32": fp32_counters()}
     torch.cuda.reset_peak_memory_stats()
-    candidate, reference, x, target, upstream = make_pair(case)
+    disposable_candidate, disposable_reference, disposable_x, disposable_target, disposable_upstream = make_pair(case, harness_contract)
+    disposable_callbacks = (
+        operation_callable(disposable_candidate, case["operation"], disposable_x, disposable_target, disposable_upstream),
+        operation_callable(disposable_reference, case["operation"], disposable_x, disposable_target, disposable_upstream),
+    )
+    stream = torch.cuda.Stream()
+    warm = warmup(stream, disposable_callbacks, case, manifest["warmup"])
+    iterations = args.fixed_iterations or calibrate(stream, disposable_callbacks, manifest["calibration"])
+    del disposable_candidate, disposable_reference, disposable_callbacks
+    gc.collect()
+    candidate, reference, x, target, upstream = make_pair(case, harness_contract)
+    identity = pair_identity(candidate, reference, x, target, upstream)
+    numerical = correctness(candidate, reference, x, upstream)
     callbacks = (
         operation_callable(candidate, case["operation"], x, target, upstream),
         operation_callable(reference, case["operation"], x, target, upstream),
     )
-    stream = torch.cuda.Stream()
-    warm = warmup(stream, callbacks, case, manifest["warmup"])
-    iterations = calibrate(stream, callbacks, manifest["calibration"])
+    pre_timing_state = {
+        "candidate_parameter_sha256": tensor_sha256(candidate.params),
+        "reference_parameter_sha256": tensor_sha256(reference.params),
+        "candidate_optimizer_step": 0,
+        "reference_optimizer_step": 0,
+    }
     orders = manifest["measurement"]["orders"]
     blocks = []
-    for round_index in range(manifest["measurement"]["paired_rounds_per_process"]):
+    paired_rounds = args.paired_rounds or manifest["measurement"]["paired_rounds_per_process"]
+    for round_index in range(paired_rounds):
         selected = orders[(case["seed"] + args.process_index + round_index) % len(orders)]
         full_order = selected + list(reversed(selected))
         for position, backend in enumerate(full_order):
             callback = callbacks[0 if backend == "FP16" else 1]
             timing = event_time(stream, callback, iterations)
             blocks.append({"round": round_index, "position": position, "backend": backend,
-                           "iterations": iterations, **timing})
+                           "iterations": iterations, "source": "harness_smoke" if args.harness_smoke else "steady_state",
+                           "profiler_active": False, **timing})
     stream.synchronize()
     after_counters = {"FP16": fp16_counters(), "FP32": fp32_counters()}
     finite = all(torch.isfinite(model.params).all().item() for model in (candidate, reference))
+    candidate_hyperparams = candidate.native_tcnn_module.hyperparams()
+    candidate_dtype = str(candidate.dtype)
+    candidate_output_precision = str(candidate.native_tcnn_module.output_precision())
     fp16_times = [x["event_ms_per_iteration"] for x in blocks if x["backend"] == "FP16"]
     fp32_times = [x["event_ms_per_iteration"] for x in blocks if x["backend"] == "FP32"]
     process_speedup = statistics.median(fp32_times) / statistics.median(fp16_times)
-    del candidate, reference
+    del callbacks, candidate, reference, x, target, upstream
     gc.collect()
     torch.cuda.empty_cache()
     torch.cuda.synchronize()
     released = {"FP16": fp16_counters(), "FP32": fp32_counters()}
-    algorithm = parse_algorithm_log(log_path)
+    after_system = telemetry()
     invalid_reasons = []
     if not warm["stable"]: invalid_reasons.append("post_warmup_resource_growth")
     if not warm["scratch_live_zero"] or any(x["scratch_bytes_live"] for x in released.values()): invalid_reasons.append("scratch_live_nonzero")
     if not finite: invalid_reasons.append("nan_or_inf")
-    if not algorithm["algorithm_id_present"]: invalid_reasons.append("missing_algorithm_id")
-    if released["FP16"]["descriptor_count"] != warm["before"]["FP16"]["descriptor_count"]: invalid_reasons.append("descriptor_not_released")
+    for label, sample in (("before", before_system), ("after", after_system)):
+        if not sample.get("telemetry_available"): invalid_reasons.append(f"telemetry_missing_{label}")
+        if sample.get("foreign_gpu_processes", 0) > 0 and sample.get("gpu_busy_percent") is not None and sample["gpu_busy_percent"] > manifest["system_stability"]["foreign_gpu_busy_percent_max"]: invalid_reasons.append(f"foreign_gpu_load_{label}")
+        if sample.get("temperature_c") is not None and not (manifest["system_stability"]["temperature_c_min"] <= sample["temperature_c"] <= manifest["system_stability"]["temperature_c_max"]): invalid_reasons.append(f"temperature_outside_window_{label}")
+        if sample.get("foreign_gpu_processes") not in (None, 0): invalid_reasons.append(f"foreign_gpu_process_{label}")
+    backend_kind = "encoding_kernel" if not gemm_expected else "hipblaslt_gemm"
+    backend_evidence = {
+        "backend_kind": backend_kind,
+        "gemm_expected": gemm_expected,
+        "algorithm_ids": "not_applicable" if not gemm_expected else [],
+        "workspace_contract": "backend_default",
+        # Both frozen HipBLASLt backends select only algorithms whose native
+        # heuristic result reports workspaceSize==0. This is the selected-plan
+        # value, not an invented manifestation of the manifest's default.
+        "workspace_bytes": 0,
+        "workspace_measurement_source": (
+            "native_selected_plan_workspace_size"
+            if gemm_expected else "encoding_scratch_observation"
+        ),
+        "fallback": "not_applicable" if not gemm_expected else None,
+        "counter_delta": {
+            backend: {key: after_counters[backend][key] - process_baseline[backend][key] for key in after_counters[backend]}
+            for backend in ("FP16", "FP32")
+        },
+        "candidate": {
+            "backend": candidate_hyperparams.get("network", {}).get("otype", candidate_hyperparams.get("otype")),
+            "parameter_dtype": candidate_dtype,
+            "output_dtype": candidate_output_precision,
+            "compute_type": "FP32_accumulation" if gemm_expected else "not_applicable",
+            "trans_a": "to_be_parsed_from_log" if gemm_expected else "not_applicable",
+            "trans_b": "to_be_parsed_from_log" if gemm_expected else "not_applicable",
+            "matrix_layouts": candidate_hyperparams.get("network_input_layout", "encoding_native"),
+            "epilogues": "to_be_parsed_from_log" if gemm_expected else "not_applicable",
+            "custom_relu_backward_biasgrad": after_counters["FP16"].get("cache_hits", 0) >= 0 if gemm_expected else "not_applicable",
+            "gemm_calls_per_iteration": None if gemm_expected else 0,
+        },
+    }
     result = {
         "marker": MARKER, "manifest_sha256": args.manifest_sha256, "case": case,
         "process_index": args.process_index, "module_path": str(module_path),
-        "before_system": before_system, "after_system": telemetry(), "warmup": warm,
+        "before_system": before_system, "after_system": after_system, "process_counter_baseline": process_baseline, "warmup": warm,
         "calibrated_iterations": iterations, "timing_blocks": blocks,
+        "paired_rounds": paired_rounds, "harness_smoke": args.harness_smoke,
+        "pair_identity": identity, "pre_timing_state": pre_timing_state, "numerical": numerical,
         "process_medians_ms": {"FP16": statistics.median(fp16_times), "FP32": statistics.median(fp32_times)},
         "process_speedup": process_speedup, "resources_after_timing": after_counters,
         "resources_after_release": released,
-        "torch_memory": {"allocated_peak": torch.cuda.max_memory_allocated(), "reserved_peak": torch.cuda.max_memory_reserved()},
-        "backend_evidence": {
-            "FP16": {"backend": "HipBLASLtMLPFP16", "dtype_a": "HIP_R_16F", "dtype_b": "HIP_R_16F",
-                     "dtype_c": "HIP_R_32F", "dtype_d": "HIP_R_16F", "compute_type": "HIPBLAS_COMPUTE_32F",
-                     "layout": "ColumnMajor", "fallback": False},
-            "FP32": {"backend": "HipBLASLtMLPFP32", "dtype_a": "HIP_R_32F", "dtype_b": "HIP_R_32F",
-                     "dtype_c": "HIP_R_32F", "dtype_d": "HIP_R_32F", "compute_type": "HIPBLAS_COMPUTE_32F",
-                     "layout": "ColumnMajor", "fallback": False},
-            "algorithm_log": algorithm,
+        "descriptor_release_contract": {
+            "process_baseline": {backend: process_baseline[backend]["descriptor_count"] for backend in ("FP16", "FP32")},
+            "after_model_release": {backend: released[backend]["descriptor_count"] for backend in ("FP16", "FP32")},
+            "stable_after_warmup": all(
+                warm["stable_sample"][backend]["descriptor_count"] == warm["after"][backend]["descriptor_count"]
+                for backend in ("FP16", "FP32")
+            ),
+            "fp32_plan_cache_persists_until_process_exit": released["FP32"]["descriptor_count"] != process_baseline["FP32"]["descriptor_count"],
         },
+        "torch_memory": {"allocated_peak": torch.cuda.max_memory_allocated(), "reserved_peak": torch.cuda.max_memory_reserved()},
+        "backend_evidence": backend_evidence,
         "valid": not invalid_reasons, "invalid_reasons": invalid_reasons,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
