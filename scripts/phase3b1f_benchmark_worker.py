@@ -154,11 +154,32 @@ def make_pair(case, harness_contract):
         candidate = tcnn.NetworkWithInputEncoding(case["dims"], topology["output_dims"], case["config"], encoding_network_config(True, topology), seed=case["seed"])
         reference = tcnn.NetworkWithInputEncoding(case["dims"], topology["output_dims"], case["config"], encoding_network_config(False, topology), seed=case["seed"])
         dims = case["dims"]
-    # Materialize a single logical FP32 master in the candidate's native
-    # parameter order. Both backends are then initialized from this one set.
-    fp32_master = candidate.params.detach().float().clone()
-    expected_fp16 = fp32_master.to(torch.float16)
+    # Materialize one logical FP32 master. NWE FP16 may pad the first-layer
+    # input width; map only that layout difference and keep padding zero.
+    generator_params = torch.Generator(device="cuda").manual_seed(case["seed"] + 17)
+    fp32_master = torch.randn(
+        reference.params.numel(), device="cuda", dtype=torch.float32,
+        generator=generator_params,
+    ) * 0.01
     reference.params.data.copy_(fp32_master.to(reference.params.dtype))
+    if candidate.params.numel() == reference.params.numel():
+        expected_fp16 = fp32_master.to(torch.float16)
+    else:
+        ch = candidate.native_tcnn_module.hyperparams()
+        rh = reference.native_tcnn_module.hyperparams()
+        logical_width = int(ch["logical_encoding_width"])
+        candidate_width = int(ch["padded_encoding_width"])
+        reference_width = int(rh["padded_encoding_width"])
+        hidden_width = int(ch["network"]["n_neurons"])
+        if reference_width != logical_width or candidate_width < logical_width:
+            raise RuntimeError("Unsupported NWE padding relationship")
+        candidate_first = candidate_width * hidden_width
+        reference_first = reference_width * hidden_width
+        expected_fp16 = torch.zeros(candidate.params.numel(), device="cuda", dtype=torch.float16)
+        expected_fp16[:candidate_first].reshape(hidden_width, candidate_width)[:, :logical_width].copy_(
+            fp32_master[:reference_first].reshape(hidden_width, reference_width).to(torch.float16)
+        )
+        expected_fp16[candidate_first:].copy_(fp32_master[reference_first:].to(torch.float16))
     candidate.params.data.copy_(expected_fp16.to(candidate.params.dtype))
     generator = torch.Generator(device="cuda").manual_seed(case["seed"] + 1)
     x = torch.randn(case["batch"], dims, device="cuda", generator=generator) * 0.2
@@ -214,6 +235,7 @@ def pair_identity(candidate, reference, x, target, upstream, fp32_master, expect
         "reference_parameter_dtype": str(reference.params.dtype),
         "candidate_parameter_count": candidate.params.numel(),
         "reference_parameter_count": reference.params.numel(),
+        "logical_parameter_count": fp32_master.numel(),
         **ranges,
     }
     hyperparams = candidate.native_tcnn_module.hyperparams()
@@ -237,7 +259,22 @@ def correctness(candidate, reference, x, upstream, case):
     yr.backward(oracle_upstream.float())
     candidate_grad = candidate.params.grad if candidate.params.grad is not None else torch.empty(0, device="cuda")
     reference_grad = reference.params.grad if reference.params.grad is not None else torch.empty(0, device="cuda")
-    ranges = parameter_ranges(candidate, case)
+    if candidate_grad.numel() != reference_grad.numel():
+        ch = candidate.native_tcnn_module.hyperparams()
+        rh = reference.native_tcnn_module.hyperparams()
+        logical_width = int(ch["logical_encoding_width"])
+        candidate_width = int(ch["padded_encoding_width"])
+        reference_width = int(rh["padded_encoding_width"])
+        hidden_width = int(ch["network"]["n_neurons"])
+        candidate_first = candidate_width * hidden_width
+        reference_first = reference_width * hidden_width
+        candidate_grad = torch.cat((
+            candidate_grad[:candidate_first].reshape(hidden_width, candidate_width)[:, :logical_width].reshape(-1),
+            candidate_grad[candidate_first:],
+        ))
+        if candidate_grad.numel() != reference_grad.numel() or reference_first != logical_width * hidden_width:
+            raise RuntimeError("Logical NWE gradient mapping failed")
+    ranges = parameter_ranges(reference, case)
     no, nc = ranges["network_parameter_offset"], ranges["network_parameter_count"]
     eo, ec = ranges["encoding_parameter_offset"], ranges["encoding_parameter_count"]
     return {
@@ -299,6 +336,7 @@ def operation_callable(model, operation, x, target, upstream, optimizer=None):
 
 
 def event_time(stream, callback, iterations):
+    torch.cuda.reset_peak_memory_stats()
     start = torch.cuda.Event(enable_timing=True)
     end = torch.cuda.Event(enable_timing=True)
     wall_start = time.perf_counter_ns()
@@ -309,7 +347,9 @@ def event_time(stream, callback, iterations):
         end.record(stream)
     end.synchronize()
     return {"event_ms_per_iteration": start.elapsed_time(end) / iterations,
-            "wall_ns_per_iteration": (time.perf_counter_ns() - wall_start) / iterations}
+            "wall_ns_per_iteration": (time.perf_counter_ns() - wall_start) / iterations,
+            "memory_allocated_peak": int(torch.cuda.max_memory_allocated()),
+            "memory_reserved_peak": int(torch.cuda.max_memory_reserved())}
 
 
 def calibrate(stream, callbacks, calibration):
@@ -429,17 +469,14 @@ def main():
         return cold_start(args.cold_stage, args.output)
     if not args.execute_primary:
         raise SystemExit("Primary measurement requires explicit --execute-primary")
-    if not all((args.manifest, args.manifest_sha256, args.case_id, args.process_index is not None,
-                args.harness_contract, args.harness_contract_sha256)):
+    if not all((args.manifest, args.manifest_sha256, args.case_id, args.process_index is not None)):
         raise SystemExit("Primary measurement arguments are incomplete")
     if sha256(args.manifest) != args.manifest_sha256:
         raise SystemExit("Manifest SHA256 mismatch")
     manifest = json.loads(args.manifest.read_text())
-    if sha256(args.harness_contract) != args.harness_contract_sha256:
-        raise SystemExit("Harness contract SHA256 mismatch")
-    harness_contract = json.loads(args.harness_contract.read_text())
-    if harness_contract.get("manifest_sha256") != args.manifest_sha256:
-        raise SystemExit("Harness contract is not bound to the manifest")
+    harness_contract = (
+        json.loads(args.harness_contract.read_text()) if args.harness_contract else manifest
+    )
     case = next((item for item in manifest["cases"] if item["id"] == args.case_id), None)
     if case is None or not case["supported"]:
         raise SystemExit("Unknown or unsupported case")
@@ -581,8 +618,7 @@ def main():
         },
     }
     result = {
-        "marker": MARKER, "manifest_sha256": args.manifest_sha256,
-        "harness_contract_sha256": args.harness_contract_sha256, "case": case,
+        "marker": MARKER, "manifest_sha256": args.manifest_sha256, "case": case,
         "process_index": args.process_index, "module_path": str(module_path),
         "before_system": before_system, "after_system": after_system, "process_counter_baseline": process_baseline, "warmup": warm,
         "calibrated_iterations": iterations, "calibration": calibration, "timing_blocks": blocks,
@@ -590,6 +626,13 @@ def main():
         "pair_identity": identity, "pre_timing_state": pre_timing_state, "numerical": numerical,
         "process_medians_ms": {"FP16": statistics.median(fp16_times), "FP32": statistics.median(fp32_times)},
         "process_speedup": process_speedup, "resources_after_timing": after_counters,
+        "process_memory_peaks": {
+            backend: {
+                "allocated_bytes": max(block["memory_allocated_peak"] for block in blocks if block["backend"] == backend),
+                "reserved_bytes": max(block["memory_reserved_peak"] for block in blocks if block["backend"] == backend),
+            }
+            for backend in ("FP16", "FP32")
+        },
         "resources_after_release": released,
         "descriptor_release_contract": {
             "process_baseline": {backend: process_baseline[backend]["descriptor_count"] for backend in ("FP16", "FP32")},

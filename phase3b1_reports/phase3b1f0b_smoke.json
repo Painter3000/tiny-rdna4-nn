@@ -1,0 +1,264 @@
+{
+  "marker": "TCNN_RDNA4_P3B1F0B_REPRODUCIBLE_BENCHMARK_001",
+  "decision": "PROCEED_TO_3B1F1_72_PROCESS_MEASUREMENT",
+  "manifest_path": "/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/phase3b1_reports/phase3b1f0b_reproducible_benchmark_manifest.json",
+  "manifest_sha256": "98bd1a1c2d447bfeaba419b9f8cd705320ff0a92f31ef1dca71adf4a3d272708",
+  "run_directory": "/tmp/phase3b1f1_reproducible_runs/f0b_smoke_20260723T231246_175967",
+  "include_in_f1_statistics": false,
+  "correctness_pre": {
+    "marker": "TCNN_RDNA4_P3B1F0A1_FINAL_HARNESS_CLOSURE_001",
+    "passed": true,
+    "output_max_abs": 0.0009765625,
+    "dinput_max_abs": 0.02745274268090725,
+    "network_gradient_max_abs": 0.0007190704345703125,
+    "encoding_gradient_max_abs": 0.00013780593872070312,
+    "nan_count": 0,
+    "inf_count": 0,
+    "historical_reports_byte_equal": true,
+    "production_files": [],
+    "raw_sha256": "049d977ee88024017592c4649ff3f16ad21b2f24cbdcbfc90d7873eb1583bf9e",
+    "raw_refinalized": true,
+    "baseline_cases_executed": [
+      {
+        "encoding": "Frequency",
+        "dims": 2,
+        "variant": 3,
+        "batch": 1024,
+        "interpolation": null,
+        "n_levels": null,
+        "n_features_per_level": null,
+        "metrics": {
+          "output": {
+            "absolute_error": 0.0009765625,
+            "normalized_l2": 0.00013900978258998595,
+            "max_relative_outside_near_zero": 0.1160639226436615,
+            "reference_norm": 54.42112350463867
+          },
+          "dinput": {
+            "absolute_error": 0.02745274268090725,
+            "normalized_l2": 0.028579029471602468,
+            "max_relative_outside_near_zero": 0.9352390766143799,
+            "reference_norm": 1.1537230014801025
+          },
+          "network_gradient": {
+            "absolute_error": 0.00018548965454101562,
+            "normalized_l2": 0.011280067773743286,
+            "max_relative_outside_near_zero": 0.1719924807548523,
+            "reference_norm": 0.07781672477722168
+          },
+          "encoding_gradient": {
+            "absolute_error": 0.0,
+            "normalized_l2": 0.0,
+            "max_relative_outside_near_zero": 0.0,
+            "reference_norm": 0.0
+          }
+        },
+        "passed": true
+      },
+      {
+        "encoding": "HashGrid",
+        "dims": 2,
+        "variant": 3,
+        "batch": 1024,
+        "interpolation": "Smoothstep",
+        "n_levels": 16,
+        "n_features_per_level": 4,
+        "metrics": {
+          "output": {
+            "absolute_error": 2.384185791015625e-07,
+            "normalized_l2": 0.001111679375840723,
+            "max_relative_outside_near_zero": 0.0,
+            "reference_norm": 0.005257723852992058
+          },
+          "dinput": {
+            "absolute_error": 0.0028164652176201344,
+            "normalized_l2": 0.048243809636847934,
+            "max_relative_outside_near_zero": 1.4089642763137817,
+            "reference_norm": 0.1698644757270813
+          },
+          "network_gradient": {
+            "absolute_error": 0.0007190704345703125,
+            "normalized_l2": 0.10276123438550208,
+            "max_relative_outside_near_zero": 0.22668173909187317,
+            "reference_norm": 0.010350598022341728
+          },
+          "encoding_gradient": {
+            "absolute_error": 0.00013780593872070312,
+            "normalized_l2": 0.06784266262442425,
+            "max_relative_outside_near_zero": 0.0052956752479076385,
+            "reference_norm": 0.007708486169576645
+          }
+        },
+        "passed": true
+      }
+    ],
+    "returncode": 0,
+    "output_fresh": true,
+    "timed_out": false
+  },
+  "correctness_post": {
+    "marker": "TCNN_RDNA4_P3B1F0A1_FINAL_HARNESS_CLOSURE_001",
+    "passed": true,
+    "output_max_abs": 0.0009765625,
+    "dinput_max_abs": 0.02745274268090725,
+    "network_gradient_max_abs": 0.0007190704345703125,
+    "encoding_gradient_max_abs": 0.00013780593872070312,
+    "nan_count": 0,
+    "inf_count": 0,
+    "historical_reports_byte_equal": true,
+    "production_files": [],
+    "raw_sha256": "049d977ee88024017592c4649ff3f16ad21b2f24cbdcbfc90d7873eb1583bf9e",
+    "raw_refinalized": true,
+    "baseline_cases_executed": [
+      {
+        "encoding": "Frequency",
+        "dims": 2,
+        "variant": 3,
+        "batch": 1024,
+        "interpolation": null,
+        "n_levels": null,
+        "n_features_per_level": null,
+        "metrics": {
+          "output": {
+            "absolute_error": 0.0009765625,
+            "normalized_l2": 0.00013900978258998595,
+            "max_relative_outside_near_zero": 0.1160639226436615,
+            "reference_norm": 54.42112350463867
+          },
+          "dinput": {
+            "absolute_error": 0.02745274268090725,
+            "normalized_l2": 0.028579029471602468,
+            "max_relative_outside_near_zero": 0.9352390766143799,
+            "reference_norm": 1.1537230014801025
+          },
+          "network_gradient": {
+            "absolute_error": 0.00018548965454101562,
+            "normalized_l2": 0.011280067773743286,
+            "max_relative_outside_near_zero": 0.1719924807548523,
+            "reference_norm": 0.07781672477722168
+          },
+          "encoding_gradient": {
+            "absolute_error": 0.0,
+            "normalized_l2": 0.0,
+            "max_relative_outside_near_zero": 0.0,
+            "reference_norm": 0.0
+          }
+        },
+        "passed": true
+      },
+      {
+        "encoding": "HashGrid",
+        "dims": 2,
+        "variant": 3,
+        "batch": 1024,
+        "interpolation": "Smoothstep",
+        "n_levels": 16,
+        "n_features_per_level": 4,
+        "metrics": {
+          "output": {
+            "absolute_error": 2.384185791015625e-07,
+            "normalized_l2": 0.001111679375840723,
+            "max_relative_outside_near_zero": 0.0,
+            "reference_norm": 0.005257723852992058
+          },
+          "dinput": {
+            "absolute_error": 0.0028164652176201344,
+            "normalized_l2": 0.048243809636847934,
+            "max_relative_outside_near_zero": 1.4089642763137817,
+            "reference_norm": 0.1698644757270813
+          },
+          "network_gradient": {
+            "absolute_error": 0.0007190704345703125,
+            "normalized_l2": 0.10276123438550208,
+            "max_relative_outside_near_zero": 0.22668173909187317,
+            "reference_norm": 0.010350598022341728
+          },
+          "encoding_gradient": {
+            "absolute_error": 0.00013780593872070312,
+            "normalized_l2": 0.06784266262442425,
+            "max_relative_outside_near_zero": 0.0052956752479076385,
+            "reference_norm": 0.007708486169576645
+          }
+        },
+        "passed": true
+      }
+    ],
+    "returncode": 0,
+    "output_fresh": true,
+    "timed_out": false
+  },
+  "cases": [
+    {
+      "case_id": "network.N32-L2.b1024.forward",
+      "path": "/tmp/phase3b1f1_reproducible_runs/f0b_smoke_20260723T231246_175967/network_N32-L2_b1024_forward.json",
+      "sha256": "5892fb1ed34f619e184e329bf3de40d054b4f8dc5e1cae675e5fd70174ed5472",
+      "valid": true,
+      "checks": {
+        "identity": true,
+        "returncode": true,
+        "timing": true,
+        "comparison_identity": true,
+        "backend": true,
+        "numerical": true,
+        "memory": true
+      }
+    },
+    {
+      "case_id": "network.N128-L4.b16384.adam_training_step",
+      "path": "/tmp/phase3b1f1_reproducible_runs/f0b_smoke_20260723T231246_175967/network_N128-L4_b16384_adam_training_step.json",
+      "sha256": "0ad74bf3dea879c366e0bb2e0fca993a34127c0f1f446adc75ec09aa6ad74d34",
+      "valid": true,
+      "checks": {
+        "identity": true,
+        "returncode": true,
+        "timing": true,
+        "comparison_identity": true,
+        "backend": true,
+        "numerical": true,
+        "memory": true
+      }
+    },
+    {
+      "case_id": "nwe.Frequency.b1024.forward_backward",
+      "path": "/tmp/phase3b1f1_reproducible_runs/f0b_smoke_20260723T231246_175967/nwe_Frequency_b1024_forward_backward.json",
+      "sha256": "c9ef4c4badc5951185a4170081fe5cc2f30f17983b800d58f572a8fc9a2744f8",
+      "valid": true,
+      "checks": {
+        "identity": true,
+        "returncode": true,
+        "timing": true,
+        "comparison_identity": true,
+        "backend": true,
+        "numerical": true,
+        "memory": true
+      }
+    },
+    {
+      "case_id": "nwe.HashGrid3D.b16384.adam_training_step",
+      "path": "/tmp/phase3b1f1_reproducible_runs/f0b_smoke_20260723T231246_175967/nwe_HashGrid3D_b16384_adam_training_step.json",
+      "sha256": "3da01b92d9746757dbacc6382afc5408093df22e30ca4603575e4e0ce3cf61e5",
+      "valid": true,
+      "checks": {
+        "identity": true,
+        "returncode": true,
+        "timing": true,
+        "comparison_identity": true,
+        "backend": true,
+        "numerical": true,
+        "memory": true
+      }
+    }
+  ],
+  "validity_contract_test": {
+    "passed": true,
+    "checks": {
+      "two_of_three_accepted": true,
+      "one_of_three_blocked": true,
+      "one_replacement_allowed": true,
+      "two_replacements_blocked": true
+    }
+  },
+  "historical_artifacts_byte_equal": true,
+  "production_files_changed": [],
+  "f1_full_measurement_executed": false
+}

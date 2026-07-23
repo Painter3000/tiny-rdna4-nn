@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "marker": "TCNN_RDNA4_P3B1F0B_REPRODUCIBLE_BENCHMARK_001",
+  "status": "active_for_phase3b1f1",
+  "base_commit": "c2921ea14c82cf2222487b95f8514f678afc2f2c",
+  "supersedes": {
+    "path": "phase3b1_reports/phase3b1f_protocol_manifest.json",
+    "sha256": "cf097d672595e72ca58a4090bff1135882f2181756f8e8ffb70281ea2fcfe0e3",
+    "reason": "The 123-case/861-process protocol was not executed and was dimensioned for manipulation resistance rather than the actual requirement of reproducible performance measurement. F0b replaces it with a reproducibility-focused benchmark."
+  },
+  "primary_case_count": 24,
+  "fresh_processes_per_case": 3,
+  "primary_process_count": 72,
+  "paired_rounds_per_process": 5,
+  "minimum_valid_processes_per_case": 2,
+  "maximum_replacement_attempts_per_case": 1,
+  "network_with_encoding_topology": {
+    "hidden_width": 64,
+    "hidden_layers": 2,
+    "output_dims": 16,
+    "activation": "ReLU",
+    "output_activation": "None"
+  },
+  "calibration": {
+    "target_min_ms": 250,
+    "target_max_ms_approx": 1500,
+    "min_iterations": 50,
+    "max_iterations": 5000
+  },
+  "warmup": {
+    "default_iterations_min": 50,
+    "training_iterations_min": 20
+  },
+  "measurement": {
+    "orders": [
+      ["FP16", "FP32", "FP32", "FP16"],
+      ["FP32", "FP16", "FP16", "FP32"]
+    ],
+    "blocks_per_round": 8,
+    "blocks_per_process": 40
+  },
+  "system_stability": {
+    "foreign_gpu_busy_percent_max": 10,
+    "temperature_c_min": 30,
+    "temperature_c_max": 95
+  },
+  "numerical_gates": {
+    "frozen_absolute": {
+      "network_output": 0.03,
+      "dinput": 0.04,
+      "network_gradient": 0.06,
+      "encoding_gradient": 0.06
+    },
+    "nan_allowed": 0,
+    "inf_allowed": 0
+  },
+  "process_execution": {
+    "root": "/tmp/phase3b1f1_reproducible_runs",
+    "timeout_seconds": 1800,
+    "append_only_index": "process_index.jsonl",
+    "state_file": "run_state.json"
+  },
+  "result_semantics": [
+    "PHASE3B1F_PERFORMANCE_GAIN_CONFIRMED",
+    "PHASE3B1F_PERFORMANCE_MIXED",
+    "PHASE3B1F_PERFORMANCE_REGRESSION",
+    "PHASE3B1F_BLOCKED"
+  ],
+  "cases": [
+    {"id":"network.N32-L2.b1024.forward","family":"network_only","supported":true,"seed":31001,"input_dims":32,"output_dims":16,"hidden_width":32,"hidden_layers":2,"batch":1024,"operation":"forward","regime":"latency-bound / launch-overhead-dominated regime"},
+    {"id":"network.N32-L2.b1024.forward_backward","family":"network_only","supported":true,"seed":31002,"input_dims":32,"output_dims":16,"hidden_width":32,"hidden_layers":2,"batch":1024,"operation":"forward_backward","regime":"latency-bound / launch-overhead-dominated regime"},
+    {"id":"network.N32-L2.b1024.adam_training_step","family":"network_only","supported":true,"seed":31003,"input_dims":32,"output_dims":16,"hidden_width":32,"hidden_layers":2,"batch":1024,"operation":"adam_training_step","regime":"latency-bound / launch-overhead-dominated regime"},
+    {"id":"network.N32-L2.b16384.forward","family":"network_only","supported":true,"seed":31004,"input_dims":32,"output_dims":16,"hidden_width":32,"hidden_layers":2,"batch":16384,"operation":"forward","regime":"throughput"},
+    {"id":"network.N32-L2.b16384.forward_backward","family":"network_only","supported":true,"seed":31005,"input_dims":32,"output_dims":16,"hidden_width":32,"hidden_layers":2,"batch":16384,"operation":"forward_backward","regime":"throughput"},
+    {"id":"network.N32-L2.b16384.adam_training_step","family":"network_only","supported":true,"seed":31006,"input_dims":32,"output_dims":16,"hidden_width":32,"hidden_layers":2,"batch":16384,"operation":"adam_training_step","regime":"throughput"},
+    {"id":"network.N128-L4.b1024.forward","family":"network_only","supported":true,"seed":31007,"input_dims":128,"output_dims":16,"hidden_width":128,"hidden_layers":4,"batch":1024,"operation":"forward","regime":"latency-bound / launch-overhead-dominated regime"},
+    {"id":"network.N128-L4.b1024.forward_backward","family":"network_only","supported":true,"seed":31008,"input_dims":128,"output_dims":16,"hidden_width":128,"hidden_layers":4,"batch":1024,"operation":"forward_backward","regime":"latency-bound / launch-overhead-dominated regime"},
+    {"id":"network.N128-L4.b1024.adam_training_step","family":"network_only","supported":true,"seed":31009,"input_dims":128,"output_dims":16,"hidden_width":128,"hidden_layers":4,"batch":1024,"operation":"adam_training_step","regime":"latency-bound / launch-overhead-dominated regime"},
+    {"id":"network.N128-L4.b16384.forward","family":"network_only","supported":true,"seed":31010,"input_dims":128,"output_dims":16,"hidden_width":128,"hidden_layers":4,"batch":16384,"operation":"forward","regime":"throughput"},
+    {"id":"network.N128-L4.b16384.forward_backward","family":"network_only","supported":true,"seed":31011,"input_dims":128,"output_dims":16,"hidden_width":128,"hidden_layers":4,"batch":16384,"operation":"forward_backward","regime":"throughput"},
+    {"id":"network.N128-L4.b16384.adam_training_step","family":"network_only","supported":true,"seed":31012,"input_dims":128,"output_dims":16,"hidden_width":128,"hidden_layers":4,"batch":16384,"operation":"adam_training_step","regime":"throughput"},
+    {"id":"nwe.Identity.b1024.forward_backward","family":"network_with_encoding","supported":true,"seed":32001,"dims":3,"batch":1024,"operation":"network_with_encoding_forward_backward","regime":"latency-bound / launch-overhead-dominated regime","config":{"otype":"Identity"}},
+    {"id":"nwe.Identity.b1024.adam_training_step","family":"network_with_encoding","supported":true,"seed":32002,"dims":3,"batch":1024,"operation":"network_with_encoding_adam_step","regime":"latency-bound / launch-overhead-dominated regime","config":{"otype":"Identity"}},
+    {"id":"nwe.Identity.b16384.forward_backward","family":"network_with_encoding","supported":true,"seed":32003,"dims":3,"batch":16384,"operation":"network_with_encoding_forward_backward","regime":"throughput","config":{"otype":"Identity"}},
+    {"id":"nwe.Identity.b16384.adam_training_step","family":"network_with_encoding","supported":true,"seed":32004,"dims":3,"batch":16384,"operation":"network_with_encoding_adam_step","regime":"throughput","config":{"otype":"Identity"}},
+    {"id":"nwe.Frequency.b1024.forward_backward","family":"network_with_encoding","supported":true,"seed":32005,"dims":3,"batch":1024,"operation":"network_with_encoding_forward_backward","regime":"latency-bound / launch-overhead-dominated regime","config":{"otype":"Frequency","n_frequencies":4}},
+    {"id":"nwe.Frequency.b1024.adam_training_step","family":"network_with_encoding","supported":true,"seed":32006,"dims":3,"batch":1024,"operation":"network_with_encoding_adam_step","regime":"latency-bound / launch-overhead-dominated regime","config":{"otype":"Frequency","n_frequencies":4}},
+    {"id":"nwe.Frequency.b16384.forward_backward","family":"network_with_encoding","supported":true,"seed":32007,"dims":3,"batch":16384,"operation":"network_with_encoding_forward_backward","regime":"throughput","config":{"otype":"Frequency","n_frequencies":4}},
+    {"id":"nwe.Frequency.b16384.adam_training_step","family":"network_with_encoding","supported":true,"seed":32008,"dims":3,"batch":16384,"operation":"network_with_encoding_adam_step","regime":"throughput","config":{"otype":"Frequency","n_frequencies":4}},
+    {"id":"nwe.HashGrid3D.b1024.forward_backward","family":"network_with_encoding","supported":true,"seed":32009,"dims":3,"batch":1024,"operation":"network_with_encoding_forward_backward","regime":"latency-bound / launch-overhead-dominated regime","config":{"otype":"HashGrid","n_levels":16,"n_features_per_level":4,"log2_hashmap_size":15,"base_resolution":16,"per_level_scale":1.5,"interpolation":"Smoothstep"}},
+    {"id":"nwe.HashGrid3D.b1024.adam_training_step","family":"network_with_encoding","supported":true,"seed":32010,"dims":3,"batch":1024,"operation":"network_with_encoding_adam_step","regime":"latency-bound / launch-overhead-dominated regime","config":{"otype":"HashGrid","n_levels":16,"n_features_per_level":4,"log2_hashmap_size":15,"base_resolution":16,"per_level_scale":1.5,"interpolation":"Smoothstep"}},
+    {"id":"nwe.HashGrid3D.b16384.forward_backward","family":"network_with_encoding","supported":true,"seed":32011,"dims":3,"batch":16384,"operation":"network_with_encoding_forward_backward","regime":"throughput","config":{"otype":"HashGrid","n_levels":16,"n_features_per_level":4,"log2_hashmap_size":15,"base_resolution":16,"per_level_scale":1.5,"interpolation":"Smoothstep"}},
+    {"id":"nwe.HashGrid3D.b16384.adam_training_step","family":"network_with_encoding","supported":true,"seed":32012,"dims":3,"batch":16384,"operation":"network_with_encoding_adam_step","regime":"throughput","config":{"otype":"HashGrid","n_levels":16,"n_features_per_level":4,"log2_hashmap_size":15,"base_resolution":16,"per_level_scale":1.5,"interpolation":"Smoothstep"}}
+  ],
+  "smoke_cases": [
+    "network.N32-L2.b1024.forward",
+    "network.N128-L4.b16384.adam_training_step",
+    "nwe.Frequency.b1024.forward_backward",
+    "nwe.HashGrid3D.b16384.adam_training_step"
+  ]
+}

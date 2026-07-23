@@ -14,14 +14,13 @@ import sys
 import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "phase3b1_reports/phase3b1f_protocol_manifest.json"
+MANIFEST = ROOT / "phase3b1_reports/phase3b1f0b_reproducible_benchmark_manifest.json"
 WORKER = ROOT / "scripts/phase3b1f_benchmark_worker.py"
 FINALIZER = ROOT / "scripts/finalize_phase3b1f_report.py"
-CONTRACT = ROOT / "phase3b1_reports/phase3b1f0a_harness_contract.json"
 RAW = pathlib.Path("/tmp/phase3b1f_fp16_performance_raw.json")
 MARKER = "TCNN_RDNA4_P3B1F_FP16_PERFORMANCE_001"
 CONFIRMATION = "RUN_PHASE3B1F1_FULL_MEASUREMENT"
-EXPECTED_MANIFEST_SHA256 = "cf097d672595e72ca58a4090bff1135882f2181756f8e8ffb70281ea2fcfe0e3"
+EXPECTED_MANIFEST_SHA256 = "98bd1a1c2d447bfeaba419b9f8cd705320ff0a92f31ef1dca71adf4a3d272708"
 
 
 def sha256(path):
@@ -71,7 +70,10 @@ def expected_cases():
 def parse_algorithm_log(path, contract, case_id, process_index):
     text = path.read_text(errors="replace") if path.exists() else ""
     ids = []
-    for expression in contract["backend_evidence"]["gemm"]["log_id_regexes"]:
+    for expression in contract.get("backend_evidence", {}).get("gemm", {}).get("log_id_regexes", (
+        r"(?i)(?:algo(?:rithm)?(?:_id|Id|Index)?|solution(?:_index|Index))[^0-9-]*(-?[0-9]+)",
+        r"(?i)index[=: ]+(-?[0-9]+)",
+    )):
         ids.extend(int(value) for value in re.findall(expression, text))
     workspace = [int(value) for value in re.findall(r"(?i)workspace(?:_size|Size| bytes)?[^0-9]*([0-9]+)", text)]
     records = [line for line in text.splitlines() if re.search(r"(?i)(matmul|gemm|algo|solution)", line)]
@@ -100,12 +102,13 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
     env["PYTHONPATH"] = f"{binding_root}:{ROOT / 'bindings/torch'}:{ROOT / 'scripts'}" + (
         ":" + env["PYTHONPATH"] if env.get("PYTHONPATH") else ""
     )
-    env.update(json.loads(MANIFEST.read_text())["backend_evidence"]["environment"])
+    env.update(json.loads(MANIFEST.read_text()).get("backend_evidence", {}).get("environment", {
+        "HIPBLASLT_LOG_LEVEL": "5", "HIPBLASLT_LOG_MASK": "32",
+    }))
     env["HIPBLASLT_LOG_FILE"] = str(log.resolve())
     command = [
         sys.executable, str(WORKER), "--manifest", str(MANIFEST),
-        "--manifest-sha256", manifest_sha, "--harness-contract", str(CONTRACT),
-        "--harness-contract-sha256", sha256(CONTRACT),
+        "--manifest-sha256", manifest_sha,
         "--case-id", case["id"], "--process-index", str(process_index),
         "--output", str(output), "--execute-primary", *extra_args,
     ]
@@ -123,6 +126,7 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
     record = json.loads(output.read_text()) if fresh else {
         "marker": MARKER, "manifest_sha256": manifest_sha, "case": case,
         "process_index": process_index, "valid": False, "invalid_reasons": ["missing_or_stale_process_output"],
+        "backend_evidence": {},
     }
     evidence = parse_algorithm_log(log, contract, case["id"], process_index)
     gemm_expected = record.get("backend_evidence", {}).get("gemm_expected")
@@ -148,11 +152,10 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
             "workspace_bytes": 0, "fallback": "not_applicable",
             "gemm_call_count": 0, "gemm_calls_per_iteration": 0,
         })
-    record["backend_evidence"]["algorithm_log"] = evidence
+    record.setdefault("backend_evidence", {})["algorithm_log"] = evidence
     identity_ok = (
         record.get("marker") == MARKER
         and record.get("manifest_sha256") == manifest_sha
-        and record.get("harness_contract_sha256") == sha256(CONTRACT)
         and record.get("case", {}).get("id") == case["id"]
         and record.get("process_index") == process_index
     )
@@ -174,7 +177,7 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
     return record
 
 
-def load_resumable_record(output, index_entry, case, process_index, manifest_sha, contract_sha, run_root):
+def load_resumable_record(output, index_entry, case, process_index, manifest_sha, run_root):
     if output.resolve().parent != run_root.resolve() or index_entry.get("path") != str(output):
         raise RuntimeError(f"Unsafe resume path for {output}")
     if not output.is_file() or sha256(output) != index_entry.get("sha256"):
@@ -185,7 +188,6 @@ def load_resumable_record(output, index_entry, case, process_index, manifest_sha
         record.get("case", {}).get("id") == case["id"],
         record.get("process_index") == process_index,
         record.get("manifest_sha256") == manifest_sha,
-        record.get("harness_contract_sha256") == contract_sha,
     )):
         raise RuntimeError(f"Resume identity mismatch for {output}")
     record["resumed_after_full_validation"] = True
@@ -213,80 +215,45 @@ def run_correctness_process(script, output, timeout):
 
 def protocol_audit():
     manifest = json.loads(MANIFEST.read_text())
-    network, encoding, total = expected_cases()
     ids = [case["id"] for case in manifest["cases"]]
-    required_top = {
-        "base_commit", "marker", "comparators", "inputs", "seeds", "timer", "calibration",
-        "warmup", "measurement", "statistics", "valid_process", "system_stability",
-        "cold_start", "resources", "backend_evidence", "profiling", "performance_gates",
-        "numerical_gates", "correctness_pre_post", "cases", "expected_counts",
+    historical = {
+        "phase3b1_reports/PHASE3B1F_PROTOCOL.md": "f88163eeaeadb8785dcfdc31e8db49df7e07f97718333da637ab4145ff041b4a",
+        "phase3b1_reports/phase3b1f_protocol_manifest.json": "cf097d672595e72ca58a4090bff1135882f2181756f8e8ffb70281ea2fcfe0e3",
+        "phase3b1_reports/PHASE3B1F0A_HARNESS_HARDENING.md": "4ed765b23588ca4ad0abd30d01d6a94fedf2a346291955e863f2627a41f7ea78",
+        "phase3b1_reports/PHASE3B1F0A1_FINAL_HARNESS_CLOSURE.md": "711000b22667b165ce61dee8be8cf25b2ec569ca14800766a510eed7427b7ef2",
     }
     changed = set(subprocess.check_output(["git", "diff", "--name-only", manifest["base_commit"]], cwd=ROOT, text=True).splitlines())
     changed.update(subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard"], cwd=ROOT, text=True).splitlines())
     production = [path for path in changed if path.startswith(("src/", "include/", "bindings/"))]
-    historical_equal = True
-    for path in subprocess.check_output(
-        ["git", "ls-tree", "-r", "--name-only", manifest["base_commit"], "phase3b1_reports"], cwd=ROOT, text=True
-    ).splitlines():
-        historical_equal &= (ROOT / path).read_bytes() == subprocess.check_output(
-            ["git", "show", f"{manifest['base_commit']}:{path}"], cwd=ROOT
-        )
-    required_mutations = (
-        "primary_case_removed", "batch_changed", "fp16_fp32_time_swapped", "speedup_increased",
-        "process_median_manipulated", "invalid_process_removed", "bootstrap_interval_manipulated",
-        "warmup_as_steady_state", "candidate_reference_iterations_differ", "fallback_enabled",
-        "numerical_maximum_increased", "scratch_live_nonzero", "descriptor_count_growth",
-        "algorithm_id_missing", "manifest_hash_changed", "fewer_than_seven_processes",
-        "two_invalid_processes", "network_geomean_below_gate", "encoding_geomean_below_gate",
-        "historical_report_changed",
-    )
-    finalizer_source = FINALIZER.read_text()
+    network = [case for case in manifest["cases"] if case["family"] == "network_only"]
+    nwe = [case for case in manifest["cases"] if case["family"] == "network_with_encoding"]
     checks = {
-        "base": manifest.get("base_commit") == "3265070edbef35969f569972eaf0731d9dab2fe3",
-        "marker": manifest.get("marker") == MARKER,
+        "base": manifest.get("base_commit") == "c2921ea14c82cf2222487b95f8514f678afc2f2c",
+        "marker": manifest.get("marker") == "TCNN_RDNA4_P3B1F0B_REPRODUCIBLE_BENCHMARK_001",
+        "active": manifest.get("status") == "active_for_phase3b1f1",
         "manifest_frozen_hash": sha256(MANIFEST) == EXPECTED_MANIFEST_SHA256,
-        "schema": required_top <= set(manifest),
-        "case_count": len(ids) == total and len(set(ids)) == total,
-        "family_counts": (
-            sum(x["family"] == "network_only" for x in manifest["cases"]) == network
-            and sum(x["family"] == "encoding" for x in manifest["cases"]) == encoding
-        ),
-        "process_count": manifest["expected_counts"]["fresh_primary_processes"] == total * 7,
-        "fresh_processes": manifest["measurement"]["fresh_processes_per_primary_case"] == 7,
-        "paired_blocks": manifest["measurement"]["paired_rounds_per_process"] >= 5,
-        "calibration": (
-            manifest["calibration"]["target_min_ms"] == 250
-            and manifest["calibration"]["target_max_ms_approx"] == 1500
-            and manifest["calibration"]["min_iterations"] == 50
-            and manifest["calibration"]["max_iterations"] == 5000
-        ),
-        "bootstrap": (
-            manifest["statistics"]["bootstrap"]["paired"] is True
-            and manifest["statistics"]["bootstrap"]["resamples"] >= 10000
-        ),
-        "invalid_limit": manifest["valid_process"]["max_invalid_per_case"] == 1,
-        "no_outlier_deletion": manifest["measurement"]["no_value_based_outlier_removal"] is True,
-        "gates_frozen": manifest["performance_gates"]["network_large_batch_geomean"] == {
-            "batch_min": 1024, "forward": 1.20, "forward_backward": 1.15, "adam_training_step": 1.10
-        },
-        "numerics_frozen": manifest["numerical_gates"]["phase3b1f_starting_baseline"]["dinput"]["max_abs"] == 0.02745274268090725,
+        "supersedes_exact": manifest["supersedes"]["sha256"] == "cf097d672595e72ca58a4090bff1135882f2181756f8e8ffb70281ea2fcfe0e3",
+        "case_count": len(ids) == len(set(ids)) == manifest["primary_case_count"] == 24,
+        "family_counts": len(network) == 12 and len(nwe) == 12,
+        "process_count": manifest["fresh_processes_per_case"] == 3 and manifest["primary_process_count"] == 72,
+        "paired_rounds": manifest["paired_rounds_per_process"] == 5,
+        "validity_contract": manifest["minimum_valid_processes_per_case"] == 2
+                             and manifest["maximum_replacement_attempts_per_case"] == 1,
+        "historical_byte_equal": all(sha256(ROOT / path) == digest for path, digest in historical.items()),
         "no_production_changes": not production,
-        "historical_reports_byte_equal": historical_equal,
-        "f1_manipulations_declared": all(name in finalizer_source for name in required_mutations),
         "worker_explicit_gate": "--execute-primary" in WORKER.read_text(),
         "full_run_explicit_gate": CONFIRMATION in pathlib.Path(__file__).read_text(),
         "python_syntax": all(ast.parse(path.read_text()) for path in (WORKER, pathlib.Path(__file__), FINALIZER)),
     }
-    decision = "PHASE3B1F0_PROTOCOL_READY" if all(checks.values()) else "PHASE3B1F0_BLOCKED"
+    decision = "PHASE3B1F0B_PROTOCOL_READY" if all(checks.values()) else "PHASE3B1F0B_BLOCKED"
     return {
         "marker": MARKER,
         "decision": decision,
         "checks": checks,
         "manifest_path": str(MANIFEST.resolve()),
         "manifest_sha256": EXPECTED_MANIFEST_SHA256,
-        "expected_primary_cases": total,
-        "expected_fresh_processes": total * 7,
-        "estimated_operation_iterations": manifest["estimated_operation_iterations"],
+        "expected_primary_cases": 24,
+        "expected_fresh_processes": 72,
     }
 
 
@@ -294,8 +261,7 @@ def full_measurement(manifest_sha, resume_run_dir=None):
     manifest = json.loads(MANIFEST.read_text())
     if sha256(MANIFEST) != manifest_sha:
         raise SystemExit("Manifest changed before F1")
-    contract = json.loads(CONTRACT.read_text())
-    contract_sha = sha256(CONTRACT)
+    contract = manifest
     if resume_run_dir:
         root = resume_run_dir.resolve()
         if root.parent != pathlib.Path(contract["process_execution"]["root"]).resolve() or not root.is_dir():
@@ -322,11 +288,11 @@ def full_measurement(manifest_sha, resume_run_dir=None):
     )
     records = []
     for case in manifest["cases"]:
-        for process_index in range(manifest["measurement"]["fresh_processes_per_primary_case"]):
+        for process_index in range(manifest["fresh_processes_per_case"]):
             output = root / f"{case['id'].replace('.', '_')}.p{process_index}.json"
             key = (case["id"], process_index)
             record = (
-                load_resumable_record(output, resume_entries[key], case, process_index, manifest_sha, contract_sha, root)
+                load_resumable_record(output, resume_entries[key], case, process_index, manifest_sha, root)
                 if key in resume_entries else launch_worker(case, process_index, output, manifest_sha, contract)
             )
             records.append(record)
@@ -336,80 +302,29 @@ def full_measurement(manifest_sha, resume_run_dir=None):
                                             "path": str(output), "sha256": record["process_file_sha256"],
                                             "valid": record["valid"]}) + "\n")
             state_path.write_text(json.dumps({"run_id": run_id, "completed": len(records),
-                                              "expected": manifest["expected_counts"]["fresh_primary_processes"]}, indent=2) + "\n")
-    cold = []
-    env = os.environ.copy()
-    binding_root = ROOT / "bindings/torch/build/lib.linux-x86_64-cpython-312"
-    env["PYTHONPATH"] = f"{binding_root}:{ROOT / 'bindings/torch'}:{ROOT / 'scripts'}" + (
-        ":" + env["PYTHONPATH"] if env.get("PYTHONPATH") else ""
-    )
-    for stage in manifest["cold_start"]["stages"]:
-        for process_index in range(manifest["cold_start"]["fresh_processes_per_case"]):
-            output = root / f"cold_{stage}.p{process_index}.json"
-            output.unlink(missing_ok=True)
-            command = [sys.executable, str(WORKER), "--cold-stage", stage, "--output", str(output)]
-            started = time.time_ns()
-            try:
-                completed = subprocess.run(
-                    command, cwd="/tmp", env=env, capture_output=True, text=True,
-                    timeout=contract["process_execution"]["timeout_seconds"],
-                )
-                timed_out = False
-            except subprocess.TimeoutExpired as error:
-                completed = subprocess.CompletedProcess(command, 124, error.stdout or "", error.stderr or "")
-                timed_out = True
-            fresh = output.exists() and output.stat().st_mtime_ns >= started
-            item = json.loads(output.read_text()) if fresh else {"requested_stage": stage}
-            item.update({"process_index": process_index, "returncode": completed.returncode,
-                         "stdout": completed.stdout, "stderr": completed.stderr,
-                         "output_fresh": fresh, "timed_out": timed_out,
-                         "valid": completed.returncode == 0 and fresh and not timed_out})
-            cold.append(item)
-    profiles = []
-    profiler = next((tool for tool in manifest["profiling"]["tool_preference"] if shutil.which(tool)), None)
-    for profile_index, case_id in enumerate(manifest["profiling"]["cases"]):
-        output = root / f"profile_{profile_index}.json"
-        profile_dir = root / f"profile_{profile_index}_rocprof"
-        output.unlink(missing_ok=True)
-        worker_command = [
-            sys.executable, str(WORKER), "--manifest", str(MANIFEST),
-            "--manifest-sha256", manifest_sha, "--harness-contract", str(CONTRACT),
-            "--harness-contract-sha256", contract_sha, "--case-id", case_id,
-            "--process-index", "99", "--output", str(output), "--execute-primary",
-        ]
-        if profiler == "rocprofv3":
-            command = [profiler, "--output-directory", str(profile_dir), "--"] + worker_command
-        elif profiler == "rocprof":
-            command = [profiler, "--stats", "-d", str(profile_dir)] + worker_command
-        else:
-            profiles.append({"case_id": case_id, "valid": False, "reason": "profiler_unavailable"})
-            continue
-        started = time.time_ns()
-        try:
-            completed = subprocess.run(
-                command, cwd="/tmp", env=env, capture_output=True, text=True,
-                timeout=contract["process_execution"]["timeout_seconds"],
-            )
-            timed_out = False
-        except subprocess.TimeoutExpired as error:
-            completed = subprocess.CompletedProcess(command, 124, error.stdout or "", error.stderr or "")
-            timed_out = True
-        fresh = output.exists() and output.stat().st_mtime_ns >= started
-        parsed = parse_profile_directory(profile_dir)
-        profiles.append({"case_id": case_id, "tool": profiler, "returncode": completed.returncode,
-                         "output_directory": str(profile_dir), "worker_output": str(output),
-                         "stdout": completed.stdout, "stderr": completed.stderr,
-                         "parsed": parsed, "output_fresh": fresh, "timed_out": timed_out,
-                         "valid": completed.returncode == 0 and fresh and not timed_out
-                                  and parsed["parsed_kernel_rows"] > 0})
+                                              "expected": manifest["primary_process_count"]}, indent=2) + "\n")
+        case_records = [item for item in records if item.get("case", {}).get("id") == case["id"]]
+        if sum(item.get("valid") is True for item in case_records) < manifest["minimum_valid_processes_per_case"]:
+            replacement_index = manifest["fresh_processes_per_case"]
+            output = root / f"{case['id'].replace('.', '_')}.replacement0.json"
+            replacement = launch_worker(case, replacement_index, output, manifest_sha, contract)
+            replacement["replacement_attempt"] = 1
+            replacement["replaces_invalid_process_indices"] = [
+                item["process_index"] for item in case_records if item.get("valid") is not True
+            ]
+            records.append(replacement)
+            with index_path.open("a") as index:
+                index.write(json.dumps({
+                    "case_id": case["id"], "process_index": replacement_index,
+                    "replacement_attempt": 1, "path": str(output),
+                    "sha256": replacement["process_file_sha256"], "valid": replacement["valid"],
+                }) + "\n")
     raw = {
-        "marker": MARKER, "manifest_sha256": manifest_sha,
-        "harness_contract_sha256": contract_sha, "complete": True,
+        "marker": MARKER, "active_protocol_marker": manifest["marker"],
+        "manifest_sha256": manifest_sha, "complete": True,
         "primary_processes": records,
-        "expected_primary_cases": manifest["expected_counts"]["supported_primary_cases"],
-        "expected_primary_processes": manifest["expected_counts"]["fresh_primary_processes"],
-        "cold_start": {"status": "complete", "results": cold},
-        "profiling": {"status": "complete", "results": profiles},
+        "expected_primary_cases": manifest["primary_case_count"],
+        "expected_primary_processes": manifest["primary_process_count"],
         "correctness_pre": correctness_pre,
         "correctness_post": None,
     }
@@ -434,9 +349,9 @@ def main():
         args.output.write_text(json.dumps(audit, indent=2) + "\n")
     if not args.execute_full:
         print(audit["decision"])
-        return 0 if audit["decision"] == "PHASE3B1F0_PROTOCOL_READY" else 1
-    if audit["decision"] != "PHASE3B1F0_PROTOCOL_READY":
-        raise SystemExit("F0 protocol is not ready")
+        return 0 if audit["decision"] == "PHASE3B1F0B_PROTOCOL_READY" else 1
+    if audit["decision"] != "PHASE3B1F0B_PROTOCOL_READY":
+        raise SystemExit("F0b protocol is not ready")
     if args.confirm != CONFIRMATION:
         raise SystemExit(f"Full F1 requires --confirm {CONFIRMATION}")
     return full_measurement(audit["manifest_sha256"], args.resume_run_dir)
