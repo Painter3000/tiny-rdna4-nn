@@ -1,0 +1,1701 @@
+{
+  "marker": "TCNN_RDNA4_P3B1F0B_REPRODUCIBLE_BENCHMARK_001",
+  "decision": "PHASE3B1F_PERFORMANCE_GAIN_CONFIRMED",
+  "manifest_sha256": "98bd1a1c2d447bfeaba419b9f8cd705320ff0a92f31ef1dca71adf4a3d272708",
+  "gates": {
+    "marker": true,
+    "active_protocol_marker": true,
+    "manifest_hash": true,
+    "complete": true,
+    "case_set": true,
+    "correctness_pre": true,
+    "correctness_post": true,
+    "all_cases_accepted": true
+  },
+  "cases": {
+    "network.N32-L2.b1024.forward": {
+      "case": {
+        "id": "network.N32-L2.b1024.forward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31001,
+        "input_dims": 32,
+        "output_dims": 16,
+        "hidden_width": 32,
+        "hidden_layers": 2,
+        "batch": 1024,
+        "operation": "forward",
+        "regime": "latency-bound / launch-overhead-dominated regime"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.8295433764390039,
+        "mad": 0.0013514299832881882,
+        "paired_bootstrap_95": [
+          0.8281919464557157,
+          0.8321164434143502
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 627712,
+        "fp32_allocated_peak_median": 654848,
+        "fp32_over_fp16_median": 1.0432300163132138
+      }
+    },
+    "network.N32-L2.b1024.forward_backward": {
+      "case": {
+        "id": "network.N32-L2.b1024.forward_backward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31002,
+        "input_dims": 32,
+        "output_dims": 16,
+        "hidden_width": 32,
+        "hidden_layers": 2,
+        "batch": 1024,
+        "operation": "forward_backward",
+        "regime": "latency-bound / launch-overhead-dominated regime"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.9491148965133406,
+        "mad": 0.0010093732343615658,
+        "paired_bootstrap_95": [
+          0.948105523278979,
+          0.9545880284730184
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 694272,
+        "fp32_allocated_peak_median": 731648,
+        "fp32_over_fp16_median": 1.053834808259587
+      }
+    },
+    "network.N32-L2.b1024.adam_training_step": {
+      "case": {
+        "id": "network.N32-L2.b1024.adam_training_step",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31003,
+        "input_dims": 32,
+        "output_dims": 16,
+        "hidden_width": 32,
+        "hidden_layers": 2,
+        "batch": 1024,
+        "operation": "adam_training_step",
+        "regime": "latency-bound / launch-overhead-dominated regime"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.9038184441639636,
+        "mad": 0.0027820422630893127,
+        "paired_bootstrap_95": [
+          0.8964692343697692,
+          0.9066004864270529
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 1074688,
+        "fp32_allocated_peak_median": 1101824,
+        "fp32_over_fp16_median": 1.0252501191043355
+      }
+    },
+    "network.N32-L2.b16384.forward": {
+      "case": {
+        "id": "network.N32-L2.b16384.forward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31004,
+        "input_dims": 32,
+        "output_dims": 16,
+        "hidden_width": 32,
+        "hidden_layers": 2,
+        "batch": 16384,
+        "operation": "forward",
+        "regime": "throughput"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.8267234091445835,
+        "mad": 0.0010815750081121234,
+        "paired_bootstrap_95": [
+          0.8243915747334775,
+          0.8278049841526957
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 8983552,
+        "fp32_allocated_peak_median": 9502208,
+        "fp32_over_fp16_median": 1.0577339564573123
+      }
+    },
+    "network.N32-L2.b16384.forward_backward": {
+      "case": {
+        "id": "network.N32-L2.b16384.forward_backward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31005,
+        "input_dims": 32,
+        "output_dims": 16,
+        "hidden_width": 32,
+        "hidden_layers": 2,
+        "batch": 16384,
+        "operation": "forward_backward",
+        "regime": "throughput"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 7.4385607464396415,
+        "mad": 0.02038071927697338,
+        "paired_bootstrap_95": [
+          7.33684888905761,
+          7.458941465716615
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 10033152,
+        "fp32_allocated_peak_median": 10562048,
+        "fp32_over_fp16_median": 1.052714839763217
+      }
+    },
+    "network.N32-L2.b16384.adam_training_step": {
+      "case": {
+        "id": "network.N32-L2.b16384.adam_training_step",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31006,
+        "input_dims": 32,
+        "output_dims": 16,
+        "hidden_width": 32,
+        "hidden_layers": 2,
+        "batch": 16384,
+        "operation": "adam_training_step",
+        "regime": "throughput"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 5.021537494693799,
+        "mad": 0.004898193605524348,
+        "paired_bootstrap_95": [
+          5.016639301088275,
+          5.0660720590638615
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 14345728,
+        "fp32_allocated_peak_median": 14864384,
+        "fp32_over_fp16_median": 1.0361540383311325
+      }
+    },
+    "network.N128-L4.b1024.forward": {
+      "case": {
+        "id": "network.N128-L4.b1024.forward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31007,
+        "input_dims": 128,
+        "output_dims": 16,
+        "hidden_width": 128,
+        "hidden_layers": 4,
+        "batch": 1024,
+        "operation": "forward",
+        "regime": "latency-bound / launch-overhead-dominated regime"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.8372121069651141,
+        "mad": 0.0023887184839299636,
+        "paired_bootstrap_95": [
+          0.8348233884811841,
+          0.8406867905928636
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 3118080,
+        "fp32_allocated_peak_median": 3014144,
+        "fp32_over_fp16_median": 0.9666666666666667
+      }
+    },
+    "network.N128-L4.b1024.forward_backward": {
+      "case": {
+        "id": "network.N128-L4.b1024.forward_backward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31008,
+        "input_dims": 128,
+        "output_dims": 16,
+        "hidden_width": 128,
+        "hidden_layers": 4,
+        "batch": 1024,
+        "operation": "forward_backward",
+        "regime": "latency-bound / launch-overhead-dominated regime"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 1.3013609720893817,
+        "mad": 0.02353527120758625,
+        "paired_bootstrap_95": [
+          1.2778257008817955,
+          1.3409848799339221
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 3184640,
+        "fp32_allocated_peak_median": 3353088,
+        "fp32_over_fp16_median": 1.0528938906752412
+      }
+    },
+    "network.N128-L4.b1024.adam_training_step": {
+      "case": {
+        "id": "network.N128-L4.b1024.adam_training_step",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31009,
+        "input_dims": 128,
+        "output_dims": 16,
+        "hidden_width": 128,
+        "hidden_layers": 4,
+        "batch": 1024,
+        "operation": "adam_training_step",
+        "regime": "latency-bound / launch-overhead-dominated regime"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 1.057219029738926,
+        "mad": 0.003127657671045503,
+        "paired_bootstrap_95": [
+          1.0540913720678804,
+          1.0924194051775118
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 6496768,
+        "fp32_allocated_peak_median": 6694400,
+        "fp32_over_fp16_median": 1.0304200488612183
+      }
+    },
+    "network.N128-L4.b16384.forward": {
+      "case": {
+        "id": "network.N128-L4.b16384.forward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31010,
+        "input_dims": 128,
+        "output_dims": 16,
+        "hidden_width": 128,
+        "hidden_layers": 4,
+        "batch": 16384,
+        "operation": "forward",
+        "regime": "throughput"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 3.8017624361810243,
+        "mad": 0.01270339161087053,
+        "paired_bootstrap_95": [
+          3.7890590445701537,
+          3.81812417680985
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 23270400,
+        "fp32_allocated_peak_median": 23657984,
+        "fp32_over_fp16_median": 1.0166556655665566
+      }
+    },
+    "network.N128-L4.b16384.forward_backward": {
+      "case": {
+        "id": "network.N128-L4.b16384.forward_backward",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31011,
+        "input_dims": 128,
+        "output_dims": 16,
+        "hidden_width": 128,
+        "hidden_layers": 4,
+        "batch": 16384,
+        "operation": "forward_backward",
+        "regime": "throughput"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 11.442526567084274,
+        "mad": 0.007806097743563001,
+        "paired_bootstrap_95": [
+          11.42713718084802,
+          11.450332664827837
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 24320000,
+        "fp32_allocated_peak_median": 24979968,
+        "fp32_over_fp16_median": 1.0271368421052631
+      }
+    },
+    "network.N128-L4.b16384.adam_training_step": {
+      "case": {
+        "id": "network.N128-L4.b16384.adam_training_step",
+        "family": "network_only",
+        "supported": true,
+        "seed": 31012,
+        "input_dims": 128,
+        "output_dims": 16,
+        "hidden_width": 128,
+        "hidden_layers": 4,
+        "batch": 16384,
+        "operation": "adam_training_step",
+        "regime": "throughput"
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 9.672995922207189,
+        "mad": 0.010440916873127648,
+        "paired_bootstrap_95": [
+          9.644993387646599,
+          9.683436839080317
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 31516160,
+        "fp32_allocated_peak_median": 31903744,
+        "fp32_over_fp16_median": 1.0122979449273009
+      }
+    },
+    "nwe.Identity.b1024.forward_backward": {
+      "case": {
+        "id": "nwe.Identity.b1024.forward_backward",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32001,
+        "dims": 3,
+        "batch": 1024,
+        "operation": "network_with_encoding_forward_backward",
+        "regime": "latency-bound / launch-overhead-dominated regime",
+        "config": {
+          "otype": "Identity"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 1.1179226103763775,
+        "mad": 0.006844449484478821,
+        "paired_bootstrap_95": [
+          1.1110781608918985,
+          1.1339856145771734
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 541184,
+        "fp32_allocated_peak_median": 583168,
+        "fp32_over_fp16_median": 1.0775780510879849
+      }
+    },
+    "nwe.Identity.b1024.adam_training_step": {
+      "case": {
+        "id": "nwe.Identity.b1024.adam_training_step",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32002,
+        "dims": 3,
+        "batch": 1024,
+        "operation": "network_with_encoding_adam_step",
+        "regime": "latency-bound / launch-overhead-dominated regime",
+        "config": {
+          "otype": "Identity"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.9187463979944102,
+        "mad": 0.000983959585241223,
+        "paired_bootstrap_95": [
+          0.9037874297091291,
+          0.9197303575796514
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 1063936,
+        "fp32_allocated_peak_median": 1087488,
+        "fp32_over_fp16_median": 1.0221366698748797
+      }
+    },
+    "nwe.Identity.b16384.forward_backward": {
+      "case": {
+        "id": "nwe.Identity.b16384.forward_backward",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32003,
+        "dims": 3,
+        "batch": 16384,
+        "operation": "network_with_encoding_forward_backward",
+        "regime": "throughput",
+        "config": {
+          "otype": "Identity"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 9.307378139771536,
+        "mad": 0.08989100402346395,
+        "paired_bootstrap_95": [
+          9.205150713913568,
+          9.397269143795
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 6316544,
+        "fp32_allocated_peak_median": 6850048,
+        "fp32_over_fp16_median": 1.0844613763475723
+      }
+    },
+    "nwe.Identity.b16384.adam_training_step": {
+      "case": {
+        "id": "nwe.Identity.b16384.adam_training_step",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32004,
+        "dims": 3,
+        "batch": 16384,
+        "operation": "network_with_encoding_adam_step",
+        "regime": "throughput",
+        "config": {
+          "otype": "Identity"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 6.358996811532801,
+        "mad": 0.030103856410435448,
+        "paired_bootstrap_95": [
+          6.295788084762724,
+          6.389100667943237
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 10771456,
+        "fp32_allocated_peak_median": 11286528,
+        "fp32_over_fp16_median": 1.0478182336724022
+      }
+    },
+    "nwe.Frequency.b1024.forward_backward": {
+      "case": {
+        "id": "nwe.Frequency.b1024.forward_backward",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32005,
+        "dims": 3,
+        "batch": 1024,
+        "operation": "network_with_encoding_forward_backward",
+        "regime": "latency-bound / launch-overhead-dominated regime",
+        "config": {
+          "otype": "Frequency",
+          "n_frequencies": 4
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 1.085668926059059,
+        "mad": 0.01147448663568773,
+        "paired_bootstrap_95": [
+          1.0741944394233713,
+          1.1112947150921249
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 572416,
+        "fp32_allocated_peak_median": 617984,
+        "fp32_over_fp16_median": 1.0796064400715564
+      }
+    },
+    "nwe.Frequency.b1024.adam_training_step": {
+      "case": {
+        "id": "nwe.Frequency.b1024.adam_training_step",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32006,
+        "dims": 3,
+        "batch": 1024,
+        "operation": "network_with_encoding_adam_step",
+        "regime": "latency-bound / launch-overhead-dominated regime",
+        "config": {
+          "otype": "Frequency",
+          "n_frequencies": 4
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.9166519188755264,
+        "mad": 0.0008028275766148729,
+        "paired_bootstrap_95": [
+          0.9158490912989116,
+          0.9188360488630477
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 1149440,
+        "fp32_allocated_peak_median": 1169408,
+        "fp32_over_fp16_median": 1.0173719376391983
+      }
+    },
+    "nwe.Frequency.b16384.forward_backward": {
+      "case": {
+        "id": "nwe.Frequency.b16384.forward_backward",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32007,
+        "dims": 3,
+        "batch": 16384,
+        "operation": "network_with_encoding_forward_backward",
+        "regime": "throughput",
+        "config": {
+          "otype": "Frequency",
+          "n_frequencies": 4
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 9.449066613967345,
+        "mad": 0.013871983822344447,
+        "paired_bootstrap_95": [
+          9.416794339369877,
+          9.46293859778969
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 6347776,
+        "fp32_allocated_peak_median": 6884864,
+        "fp32_over_fp16_median": 1.0846104210356509
+      }
+    },
+    "nwe.Frequency.b16384.adam_training_step": {
+      "case": {
+        "id": "nwe.Frequency.b16384.adam_training_step",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32008,
+        "dims": 3,
+        "batch": 16384,
+        "operation": "network_with_encoding_adam_step",
+        "regime": "throughput",
+        "config": {
+          "otype": "Frequency",
+          "n_frequencies": 4
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 6.240780188329401,
+        "mad": 0.08933172020742308,
+        "paired_bootstrap_95": [
+          5.685570227990554,
+          6.330111908536824
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 10856960,
+        "fp32_allocated_peak_median": 11368448,
+        "fp32_over_fp16_median": 1.0471115302994576
+      }
+    },
+    "nwe.HashGrid3D.b1024.forward_backward": {
+      "case": {
+        "id": "nwe.HashGrid3D.b1024.forward_backward",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32009,
+        "dims": 3,
+        "batch": 1024,
+        "operation": "network_with_encoding_forward_backward",
+        "regime": "latency-bound / launch-overhead-dominated regime",
+        "config": {
+          "otype": "HashGrid",
+          "n_levels": 16,
+          "n_features_per_level": 4,
+          "log2_hashmap_size": 15,
+          "base_resolution": 16,
+          "per_level_scale": 1.5,
+          "interpolation": "Smoothstep"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 1.175975870141818,
+        "mad": 0.00043704392305254913,
+        "paired_bootstrap_95": [
+          1.1645529769736396,
+          1.1764129140648705
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 50205696,
+        "fp32_allocated_peak_median": 54070784,
+        "fp32_over_fp16_median": 1.0769850496644844
+      }
+    },
+    "nwe.HashGrid3D.b1024.adam_training_step": {
+      "case": {
+        "id": "nwe.HashGrid3D.b1024.adam_training_step",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32010,
+        "dims": 3,
+        "batch": 1024,
+        "operation": "network_with_encoding_adam_step",
+        "regime": "latency-bound / launch-overhead-dominated regime",
+        "config": {
+          "otype": "HashGrid",
+          "n_levels": 16,
+          "n_features_per_level": 4,
+          "log2_hashmap_size": 15,
+          "base_resolution": 16,
+          "per_level_scale": 1.5,
+          "interpolation": "Smoothstep"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 0.9761494064917392,
+        "mad": 0.013406027442182444,
+        "paired_bootstrap_95": [
+          0.9151252362315676,
+          0.9895554339339216
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 145915392,
+        "fp32_allocated_peak_median": 146113024,
+        "fp32_over_fp16_median": 1.001354428736346
+      }
+    },
+    "nwe.HashGrid3D.b16384.forward_backward": {
+      "case": {
+        "id": "nwe.HashGrid3D.b16384.forward_backward",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32011,
+        "dims": 3,
+        "batch": 16384,
+        "operation": "network_with_encoding_forward_backward",
+        "regime": "throughput",
+        "config": {
+          "otype": "HashGrid",
+          "n_levels": 16,
+          "n_features_per_level": 4,
+          "log2_hashmap_size": 15,
+          "base_resolution": 16,
+          "per_level_scale": 1.5,
+          "interpolation": "Smoothstep"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 3.093434861075114,
+        "mad": 0.0006656453865332423,
+        "paired_bootstrap_95": [
+          3.092769215688581,
+          3.0948248121068422
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 55981056,
+        "fp32_allocated_peak_median": 60337664,
+        "fp32_over_fp16_median": 1.0778228978031426
+      }
+    },
+    "nwe.HashGrid3D.b16384.adam_training_step": {
+      "case": {
+        "id": "nwe.HashGrid3D.b16384.adam_training_step",
+        "family": "network_with_encoding",
+        "supported": true,
+        "seed": 32012,
+        "dims": 3,
+        "batch": 16384,
+        "operation": "network_with_encoding_adam_step",
+        "regime": "throughput",
+        "config": {
+          "otype": "HashGrid",
+          "n_levels": 16,
+          "n_features_per_level": 4,
+          "log2_hashmap_size": 15,
+          "base_resolution": 16,
+          "per_level_scale": 1.5,
+          "interpolation": "Smoothstep"
+        }
+      },
+      "accepted": true,
+      "primary_processes": 3,
+      "replacement_attempts": 0,
+      "valid_processes": 3,
+      "replacement_contract": {
+        "three_primary_attempts": true,
+        "at_most_one_replacement": true,
+        "replacement_is_documented": true
+      },
+      "process_checks": [
+        {
+          "process_index": 0,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 1,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        },
+        {
+          "process_index": 2,
+          "identity": true,
+          "returncode": true,
+          "timing": true,
+          "comparison_identity": true,
+          "backend": true,
+          "numerical": true,
+          "memory": true
+        }
+      ],
+      "time": {
+        "median_speedup": 2.887681219167609,
+        "mad": 0.002750136710416129,
+        "paired_bootstrap_95": [
+          2.875808553214063,
+          2.8904313558780252
+        ]
+      },
+      "memory": {
+        "fp16_allocated_peak_median": 150216192,
+        "fp32_allocated_peak_median": 153362944,
+        "fp32_over_fp16_median": 1.0209481545105337
+      }
+    }
+  }
+}
