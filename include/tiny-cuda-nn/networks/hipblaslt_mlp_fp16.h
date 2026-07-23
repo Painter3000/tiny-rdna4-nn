@@ -49,7 +49,9 @@ public:
 	uint32_t input_width() const override { return m_input_width; }
 	uint32_t padded_output_width() const override { return m_output_width; }
 	uint32_t output_width() const override { return m_output_width; }
-	static uint32_t REQUIRED_ALIGNMENT() { return 1; }
+	// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: encoded widths must be
+	// padded to the smallest width accepted by the explicit FP16 backend.
+	static uint32_t REQUIRED_ALIGNMENT() { return 16; }
 	uint32_t required_input_alignment() const override { return REQUIRED_ALIGNMENT(); }
 	std::vector<std::pair<uint32_t,uint32_t>> layer_sizes() const override;
 	uint32_t width(uint32_t) const override;

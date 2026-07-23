@@ -658,7 +658,12 @@ __global__ void kernel_grid_backward_input_backward_dLdoutput(
 template <typename T, uint32_t N_POS_DIMS=3, uint32_t N_FEATURES_PER_LEVEL=2, HashType HASH_TYPE=HashType::CoherentPrime>
 class GridEncodingTemplated : public MultiLevelEncoding<T> {
 public:
-#if TCNN_MIN_GPU_ARCH >= 62 || TCNN_MIN_GPU_ARCH == 60
+#if defined(__HIP_PLATFORM_AMD__)
+	// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: hash collisions always
+	// accumulate into an owned FP32 scratch buffer on AMD. No FP16/half2 atomic
+	// path is permitted; the native FP16 gradient is written exactly once.
+	using grad_t = float;
+#elif TCNN_MIN_GPU_ARCH >= 62 || TCNN_MIN_GPU_ARCH == 60
 	// The GPUs that we tested this on do not have an efficient 1D fp16
 	// atomicAdd feature. Thus, we accumulate gradients at fp32 if we're
 	// forced to use 1D atomicAdds. As soon as 2D or higher is possible,
@@ -865,6 +870,12 @@ public:
 
 			if (param_gradients_mode == GradientMode::Overwrite) {
 				CUDA_CHECK_THROW(hipMemsetAsync(grid_gradient, 0, n_params() * sizeof(grad_t), stream));
+			} else if (!std::is_same<grad_t, T>::value) {
+				// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: Accumulate starts
+				// from the existing native gradient, promoted once to FP32.
+				parallel_for_gpu(stream, n_params(), [grad=this->gradients(), grad_tmp=grid_gradient] __device__ (size_t i) {
+					grad_tmp[i] = (grad_t)grad[i];
+				});
 			}
 
 			static constexpr uint32_t N_THREADS_HASHGRID = 256;

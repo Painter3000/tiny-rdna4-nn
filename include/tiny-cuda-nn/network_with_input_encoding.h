@@ -46,7 +46,16 @@ public:
 	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, std::shared_ptr<Network<T>> network) : m_encoding{encoding}, m_network{network} {}
 
 	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, uint32_t n_output_dims, const json& network) : m_encoding{encoding} {
-		encoding->set_alignment(minimum_alignment(network));
+		m_fp16_hipblaslt = equals_case_insensitive(network.value("otype", ""), "HipBLASLtMLPFP16");
+		const uint32_t alignment = minimum_alignment(network);
+		encoding->set_alignment(alignment);
+		if (m_fp16_hipblaslt) {
+			// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: the qualified
+			// hipBLASLt shapes are discrete, not merely multiples of sixteen.
+			const uint32_t logical = encoding->output_width();
+			const uint32_t supported = logical <= 16 ? 16 : logical <= 32 ? 32 : logical <= 64 ? 64 : logical <= 128 ? 128 : logical;
+			encoding->set_padded_output_width(supported);
+		}
 
 		json local_network_config = network;
 		local_network_config["n_input_dims"] = m_encoding->padded_output_width();
@@ -59,8 +68,15 @@ public:
 
 	virtual ~NetworkWithInputEncoding() { }
 
+	MatrixLayout network_input_layout() const {
+		// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: the explicit FP16
+		// hipBLASLt backend consumes contiguous column-major matrices. Encodings
+		// may prefer SoA, but their dynamic matrix kernels support this layout.
+		return m_fp16_hipblaslt ? MatrixLayout::ColumnMajor : m_encoding->preferred_output_layout();
+	}
+
 	void inference_mixed_precision_impl(hipStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>& output, bool use_inference_params = true) override {
-		GPUMatrixDynamic<T> network_input = {m_encoding->padded_output_width(), input.n(), stream, m_encoding->preferred_output_layout()};
+		GPUMatrixDynamic<T> network_input = {m_encoding->padded_output_width(), input.n(), stream, network_input_layout()};
 		m_encoding->inference_mixed_precision(stream, input, network_input, use_inference_params);
 		m_network->inference_mixed_precision(stream, network_input, output, use_inference_params);
 	}
@@ -75,7 +91,7 @@ public:
 
 		auto forward = std::make_unique<ForwardContext>();
 
-		forward->network_input = GPUMatrixDynamic<T>{m_encoding->padded_output_width(), input.n(), stream, m_encoding->preferred_output_layout()};
+		forward->network_input = GPUMatrixDynamic<T>{m_encoding->padded_output_width(), input.n(), stream, network_input_layout()};
 		forward->encoding_ctx = m_encoding->forward(stream, input, &forward->network_input, use_inference_params, prepare_input_gradients);
 		forward->network_ctx = m_network->forward(stream, forward->network_input, output, use_inference_params, true);
 
@@ -94,7 +110,7 @@ public:
 	) override {
 		GPUMatrixDynamic<T> dL_dnetwork_input;
 		if (m_encoding->n_params() > 0 || dL_dinput) {
-			dL_dnetwork_input = {m_encoding->padded_output_width(), input.n(), stream, m_encoding->preferred_output_layout()};
+			dL_dnetwork_input = {m_encoding->padded_output_width(), input.n(), stream, network_input_layout()};
 		}
 
 		const auto& forward = dynamic_cast<const ForwardContext&>(ctx);
@@ -256,6 +272,7 @@ public:
 private:
 	std::shared_ptr<Encoding<T>> m_encoding;
 	std::shared_ptr<Network<T>> m_network;
+	bool m_fp16_hipblaslt = false;
 
 	struct ForwardContext : public Context {
 		GPUMatrixDynamic<T> network_input;
