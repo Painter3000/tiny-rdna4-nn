@@ -59,6 +59,7 @@
 #if defined(__HIP_PLATFORM_AMD__) && !defined(TCNN_NO_NETWORKS)
 #include <tiny-cuda-nn/networks/hipblaslt_mlp.h>
 #include <tiny-cuda-nn/networks/hipblaslt_mlp_fp16.h>
+#include <tiny-cuda-nn/network_with_input_encoding.h>
 #endif
 
 #define STRINGIFY(x) #x
@@ -465,6 +466,18 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
 	// TCNN_RDNA4_P3B1B1_FP16_FORWARD_HARDENING_001: controlled failure-path tests.
 	m.def("_hipblaslt_fp16_test_null_parameter_guard", &tcnn::hipblaslt_fp16_test_null_parameter_guard);
 	m.def("_hipblaslt_fp16_test_invalid_descriptor_counter", &tcnn::hipblaslt_fp16_test_invalid_descriptor_counter);
+	// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: test-only proof that the
+	// unqualified shared-object constructor rejects the FP16 composition.
+	m.def("_phase3b1e1_test_alternative_constructor_rejected", []() {
+		auto encoding = std::shared_ptr<tcnn::Encoding<__half>>{tcnn::create_encoding<__half>(3, {{"otype", "Identity"}}, 16)};
+		auto network = std::make_shared<tcnn::HipBLASLtMLPFP16>(16, 16, 16, 1, tcnn::Activation::ReLU, tcnn::Activation::None);
+		try {
+			tcnn::NetworkWithInputEncoding<__half> combined{encoding, network};
+		} catch (const std::runtime_error& error) {
+			return std::string{error.what()}.find("unqualified") != std::string::npos;
+		}
+		return false;
+	});
 	#endif
 #endif
 

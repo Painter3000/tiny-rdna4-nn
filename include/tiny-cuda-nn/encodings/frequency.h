@@ -63,7 +63,9 @@ __global__ void frequency_encoding(
 	const uint32_t j = encoded_index - i * fan_out;
 
 	if (j >= fan_out_encoded) {
-		data_out(j, i) = 1;
+		// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: padding must be inert at
+		// the Encoding -> FP16 MLP boundary.
+		data_out(j, i) = 0;
 	} else {
 		const uint32_t encoded_input_feature_i = j / (n_frequencies * 2);
 		const uint32_t log2_frequency = (j / 2) % n_frequencies;

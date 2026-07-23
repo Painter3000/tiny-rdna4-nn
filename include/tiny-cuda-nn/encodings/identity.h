@@ -61,7 +61,9 @@ __global__ void identity(
 	const uint32_t j = encoded_index - i * fan_out;
 
 	if (j >= num_to_encode) {
-		data_out(j, i) = 1;
+		// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: padding must be inert at
+		// the Encoding -> FP16 MLP boundary.
+		data_out(j, i) = 0;
 	} else {
 		data_out(j, i) = data_in(j, i) * scale + offset;
 	}

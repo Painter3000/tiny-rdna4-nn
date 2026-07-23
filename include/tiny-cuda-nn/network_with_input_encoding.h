@@ -43,17 +43,33 @@ namespace tcnn {
 template <typename T>
 class NetworkWithInputEncoding : public Network<float, T> {
 public:
-	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, std::shared_ptr<Network<T>> network) : m_encoding{encoding}, m_network{network} {}
+	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, std::shared_ptr<Network<T>> network) : m_encoding{encoding}, m_network{network} {
+		m_logical_encoding_width = encoding->output_width();
+		// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: the shared-object constructor
+		// has no authoritative backend configuration with which to apply the
+		// qualified FP16 padding/layout contract. Reject that combination rather
+		// than silently connecting an encoding-preferred layout.
+		const auto params = network->hyperparams();
+		if (equals_case_insensitive(params.value("otype", ""), "HipBLASLtMLPFP16")) {
+			throw std::runtime_error{"NetworkWithInputEncoding(shared encoding, shared HipBLASLtMLPFP16) is unqualified; use the JSON/factory constructor."};
+		}
+	}
 
 	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, uint32_t n_output_dims, const json& network) : m_encoding{encoding} {
 		m_fp16_hipblaslt = equals_case_insensitive(network.value("otype", ""), "HipBLASLtMLPFP16");
+		m_logical_encoding_width = encoding->output_width();
 		const uint32_t alignment = minimum_alignment(network);
 		encoding->set_alignment(alignment);
 		if (m_fp16_hipblaslt) {
 			// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: the qualified
 			// hipBLASLt shapes are discrete, not merely multiples of sixteen.
-			const uint32_t logical = encoding->output_width();
-			const uint32_t supported = logical <= 16 ? 16 : logical <= 32 ? 32 : logical <= 64 ? 64 : logical <= 128 ? 128 : logical;
+			const uint32_t logical = m_logical_encoding_width;
+			if (logical > 128) {
+				// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: no silent unsupported
+				// width, backend switch, or FP32 fallback is permitted.
+				throw std::runtime_error{fmt::format("HipBLASLtMLPFP16 encoding width {} exceeds the supported maximum 128.", logical)};
+			}
+			const uint32_t supported = logical <= 16 ? 16 : logical <= 32 ? 32 : logical <= 64 ? 64 : 128;
 			encoding->set_padded_output_width(supported);
 		}
 
@@ -64,7 +80,7 @@ public:
 	}
 
 	NetworkWithInputEncoding(uint32_t n_dims_to_encode, uint32_t n_output_dims, const json& encoding, const json& network)
-	: NetworkWithInputEncoding{std::shared_ptr<Encoding<T>>{create_encoding<T>(n_dims_to_encode, encoding)}, n_output_dims, network} { }
+	: NetworkWithInputEncoding{std::shared_ptr<Encoding<T>>{create_encoding<T>(n_dims_to_encode, encoding, 1)}, n_output_dims, network} { }
 
 	virtual ~NetworkWithInputEncoding() { }
 
@@ -177,7 +193,7 @@ public:
 
 	std::pair<const T*, MatrixLayout> forward_activations(const Context& ctx, uint32_t layer) const override {
 		const auto& forward = dynamic_cast<const ForwardContext&>(ctx);
-		return layer == 0 ? std::make_pair<const T*, MatrixLayout>(forward.network_input.data(), m_encoding->preferred_output_layout()) : m_network->forward_activations(*forward.network_ctx, layer - 1);
+		return layer == 0 ? std::make_pair<const T*, MatrixLayout>(forward.network_input.data(), network_input_layout()) : m_network->forward_activations(*forward.network_ctx, layer - 1);
 	}
 
 	uint32_t input_width() const override {
@@ -193,6 +209,16 @@ public:
 			{"otype", "NetworkWithInputEncoding"},
 			{"encoding", m_encoding->hyperparams()},
 			{"network", m_network->hyperparams()},
+			// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: authoritative flat
+			// parameter ranges and integration widths for audit/checkpoint replay.
+			{"logical_encoding_width", m_logical_encoding_width},
+			{"padded_encoding_width", m_encoding->padded_output_width()},
+			{"network_parameter_offset", 0},
+			{"network_parameter_count", m_network->n_params()},
+			{"encoding_parameter_offset", m_network->n_params()},
+			{"encoding_parameter_count", m_encoding->n_params()},
+			{"total_parameter_count", n_params()},
+			{"network_input_layout", network_input_layout() == MatrixLayout::ColumnMajor ? "ColumnMajor" : "RowMajor"},
 		};
 	}
 
@@ -273,6 +299,7 @@ private:
 	std::shared_ptr<Encoding<T>> m_encoding;
 	std::shared_ptr<Network<T>> m_network;
 	bool m_fp16_hipblaslt = false;
+	uint32_t m_logical_encoding_width = 0;
 
 	struct ForwardContext : public Context {
 		GPUMatrixDynamic<T> network_input;
