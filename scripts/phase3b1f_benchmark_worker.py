@@ -25,6 +25,24 @@ TCNN_IMPORT_END_NS = time.perf_counter_ns()
 MARKER = "TCNN_RDNA4_P3B1F_FP16_PERFORMANCE_001"
 
 
+def measurement_config(manifest, paired_rounds_override=None):
+    """Read the active F0b measurement schema fail-closed."""
+    paired_rounds_per_process = int(manifest["paired_rounds_per_process"])
+    orders = manifest["measurement"]["orders"]
+    blocks_per_round = int(manifest["measurement"]["blocks_per_round"])
+    if paired_rounds_per_process <= 0 or blocks_per_round <= 0 or not orders:
+        raise ValueError("Invalid active F0b measurement configuration")
+    return {
+        "paired_rounds_per_process": (
+            int(paired_rounds_override)
+            if paired_rounds_override is not None else paired_rounds_per_process
+        ),
+        "manifest_paired_rounds_per_process": paired_rounds_per_process,
+        "orders": orders,
+        "blocks_per_round": blocks_per_round,
+    }
+
+
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -456,7 +474,7 @@ def main():
     parser.add_argument("--manifest-sha256")
     parser.add_argument("--case-id")
     parser.add_argument("--process-index", type=int)
-    parser.add_argument("--output", type=pathlib.Path, required=True)
+    parser.add_argument("--output", type=pathlib.Path)
     parser.add_argument("--execute-primary", action="store_true")
     parser.add_argument("--cold-stage")
     parser.add_argument("--paired-rounds", type=int)
@@ -464,7 +482,18 @@ def main():
     parser.add_argument("--harness-smoke", action="store_true")
     parser.add_argument("--harness-contract", type=pathlib.Path)
     parser.add_argument("--harness-contract-sha256")
+    parser.add_argument("--print-measurement-config", action="store_true")
     args = parser.parse_args()
+    if args.print_measurement_config:
+        if not args.manifest or not args.manifest_sha256:
+            raise SystemExit("Reader check requires manifest and SHA256")
+        if sha256(args.manifest) != args.manifest_sha256:
+            raise SystemExit("Manifest SHA256 mismatch")
+        manifest = json.loads(args.manifest.read_text())
+        print(json.dumps(measurement_config(manifest), sort_keys=True))
+        return 0
+    if args.output is None:
+        raise SystemExit("--output is required")
     if args.cold_stage:
         return cold_start(args.cold_stage, args.output)
     if not args.execute_primary:
@@ -534,9 +563,10 @@ def main():
         "reference_optimizer_state_sha256": optimizer_state_sha256(reference_optimizer) if reference_optimizer else "not_applicable",
         "adam_state_initialized_outside_timing": bool(candidate_optimizer and reference_optimizer) if "adam" in case["operation"] else "not_applicable",
     }
-    orders = manifest["measurement"]["orders"]
+    active_measurement = measurement_config(manifest, args.paired_rounds)
+    orders = active_measurement["orders"]
     blocks = []
-    paired_rounds = args.paired_rounds or manifest["measurement"]["paired_rounds_per_process"]
+    paired_rounds = active_measurement["paired_rounds_per_process"]
     for round_index in range(paired_rounds):
         selected = orders[(case["seed"] + args.process_index + round_index) % len(orders)]
         full_order = selected + list(reversed(selected))
