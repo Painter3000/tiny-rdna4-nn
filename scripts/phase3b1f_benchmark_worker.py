@@ -47,7 +47,9 @@ def metric(actual, reference):
 
 def fp16_counters():
     names = ("cache_hits", "cache_misses", "cache_size", "heuristic_queries", "execution_handle_count",
-             "execution_handle_creations", "descriptor_count", "scratch_bytes_live", "scratch_bytes_peak")
+             "execution_handle_creations", "descriptor_count", "scratch_bytes_live", "scratch_bytes_peak",
+             "dx_launches", "dw_launches", "dz_launches", "db_launches",
+             "bias_launches", "relu_bias_launches")
     return {name: int(getattr(_C, "_hipblaslt_fp16_" + name)()) for name in names}
 
 
@@ -142,79 +144,143 @@ def make_pair(case, harness_contract):
     if case["family"] == "network_only":
         candidate = tcnn.Network(case["input_dims"], case["output_dims"], network_config(True, case), seed=case["seed"])
         reference = tcnn.Network(case["input_dims"], case["output_dims"], network_config(False, case), seed=case["seed"])
-        reference.params.data.copy_(candidate.params.detach().float())
         dims = case["input_dims"]
     elif operation.startswith("encoding_"):
         candidate = tcnn.Encoding(case["dims"], case["config"], dtype=torch.float16, seed=case["seed"])
         reference = tcnn.Encoding(case["dims"], case["config"], dtype=torch.float32, seed=case["seed"])
-        if candidate.params.numel():
-            reference.params.data.copy_(candidate.params.detach().float())
         dims = case["dims"]
     else:
         topology = harness_contract["network_with_encoding_topology"]
         candidate = tcnn.NetworkWithInputEncoding(case["dims"], topology["output_dims"], case["config"], encoding_network_config(True, topology), seed=case["seed"])
         reference = tcnn.NetworkWithInputEncoding(case["dims"], topology["output_dims"], case["config"], encoding_network_config(False, topology), seed=case["seed"])
-        reference.params.data.copy_(candidate.params.detach().float())
         dims = case["dims"]
+    # Materialize a single logical FP32 master in the candidate's native
+    # parameter order. Both backends are then initialized from this one set.
+    fp32_master = candidate.params.detach().float().clone()
+    expected_fp16 = fp32_master.to(torch.float16)
+    reference.params.data.copy_(fp32_master.to(reference.params.dtype))
+    candidate.params.data.copy_(expected_fp16.to(candidate.params.dtype))
     generator = torch.Generator(device="cuda").manual_seed(case["seed"] + 1)
     x = torch.randn(case["batch"], dims, device="cuda", generator=generator) * 0.2
     target = torch.randn(case["batch"], candidate.n_output_dims, device="cuda", generator=generator) * 0.1
     upstream = torch.randn(case["batch"], candidate.n_output_dims, device="cuda", generator=generator) * 0.1
-    return candidate, reference, x, target, upstream
+    return candidate, reference, x, target, upstream, fp32_master, expected_fp16
 
 
-def pair_identity(candidate, reference, x, target, upstream):
+def parameter_ranges(model, case):
+    count = model.params.numel()
+    hyperparams = model.native_tcnn_module.hyperparams()
+    otype = hyperparams.get("otype")
+    if case["family"] == "network_only":
+        network_offset, network_count = 0, count
+        encoding_offset, encoding_count = count, 0
+        model_kind = "network_only"
+    elif case["operation"].startswith("encoding_"):
+        network_offset, network_count = 0, 0
+        encoding_offset, encoding_count = 0, count
+        model_kind = "encoding_only"
+    else:
+        network_offset = int(hyperparams["network_parameter_offset"])
+        network_count = int(hyperparams["network_parameter_count"])
+        encoding_offset = int(hyperparams["encoding_parameter_offset"])
+        encoding_count = int(hyperparams["encoding_parameter_count"])
+        model_kind = "network_with_input_encoding"
+    return {
+        "model_kind": model_kind, "native_otype": otype,
+        "network_parameter_offset": network_offset,
+        "network_parameter_count": network_count,
+        "encoding_parameter_offset": encoding_offset,
+        "encoding_parameter_count": encoding_count,
+        "network_parameter_range": [network_offset, network_offset + network_count],
+        "encoding_parameter_range": [encoding_offset, encoding_offset + encoding_count],
+    }
+
+
+def pair_identity(candidate, reference, x, target, upstream, fp32_master, expected_fp16, case):
+    ranges = parameter_ranges(candidate, case)
+    actual_candidate_fp16 = candidate.params.detach().to(torch.float16)
     result = {
         "input_sha256": tensor_sha256(x),
         "target_sha256": tensor_sha256(target),
         "upstream_sha256": tensor_sha256(upstream),
-        "fp32_master_parameter_sha256": tensor_sha256(reference.params.float()),
-        "candidate_master_parameter_sha256": tensor_sha256(candidate.params.float()),
-        "candidate_native_parameter_dtype": str(candidate.dtype),
-        "reference_parameter_dtype": str(reference.dtype),
+        "fp32_master_parameter_sha256": tensor_sha256(fp32_master),
+        "expected_fp16_quantization_sha256": tensor_sha256(expected_fp16),
+        "actual_candidate_parameter_sha256": tensor_sha256(candidate.params),
+        "actual_candidate_fp16_quantization_sha256": tensor_sha256(actual_candidate_fp16),
+        "reference_parameter_sha256": tensor_sha256(reference.params),
+        "fp16_quantization_matches": tensor_sha256(expected_fp16) == tensor_sha256(actual_candidate_fp16),
+        "candidate_exposed_parameter_dtype": str(candidate.params.dtype),
+        "candidate_native_compute_dtype": str(candidate.dtype),
+        "reference_parameter_dtype": str(reference.params.dtype),
         "candidate_parameter_count": candidate.params.numel(),
         "reference_parameter_count": reference.params.numel(),
+        **ranges,
     }
     hyperparams = candidate.native_tcnn_module.hyperparams()
     if hyperparams.get("otype") == "NetworkWithInputEncoding":
         result.update({
-            "network_parameter_range": [
-                hyperparams["network_parameter_offset"],
-                hyperparams["network_parameter_offset"] + hyperparams["network_parameter_count"],
-            ],
-            "encoding_parameter_range": [
-                hyperparams["encoding_parameter_offset"],
-                hyperparams["encoding_parameter_offset"] + hyperparams["encoding_parameter_count"],
-            ],
             "logical_encoding_width": hyperparams["logical_encoding_width"],
             "padded_encoding_width": hyperparams["padded_encoding_width"],
         })
     return result
 
 
-def correctness(candidate, reference, x, upstream):
+def correctness(candidate, reference, x, upstream, case):
     xc = x.detach().clone().requires_grad_()
     xr = x.detach().clone().requires_grad_()
     candidate.zero_grad(set_to_none=True)
     reference.zero_grad(set_to_none=True)
     yc = candidate(xc)
     yr = reference(xr)
-    yc.backward(upstream)
-    yr.backward(upstream.float())
+    oracle_upstream = upstream / max(1, upstream.shape[0])
+    yc.backward(oracle_upstream)
+    yr.backward(oracle_upstream.float())
     candidate_grad = candidate.params.grad if candidate.params.grad is not None else torch.empty(0, device="cuda")
     reference_grad = reference.params.grad if reference.params.grad is not None else torch.empty(0, device="cuda")
-    hyperparams = candidate.native_tcnn_module.hyperparams()
-    network_end = hyperparams.get("network_parameter_count", candidate_grad.numel())
+    ranges = parameter_ranges(candidate, case)
+    no, nc = ranges["network_parameter_offset"], ranges["network_parameter_count"]
+    eo, ec = ranges["encoding_parameter_offset"], ranges["encoding_parameter_count"]
     return {
         "output": metric(yc, yr),
         "dinput": metric(xc.grad, xr.grad),
-        "network_gradient": metric(candidate_grad[:network_end], reference_grad[:network_end]),
-        "encoding_gradient": metric(candidate_grad[network_end:], reference_grad[network_end:]),
+        "network_gradient": metric(candidate_grad[no:no + nc], reference_grad[no:no + nc]),
+        "encoding_gradient": metric(candidate_grad[eo:eo + ec], reference_grad[eo:eo + ec]),
+        "parameter_ranges": ranges,
     }
 
 
-def operation_callable(model, operation, x, target, upstream):
-    optimizer = torch.optim.Adam([model.params], lr=1e-3) if "adam" in operation else None
+def optimizer_state_sha256(optimizer):
+    digest = hashlib.sha256()
+    for parameter in optimizer.param_groups[0]["params"]:
+        state = optimizer.state.get(parameter, {})
+        for key in sorted(state):
+            digest.update(key.encode())
+            value = state[key]
+            if torch.is_tensor(value):
+                digest.update(value.detach().contiguous().cpu().numpy().tobytes())
+            else:
+                digest.update(str(value).encode())
+    return digest.hexdigest()
+
+
+def initialized_adam(model):
+    optimizer = torch.optim.Adam([model.params], lr=1e-3)
+    initial = model.params.detach().clone()
+    optimizer.zero_grad(set_to_none=True)
+    model.params.grad = torch.zeros_like(model.params)
+    optimizer.step()  # allocate real Adam state outside the timing region
+    model.params.data.copy_(initial)
+    for state in optimizer.state.values():
+        for key, value in state.items():
+            if torch.is_tensor(value):
+                value.zero_()
+            elif key == "step":
+                state[key] = 0
+    optimizer.zero_grad(set_to_none=True)
+    return optimizer
+
+
+def operation_callable(model, operation, x, target, upstream, optimizer=None):
     if operation in ("forward", "encoding_forward", "network_with_encoding_forward"):
         return lambda: model(x)
     if operation in ("forward_backward", "encoding_forward_backward", "network_with_encoding_forward_backward"):
@@ -247,13 +313,31 @@ def event_time(stream, callback, iterations):
 
 
 def calibrate(stream, callbacks, calibration):
-    iterations = calibration["min_iterations"]
-    while True:
-        elapsed = max(event_time(stream, callback, iterations)["event_ms_per_iteration"] * iterations for callback in callbacks)
-        if elapsed >= calibration["target_min_ms"] or iterations >= calibration["max_iterations"]:
-            return iterations
-        scale = max(2, math.ceil(calibration["target_min_ms"] / max(elapsed, 0.001)))
-        iterations = min(calibration["max_iterations"], iterations * scale)
+    probe_iterations = calibration["min_iterations"]
+    per_iteration = [event_time(stream, callback, probe_iterations)["event_ms_per_iteration"] for callback in callbacks]
+    minimum_needed = max(
+        calibration["min_iterations"],
+        math.ceil(calibration["target_min_ms"] / max(min(per_iteration), 1e-9)),
+    )
+    maximum_allowed = min(
+        calibration["max_iterations"],
+        math.floor(calibration["target_max_ms_approx"] / max(per_iteration)),
+    )
+    feasible = minimum_needed <= maximum_allowed
+    iterations = min(maximum_allowed, minimum_needed) if feasible else max(
+        calibration["min_iterations"], min(calibration["max_iterations"], maximum_allowed)
+    )
+    predicted = [value * iterations for value in per_iteration]
+    return {
+        "iterations": iterations,
+        "probe_iterations": probe_iterations,
+        "backend_ms_per_iteration": {"FP16": per_iteration[0], "FP32": per_iteration[1]},
+        "predicted_block_ms": {"FP16": predicted[0], "FP32": predicted[1]},
+        "both_reach_target_min": min(predicted) >= calibration["target_min_ms"],
+        "slower_within_target_max": max(predicted) <= calibration["target_max_ms_approx"],
+        "feasible": feasible,
+        "reason": None if feasible else "no_shared_iteration_count_satisfies_250_to_1500_ms",
+    }
 
 
 def warmup(stream, callbacks, case, rules):
@@ -339,16 +423,20 @@ def main():
     parser.add_argument("--fixed-iterations", type=int)
     parser.add_argument("--harness-smoke", action="store_true")
     parser.add_argument("--harness-contract", type=pathlib.Path)
+    parser.add_argument("--harness-contract-sha256")
     args = parser.parse_args()
     if args.cold_stage:
         return cold_start(args.cold_stage, args.output)
     if not args.execute_primary:
         raise SystemExit("Primary measurement requires explicit --execute-primary")
-    if not all((args.manifest, args.manifest_sha256, args.case_id, args.process_index is not None, args.harness_contract)):
+    if not all((args.manifest, args.manifest_sha256, args.case_id, args.process_index is not None,
+                args.harness_contract, args.harness_contract_sha256)):
         raise SystemExit("Primary measurement arguments are incomplete")
     if sha256(args.manifest) != args.manifest_sha256:
         raise SystemExit("Manifest SHA256 mismatch")
     manifest = json.loads(args.manifest.read_text())
+    if sha256(args.harness_contract) != args.harness_contract_sha256:
+        raise SystemExit("Harness contract SHA256 mismatch")
     harness_contract = json.loads(args.harness_contract.read_text())
     if harness_contract.get("manifest_sha256") != args.manifest_sha256:
         raise SystemExit("Harness contract is not bound to the manifest")
@@ -367,28 +455,47 @@ def main():
     before_system = telemetry()
     process_baseline = {"FP16": fp16_counters(), "FP32": fp32_counters()}
     torch.cuda.reset_peak_memory_stats()
-    disposable_candidate, disposable_reference, disposable_x, disposable_target, disposable_upstream = make_pair(case, harness_contract)
+    disposable_candidate, disposable_reference, disposable_x, disposable_target, disposable_upstream, _, _ = make_pair(case, harness_contract)
+    disposable_candidate_optimizer = initialized_adam(disposable_candidate) if "adam" in case["operation"] else None
+    disposable_reference_optimizer = initialized_adam(disposable_reference) if "adam" in case["operation"] else None
     disposable_callbacks = (
-        operation_callable(disposable_candidate, case["operation"], disposable_x, disposable_target, disposable_upstream),
-        operation_callable(disposable_reference, case["operation"], disposable_x, disposable_target, disposable_upstream),
+        operation_callable(disposable_candidate, case["operation"], disposable_x, disposable_target, disposable_upstream, disposable_candidate_optimizer),
+        operation_callable(disposable_reference, case["operation"], disposable_x, disposable_target, disposable_upstream, disposable_reference_optimizer),
     )
     stream = torch.cuda.Stream()
     warm = warmup(stream, disposable_callbacks, case, manifest["warmup"])
-    iterations = args.fixed_iterations or calibrate(stream, disposable_callbacks, manifest["calibration"])
+    calibration = (
+        {
+            "iterations": args.fixed_iterations, "probe_iterations": 0,
+            "backend_ms_per_iteration": None, "predicted_block_ms": None,
+            "both_reach_target_min": "not_applicable_smoke",
+            "slower_within_target_max": "not_applicable_smoke",
+            "feasible": True, "reason": "fixed_harness_smoke_iterations",
+        }
+        if args.fixed_iterations else calibrate(stream, disposable_callbacks, manifest["calibration"])
+    )
+    iterations = calibration["iterations"]
     del disposable_candidate, disposable_reference, disposable_callbacks
     gc.collect()
-    candidate, reference, x, target, upstream = make_pair(case, harness_contract)
-    identity = pair_identity(candidate, reference, x, target, upstream)
-    numerical = correctness(candidate, reference, x, upstream)
+    candidate, reference, x, target, upstream, fp32_master, expected_fp16 = make_pair(case, harness_contract)
+    identity = pair_identity(candidate, reference, x, target, upstream, fp32_master, expected_fp16, case)
+    numerical = correctness(candidate, reference, x, upstream, case)
+    candidate.params.data.copy_(expected_fp16.to(candidate.params.dtype))
+    reference.params.data.copy_(fp32_master.to(reference.params.dtype))
+    candidate_optimizer = initialized_adam(candidate) if "adam" in case["operation"] else None
+    reference_optimizer = initialized_adam(reference) if "adam" in case["operation"] else None
     callbacks = (
-        operation_callable(candidate, case["operation"], x, target, upstream),
-        operation_callable(reference, case["operation"], x, target, upstream),
+        operation_callable(candidate, case["operation"], x, target, upstream, candidate_optimizer),
+        operation_callable(reference, case["operation"], x, target, upstream, reference_optimizer),
     )
     pre_timing_state = {
         "candidate_parameter_sha256": tensor_sha256(candidate.params),
         "reference_parameter_sha256": tensor_sha256(reference.params),
-        "candidate_optimizer_step": 0,
-        "reference_optimizer_step": 0,
+        "candidate_optimizer_step": int(candidate_optimizer.state[candidate.params]["step"].item()) if candidate_optimizer else "not_applicable",
+        "reference_optimizer_step": int(reference_optimizer.state[reference.params]["step"].item()) if reference_optimizer else "not_applicable",
+        "candidate_optimizer_state_sha256": optimizer_state_sha256(candidate_optimizer) if candidate_optimizer else "not_applicable",
+        "reference_optimizer_state_sha256": optimizer_state_sha256(reference_optimizer) if reference_optimizer else "not_applicable",
+        "adam_state_initialized_outside_timing": bool(candidate_optimizer and reference_optimizer) if "adam" in case["operation"] else "not_applicable",
     }
     orders = manifest["measurement"]["orders"]
     blocks = []
@@ -427,7 +534,13 @@ def main():
         if sample.get("temperature_c") is not None and not (manifest["system_stability"]["temperature_c_min"] <= sample["temperature_c"] <= manifest["system_stability"]["temperature_c_max"]): invalid_reasons.append(f"temperature_outside_window_{label}")
         if sample.get("foreign_gpu_processes") not in (None, 0): invalid_reasons.append(f"foreign_gpu_process_{label}")
     backend_kind = "encoding_kernel" if not gemm_expected else "hipblaslt_gemm"
+    operation_has_backward = "backward" in case["operation"] or "adam" in case["operation"]
+    launch_delta = {
+        name: after_counters["FP16"][name] - process_baseline["FP16"][name]
+        for name in ("dx_launches", "dw_launches", "dz_launches", "db_launches")
+    }
     backend_evidence = {
+        "schema_version": 1,
         "backend_kind": backend_kind,
         "gemm_expected": gemm_expected,
         "algorithm_ids": "not_applicable" if not gemm_expected else [],
@@ -441,6 +554,17 @@ def main():
             if gemm_expected else "encoding_scratch_observation"
         ),
         "fallback": "not_applicable" if not gemm_expected else None,
+        "fallback_measurement_source": "not_applicable" if not gemm_expected else "orchestrator_hipblaslt_log",
+        "gemm_call_count": 0 if not gemm_expected else None,
+        "gemm_calls_per_iteration": 0 if not gemm_expected else None,
+        "custom_relu_backward_biasgrad": (
+            "not_applicable" if not gemm_expected or not operation_has_backward
+            else all(launch_delta[name] > 0 for name in launch_delta)
+        ),
+        "custom_relu_backward_biasgrad_source": (
+            "not_applicable" if not gemm_expected or not operation_has_backward
+            else "native_dx_dw_dz_db_launch_counter_deltas"
+        ),
         "counter_delta": {
             backend: {key: after_counters[backend][key] - process_baseline[backend][key] for key in after_counters[backend]}
             for backend in ("FP16", "FP32")
@@ -454,15 +578,14 @@ def main():
             "trans_b": "to_be_parsed_from_log" if gemm_expected else "not_applicable",
             "matrix_layouts": candidate_hyperparams.get("network_input_layout", "encoding_native"),
             "epilogues": "to_be_parsed_from_log" if gemm_expected else "not_applicable",
-            "custom_relu_backward_biasgrad": after_counters["FP16"].get("cache_hits", 0) >= 0 if gemm_expected else "not_applicable",
-            "gemm_calls_per_iteration": None if gemm_expected else 0,
         },
     }
     result = {
-        "marker": MARKER, "manifest_sha256": args.manifest_sha256, "case": case,
+        "marker": MARKER, "manifest_sha256": args.manifest_sha256,
+        "harness_contract_sha256": args.harness_contract_sha256, "case": case,
         "process_index": args.process_index, "module_path": str(module_path),
         "before_system": before_system, "after_system": after_system, "process_counter_baseline": process_baseline, "warmup": warm,
-        "calibrated_iterations": iterations, "timing_blocks": blocks,
+        "calibrated_iterations": iterations, "calibration": calibration, "timing_blocks": blocks,
         "paired_rounds": paired_rounds, "harness_smoke": args.harness_smoke,
         "pair_identity": identity, "pre_timing_state": pre_timing_state, "numerical": numerical,
         "process_medians_ms": {"FP16": statistics.median(fp16_times), "FP32": statistics.median(fp32_times)},

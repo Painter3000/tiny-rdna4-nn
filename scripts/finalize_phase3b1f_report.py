@@ -12,6 +12,7 @@ import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "phase3b1_reports/phase3b1f_protocol_manifest.json"
+CONTRACT = ROOT / "phase3b1_reports/phase3b1f0a_harness_contract.json"
 OUT = ROOT / "phase3b1_reports/phase3b1f_fp16_performance.json"
 MD = ROOT / "phase3b1_reports/PHASE3B1F_FP16_PERFORMANCE.md"
 BASE = "3265070edbef35969f569972eaf0731d9dab2fe3"
@@ -84,6 +85,70 @@ def correctness_snapshot_valid(snapshot, manifest):
     )
 
 
+def backend_evidence_valid(evidence, operation):
+    if not isinstance(evidence, dict) or evidence.get("schema_version") != 1:
+        return False
+    common = (
+        isinstance(evidence.get("workspace_bytes"), int)
+        and evidence["workspace_bytes"] >= 0
+        and isinstance(evidence.get("gemm_call_count"), int)
+        and isinstance(evidence.get("gemm_calls_per_iteration"), (int, float))
+        and math.isfinite(evidence["gemm_calls_per_iteration"])
+    )
+    if evidence.get("gemm_expected") is False:
+        return common and all((
+            evidence.get("backend_kind") == "encoding_kernel",
+            evidence.get("algorithm_ids") == "not_applicable",
+            evidence.get("workspace_measurement_source") == "encoding_scratch_observation",
+            evidence.get("fallback") == "not_applicable",
+            evidence.get("fallback_measurement_source") == "not_applicable",
+            evidence.get("gemm_call_count") == 0,
+            evidence.get("gemm_calls_per_iteration") == 0,
+            evidence.get("custom_relu_backward_biasgrad") == "not_applicable",
+        ))
+    backward = "backward" in operation or "adam" in operation
+    custom_valid = (
+        evidence.get("custom_relu_backward_biasgrad") is True
+        and evidence.get("custom_relu_backward_biasgrad_source") == "native_dx_dw_dz_db_launch_counter_deltas"
+        if backward else evidence.get("custom_relu_backward_biasgrad") == "not_applicable"
+    )
+    return common and all((
+        evidence.get("backend_kind") == "hipblaslt_gemm",
+        evidence.get("gemm_expected") is True,
+        isinstance(evidence.get("algorithm_ids"), list),
+        bool(evidence.get("algorithm_ids")),
+        all(isinstance(value, int) for value in evidence.get("algorithm_ids", [])),
+        evidence.get("workspace_measurement_source") == "native_selected_plan_workspace_size",
+        evidence.get("fallback") is False,
+        evidence.get("fallback_measurement_source") == "orchestrator_hipblaslt_log",
+        evidence.get("gemm_call_count") > 0,
+        evidence.get("gemm_calls_per_iteration") > 0,
+        custom_valid,
+    ))
+
+
+def numerical_valid(numerical, manifest):
+    if not isinstance(numerical, dict):
+        return False
+    limits = manifest["numerical_gates"]["frozen_absolute"]
+    mapping = {
+        "output": limits["network_output"], "dinput": limits["dinput"],
+        "network_gradient": limits["network_gradient"],
+        "encoding_gradient": limits["encoding_gradient"],
+    }
+    return all(
+        isinstance(numerical.get(name), dict)
+        and isinstance(numerical[name].get("max_abs"), (int, float))
+        and math.isfinite(numerical[name]["max_abs"])
+        and numerical[name]["max_abs"] <= limit
+        and isinstance(numerical[name].get("normalized_l2"), (int, float))
+        and math.isfinite(numerical[name]["normalized_l2"])
+        and numerical[name].get("nan_count") == 0
+        and numerical[name].get("inf_count") == 0
+        for name, limit in mapping.items()
+    )
+
+
 def derive(data, manifest):
     cases = {case["id"]: case for case in manifest["cases"] if case["supported"]}
     grouped = {case_id: [] for case_id in cases}
@@ -107,7 +172,6 @@ def derive(data, manifest):
             calculated = statistics.median(fp32) / statistics.median(fp16) if fp16 and fp32 else None
             speedup_equal = calculated is not None and abs(calculated - item.get("process_speedup", -1)) <= 1e-12
             process_index = item.get("process_index")
-            gemm_expected = item.get("backend_evidence", {}).get("gemm_expected")
             warmup = item.get("warmup", {})
             operation = cases[case_id]["operation"]
             warmup_minimum = manifest["warmup"]["training_iterations_min"] if "adam" in operation else manifest["warmup"]["default_iterations_min"]
@@ -118,11 +182,13 @@ def derive(data, manifest):
             rounds = {}
             for block in blocks:
                 rounds.setdefault(block.get("round"), []).append(block)
+            expected_rounds = manifest["measurement"]["paired_rounds_per_process"]
+            expected_blocks = manifest["measurement"]["blocks_per_process"]
             timing_integrity = (
-                len(blocks) == 40
-                and sum(block.get("backend") == "FP16" for block in blocks) == 20
-                and sum(block.get("backend") == "FP32" for block in blocks) == 20
-                and set(rounds) == set(range(5))
+                len(blocks) == expected_blocks
+                and sum(block.get("backend") == "FP16" for block in blocks) == expected_blocks // 2
+                and sum(block.get("backend") == "FP32" for block in blocks) == expected_blocks // 2
+                and set(rounds) == set(range(expected_rounds))
                 and all(
                     [block.get("position") for block in sorted(round_blocks, key=lambda x: x.get("position", -1))] == list(range(8))
                     and [block.get("backend") for block in sorted(round_blocks, key=lambda x: x.get("position", -1))] in allowed_orders
@@ -130,12 +196,15 @@ def derive(data, manifest):
                 )
                 and len(iterations) == 1
                 and iterations
-                and 50 <= next(iter(iterations)) <= 5000
+                and (
+                    data.get("harness_smoke") is True
+                    or manifest["calibration"]["min_iterations"] <= next(iter(iterations)) <= manifest["calibration"]["max_iterations"]
+                )
                 and item.get("calibrated_iterations") == next(iter(iterations))
                 and all(
                     block.get("event_ms_per_iteration", 0) > 0
                     and block.get("wall_ns_per_iteration", 0) > 0
-                    and block.get("source") == "steady_state"
+                    and block.get("source") == ("harness_smoke" if data.get("harness_smoke") is True else "steady_state")
                     and block.get("profiler_active") is False
                     for block in blocks
                 )
@@ -162,15 +231,33 @@ def derive(data, manifest):
                 and sample.get("clock_mhz") is not None
                 for sample in telemetry
             )
-            numerical = item.get("numerical", {})
-            numerical_valid = (
-                all(name in numerical for name in ("output", "dinput", "network_gradient", "encoding_gradient"))
-                and all(value.get("nan_count") == 0 and value.get("inf_count") == 0 for value in numerical.values())
+            identity = item.get("pair_identity", {})
+            ranges_valid = (
+                identity.get("fp16_quantization_matches") is True
+                and identity.get("expected_fp16_quantization_sha256") == identity.get("actual_candidate_fp16_quantization_sha256")
+                and identity.get("candidate_parameter_count") == identity.get("reference_parameter_count")
+                and identity.get("network_parameter_count", 0) + identity.get("encoding_parameter_count", 0)
+                    == identity.get("candidate_parameter_count")
             )
-            algorithm_valid = (
-                item.get("backend_evidence", {}).get("algorithm_ids") == "not_applicable"
-                if gemm_expected is False
-                else gemm_expected is True and bool(item.get("backend_evidence", {}).get("algorithm_ids"))
+            adam = "adam" in operation
+            pre = item.get("pre_timing_state", {})
+            adam_valid = (
+                pre.get("candidate_optimizer_step") == 0
+                and pre.get("reference_optimizer_step") == 0
+                and pre.get("adam_state_initialized_outside_timing") is True
+                and isinstance(pre.get("candidate_optimizer_state_sha256"), str)
+                and isinstance(pre.get("reference_optimizer_state_sha256"), str)
+            ) if adam else True
+            calibration = item.get("calibration", {})
+            calibration_valid = (
+                calibration.get("feasible") is True
+                and (
+                    data.get("harness_smoke") is True
+                    or (
+                        calibration.get("both_reach_target_min") is True
+                        and calibration.get("slower_within_target_max") is True
+                    )
+                )
             )
             integrity.append({
                 "process_index": item.get("process_index"),
@@ -184,13 +271,12 @@ def derive(data, manifest):
                 "case_config_exact": item.get("case") == cases[case_id],
                 "warmup_derived": warmup_derived,
                 "telemetry_valid": telemetry_valid,
-                "numerical_valid": numerical_valid,
-                "fallback_clear": all(
-                    evidence.get("fallback") is False
-                    for name, evidence in item.get("backend_evidence", {}).items()
-                    if name in ("FP16", "FP32")
-                ),
-                "algorithm_contract": algorithm_valid,
+                "numerical_valid": numerical_valid(item.get("numerical"), manifest),
+                "backend_evidence_valid": backend_evidence_valid(item.get("backend_evidence"), operation),
+                "pair_identity_valid": ranges_valid,
+                "adam_state_valid": adam_valid,
+                "calibration_valid": calibration_valid,
+                "contract_hash_valid": item.get("harness_contract_sha256") == sha256(CONTRACT),
                 "scratch_zero": all(
                     counters.get("scratch_bytes_live") == 0
                     for counters in item.get("resources_after_release", {}).values()
@@ -237,9 +323,14 @@ def evaluate(data, manifest):
         "marker": data.get("marker") == MARKER,
         "complete": data.get("complete") is True,
         "manifest_hash": data.get("manifest_sha256") == sha256(MANIFEST),
+        "contract_hash": data.get("harness_contract_sha256") == sha256(CONTRACT),
         "case_set": set(results) == {case["id"] for case in manifest["cases"] if case["supported"]} and not unknown,
         "process_total": len(data.get("primary_processes", [])) == expected["fresh_primary_processes"],
-        "seven_processes": all(item["process_count"] == 7 and item["process_indices"] == list(range(7)) for item in results.values()),
+        "seven_processes": all(
+            item["process_count"] == manifest["measurement"]["fresh_processes_per_primary_case"]
+            and item["process_indices"] == list(range(manifest["measurement"]["fresh_processes_per_primary_case"]))
+            for item in results.values()
+        ),
         "invalid_limit": all(len(item["invalid_processes"]) <= 1 for item in results.values()),
         "process_integrity": all(
             all(all(value for key, value in row.items() if key != "process_index") for row in item["integrity"])
@@ -329,7 +420,13 @@ def mutation_names():
         "numerical_maximum_increased", "scratch_live_nonzero", "descriptor_count_growth",
         "algorithm_id_missing", "manifest_hash_changed", "fewer_than_seven_processes",
         "two_invalid_processes", "network_geomean_below_gate", "encoding_geomean_below_gate",
-        "historical_report_changed",
+        "historical_report_changed", "process_index_zero_invalid", "process_index_duplicate",
+        "encoding_only_algorithm_required", "gemm_algorithm_missing", "fallback_hardcoded",
+        "telemetry_missing", "foreign_load_high", "stale_process_file", "process_timeout",
+        "correctness_pre_missing", "correctness_post_missing", "numerical_data_missing",
+        "manifest_and_raw_hash_changed", "production_file_changed", "historical_file_changed",
+        "adam_candidate_pretrained", "workspace_contract_missing", "wrong_nwe_topology",
+        "invalid_block_order", "profiling_incomplete",
     )
 
 
@@ -356,11 +453,11 @@ def run_manipulations(data, manifest):
     run("bootstrap_interval_manipulated", lambda x: x.update({"reported_bootstrap": [99, 100]}))
     run("warmup_as_steady_state", lambda x: x["primary_processes"][0]["timing_blocks"][0].update({"source": "warmup"}))
     run("candidate_reference_iterations_differ", lambda x: x["primary_processes"][0]["timing_blocks"][0].update({"iterations": 1}))
-    run("fallback_enabled", lambda x: x["primary_processes"][0]["backend_evidence"]["FP16"].update({"fallback": True}))
-    run("numerical_maximum_increased", lambda x: x["correctness_post"].update({"passed": False, "numerical_maximum_increased": True}))
+    run("fallback_enabled", lambda x: x["primary_processes"][0]["backend_evidence"].update({"fallback": True}))
+    run("numerical_maximum_increased", lambda x: x["primary_processes"][0]["numerical"]["output"].update({"max_abs": 9.0}))
     run("scratch_live_nonzero", lambda x: x["primary_processes"][0]["resources_after_release"]["FP16"].update({"scratch_bytes_live": 1}))
-    run("descriptor_count_growth", lambda x: x["primary_processes"][0]["resources_after_release"]["FP16"].update({"descriptor_count": x["primary_processes"][0]["resources_after_release"]["FP16"]["descriptor_count"] + 1}))
-    run("algorithm_id_missing", lambda x: x["primary_processes"][0]["backend_evidence"]["algorithm_log"].update({"algorithm_id_present": False}))
+    run("descriptor_count_growth", lambda x: x["primary_processes"][0]["descriptor_release_contract"].update({"stable_after_warmup": False}))
+    run("algorithm_id_missing", lambda x: x["primary_processes"][0]["backend_evidence"].update({"algorithm_ids": []}))
     run("manifest_hash_changed", lambda x: x.update({"manifest_sha256": "0" * 64}))
     run("fewer_than_seven_processes", lambda x: x["primary_processes"].pop(0))
     def two_invalid(x):
@@ -381,6 +478,30 @@ def run_manipulations(data, manifest):
     run("network_geomean_below_gate", lambda x: slow_family(x, "network_only", "forward"))
     run("encoding_geomean_below_gate", lambda x: slow_family(x, "encoding", "network_with_encoding_forward_backward"))
     run("historical_report_changed", lambda x: x["correctness_post"].update({"passed": False, "historical_reports_byte_equal": False}))
+    run("process_index_zero_invalid", lambda x: x["primary_processes"][0].update({"process_index": 7}))
+    run("process_index_duplicate", lambda x: x["primary_processes"][1].update({"process_index": x["primary_processes"][0]["process_index"]}))
+    encoding_only = next(i for i, item in enumerate(data["primary_processes"]) if item["backend_evidence"]["gemm_expected"] is False)
+    gemm = next(i for i, item in enumerate(data["primary_processes"]) if item["backend_evidence"]["gemm_expected"] is True)
+    run("encoding_only_algorithm_required", lambda x: x["primary_processes"][encoding_only]["backend_evidence"].update({"gemm_expected": True}))
+    run("gemm_algorithm_missing", lambda x: x["primary_processes"][gemm]["backend_evidence"].update({"algorithm_ids": []}))
+    run("fallback_hardcoded", lambda x: x["primary_processes"][gemm]["backend_evidence"].update({"fallback_measurement_source": "constant"}))
+    run("telemetry_missing", lambda x: x["primary_processes"][0]["before_system"].update({"telemetry_available": False}))
+    run("foreign_load_high", lambda x: x["primary_processes"][0]["after_system"].update({"foreign_gpu_processes": 1}))
+    run("stale_process_file", lambda x: x["primary_processes"][0].update({"valid": False, "output_fresh": False}))
+    run("process_timeout", lambda x: x["primary_processes"][0].update({"valid": False, "returncode": 124}))
+    run("correctness_pre_missing", lambda x: x.update({"correctness_pre": None}))
+    run("correctness_post_missing", lambda x: x.update({"correctness_post": None}))
+    run("numerical_data_missing", lambda x: x["primary_processes"][0]["numerical"].pop("dinput"))
+    run("manifest_and_raw_hash_changed", lambda x: x["correctness_pre"].update({"raw_sha256": "0" * 64}))
+    run("production_file_changed", lambda x: x["correctness_post"].update({"production_files": ["src/change.cu"]}))
+    run("historical_file_changed", lambda x: x["correctness_pre"].update({"historical_reports_byte_equal": False}))
+    adam_index = next(i for i, item in enumerate(data["primary_processes"]) if "adam" in item["case"]["operation"])
+    run("adam_candidate_pretrained", lambda x: x["primary_processes"][adam_index]["pre_timing_state"].update({"candidate_optimizer_step": 1}))
+    run("workspace_contract_missing", lambda x: x["primary_processes"][gemm]["backend_evidence"].pop("workspace_bytes"))
+    nwe_index = next(i for i, item in enumerate(data["primary_processes"]) if item["pair_identity"].get("model_kind") == "network_with_input_encoding")
+    run("wrong_nwe_topology", lambda x: x["primary_processes"][nwe_index]["pair_identity"].update({"network_parameter_count": 1}))
+    run("invalid_block_order", lambda x: x["primary_processes"][0]["timing_blocks"][0].update({"position": 99}))
+    run("profiling_incomplete", lambda x: x["profiling"].update({"status": "incomplete"}))
     return tests
 
 

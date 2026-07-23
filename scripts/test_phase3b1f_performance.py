@@ -105,6 +105,7 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
     command = [
         sys.executable, str(WORKER), "--manifest", str(MANIFEST),
         "--manifest-sha256", manifest_sha, "--harness-contract", str(CONTRACT),
+        "--harness-contract-sha256", sha256(CONTRACT),
         "--case-id", case["id"], "--process-index", str(process_index),
         "--output", str(output), "--execute-primary", *extra_args,
     ]
@@ -130,7 +131,9 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
         if evidence["workspace_bytes"] is not None:
             record["backend_evidence"]["workspace_bytes"] = evidence["workspace_bytes"]
         record["backend_evidence"]["fallback"] = evidence["fallback_observed"]
+        record["backend_evidence"]["fallback_measurement_source"] = "orchestrator_hipblaslt_log"
         timed_iterations = sum(block.get("iterations", 0) for block in record.get("timing_blocks", []))
+        record["backend_evidence"]["gemm_call_count"] = evidence["record_count"]
         record["backend_evidence"]["gemm_calls_per_iteration"] = evidence["record_count"] / timed_iterations if timed_iterations else None
         record["backend_evidence"]["candidate"].update({
             "trans_a": evidence["trans_a"], "trans_b": evidence["trans_b"],
@@ -142,12 +145,14 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
     elif gemm_expected is False:
         record["backend_evidence"].update({
             "backend_kind": "encoding_kernel", "algorithm_ids": "not_applicable",
-            "workspace_bytes": 0, "fallback": "not_applicable", "gemm_calls_per_iteration": 0,
+            "workspace_bytes": 0, "fallback": "not_applicable",
+            "gemm_call_count": 0, "gemm_calls_per_iteration": 0,
         })
     record["backend_evidence"]["algorithm_log"] = evidence
     identity_ok = (
         record.get("marker") == MARKER
         and record.get("manifest_sha256") == manifest_sha
+        and record.get("harness_contract_sha256") == sha256(CONTRACT)
         and record.get("case", {}).get("id") == case["id"]
         and record.get("process_index") == process_index
     )
@@ -167,6 +172,43 @@ def launch_worker(case, process_index, output, manifest_sha, contract, extra_arg
     output.write_text(json.dumps(record, indent=2) + "\n")
     record["process_file_sha256"] = sha256(output)
     return record
+
+
+def load_resumable_record(output, index_entry, case, process_index, manifest_sha, contract_sha, run_root):
+    if output.resolve().parent != run_root.resolve() or index_entry.get("path") != str(output):
+        raise RuntimeError(f"Unsafe resume path for {output}")
+    if not output.is_file() or sha256(output) != index_entry.get("sha256"):
+        raise RuntimeError(f"Resume SHA256 mismatch for {output}")
+    record = json.loads(output.read_text())
+    if not all((
+        record.get("marker") == MARKER,
+        record.get("case", {}).get("id") == case["id"],
+        record.get("process_index") == process_index,
+        record.get("manifest_sha256") == manifest_sha,
+        record.get("harness_contract_sha256") == contract_sha,
+    )):
+        raise RuntimeError(f"Resume identity mismatch for {output}")
+    record["resumed_after_full_validation"] = True
+    return record
+
+
+def run_correctness_process(script, output, timeout):
+    output.unlink(missing_ok=True)
+    started = time.time_ns()
+    command = [sys.executable, str(script), "--correctness-snapshot", str(output)]
+    try:
+        completed = subprocess.run(
+            command, cwd=ROOT, env=os.environ.copy(), capture_output=True, text=True, timeout=timeout,
+        )
+        timed_out = False
+    except subprocess.TimeoutExpired as error:
+        completed = subprocess.CompletedProcess(command, 124, error.stdout or "", error.stderr or "")
+        timed_out = True
+    fresh = output.exists() and output.stat().st_mtime_ns >= started
+    result = json.loads(output.read_text()) if fresh else {"passed": False, "error": "missing_or_stale_correctness"}
+    result.update({"returncode": completed.returncode, "output_fresh": fresh, "timed_out": timed_out})
+    result["passed"] = result.get("passed") is True and completed.returncode == 0 and fresh and not timed_out
+    return result
 
 
 def protocol_audit():
@@ -248,35 +290,51 @@ def protocol_audit():
     }
 
 
-def full_measurement(manifest_sha):
+def full_measurement(manifest_sha, resume_run_dir=None):
     manifest = json.loads(MANIFEST.read_text())
     if sha256(MANIFEST) != manifest_sha:
         raise SystemExit("Manifest changed before F1")
     contract = json.loads(CONTRACT.read_text())
-    run_id = time.strftime("%Y%m%dT%H%M%S") + f"_{os.getpid()}"
-    root = pathlib.Path(contract["process_execution"]["root"]) / run_id
-    root.mkdir(parents=True, exist_ok=False)
+    contract_sha = sha256(CONTRACT)
+    if resume_run_dir:
+        root = resume_run_dir.resolve()
+        if root.parent != pathlib.Path(contract["process_execution"]["root"]).resolve() or not root.is_dir():
+            raise SystemExit("Unsafe or missing resume run directory")
+        run_id = root.name
+    else:
+        run_id = time.strftime("%Y%m%dT%H%M%S") + f"_{os.getpid()}"
+        root = pathlib.Path(contract["process_execution"]["root"]) / run_id
+        root.mkdir(parents=True, exist_ok=False)
     index_path = root / contract["process_execution"]["append_only_index"]
     state_path = root / contract["process_execution"]["state_file"]
+    resume_entries = {}
+    if resume_run_dir and index_path.exists():
+        for line in index_path.read_text().splitlines():
+            entry = json.loads(line)
+            key = (entry["case_id"], entry["process_index"])
+            if key in resume_entries:
+                raise SystemExit(f"Duplicate resume index entry: {key}")
+            resume_entries[key] = entry
     snapshot_script = ROOT / "scripts/test_phase3b1f0a_harness.py"
     pre_path = root / "correctness_pre.json"
-    pre_completed = subprocess.run(
-        [sys.executable, str(snapshot_script), "--correctness-snapshot", str(pre_path)],
-        cwd=ROOT, env=os.environ.copy(), capture_output=True, text=True,
-        timeout=contract["process_execution"]["timeout_seconds"],
+    correctness_pre = run_correctness_process(
+        snapshot_script, pre_path, contract["process_execution"]["timeout_seconds"]
     )
-    correctness_pre = json.loads(pre_path.read_text()) if pre_path.exists() else {"passed": False, "error": "missing correctness_pre"}
-    correctness_pre["returncode"] = pre_completed.returncode
     records = []
     for case in manifest["cases"]:
         for process_index in range(manifest["measurement"]["fresh_processes_per_primary_case"]):
             output = root / f"{case['id'].replace('.', '_')}.p{process_index}.json"
-            record = launch_worker(case, process_index, output, manifest_sha, contract)
+            key = (case["id"], process_index)
+            record = (
+                load_resumable_record(output, resume_entries[key], case, process_index, manifest_sha, contract_sha, root)
+                if key in resume_entries else launch_worker(case, process_index, output, manifest_sha, contract)
+            )
             records.append(record)
-            with index_path.open("a") as index:
-                index.write(json.dumps({"case_id": case["id"], "process_index": process_index,
-                                        "path": str(output), "sha256": record["process_file_sha256"],
-                                        "valid": record["valid"]}) + "\n")
+            if key not in resume_entries:
+                with index_path.open("a") as index:
+                    index.write(json.dumps({"case_id": case["id"], "process_index": process_index,
+                                            "path": str(output), "sha256": record["process_file_sha256"],
+                                            "valid": record["valid"]}) + "\n")
             state_path.write_text(json.dumps({"run_id": run_id, "completed": len(records),
                                               "expected": manifest["expected_counts"]["fresh_primary_processes"]}, indent=2) + "\n")
     cold = []
@@ -288,21 +346,35 @@ def full_measurement(manifest_sha):
     for stage in manifest["cold_start"]["stages"]:
         for process_index in range(manifest["cold_start"]["fresh_processes_per_case"]):
             output = root / f"cold_{stage}.p{process_index}.json"
+            output.unlink(missing_ok=True)
             command = [sys.executable, str(WORKER), "--cold-stage", stage, "--output", str(output)]
-            completed = subprocess.run(command, cwd="/tmp", env=env, capture_output=True, text=True)
-            item = json.loads(output.read_text()) if output.exists() else {"requested_stage": stage}
+            started = time.time_ns()
+            try:
+                completed = subprocess.run(
+                    command, cwd="/tmp", env=env, capture_output=True, text=True,
+                    timeout=contract["process_execution"]["timeout_seconds"],
+                )
+                timed_out = False
+            except subprocess.TimeoutExpired as error:
+                completed = subprocess.CompletedProcess(command, 124, error.stdout or "", error.stderr or "")
+                timed_out = True
+            fresh = output.exists() and output.stat().st_mtime_ns >= started
+            item = json.loads(output.read_text()) if fresh else {"requested_stage": stage}
             item.update({"process_index": process_index, "returncode": completed.returncode,
                          "stdout": completed.stdout, "stderr": completed.stderr,
-                         "valid": completed.returncode == 0})
+                         "output_fresh": fresh, "timed_out": timed_out,
+                         "valid": completed.returncode == 0 and fresh and not timed_out})
             cold.append(item)
     profiles = []
     profiler = next((tool for tool in manifest["profiling"]["tool_preference"] if shutil.which(tool)), None)
     for profile_index, case_id in enumerate(manifest["profiling"]["cases"]):
         output = root / f"profile_{profile_index}.json"
         profile_dir = root / f"profile_{profile_index}_rocprof"
+        output.unlink(missing_ok=True)
         worker_command = [
             sys.executable, str(WORKER), "--manifest", str(MANIFEST),
-            "--manifest-sha256", manifest_sha, "--harness-contract", str(CONTRACT), "--case-id", case_id,
+            "--manifest-sha256", manifest_sha, "--harness-contract", str(CONTRACT),
+            "--harness-contract-sha256", contract_sha, "--case-id", case_id,
             "--process-index", "99", "--output", str(output), "--execute-primary",
         ]
         if profiler == "rocprofv3":
@@ -312,18 +384,27 @@ def full_measurement(manifest_sha):
         else:
             profiles.append({"case_id": case_id, "valid": False, "reason": "profiler_unavailable"})
             continue
-        completed = subprocess.run(
-            command, cwd="/tmp", env=env, capture_output=True, text=True,
-            timeout=contract["process_execution"]["timeout_seconds"],
-        )
+        started = time.time_ns()
+        try:
+            completed = subprocess.run(
+                command, cwd="/tmp", env=env, capture_output=True, text=True,
+                timeout=contract["process_execution"]["timeout_seconds"],
+            )
+            timed_out = False
+        except subprocess.TimeoutExpired as error:
+            completed = subprocess.CompletedProcess(command, 124, error.stdout or "", error.stderr or "")
+            timed_out = True
+        fresh = output.exists() and output.stat().st_mtime_ns >= started
         parsed = parse_profile_directory(profile_dir)
         profiles.append({"case_id": case_id, "tool": profiler, "returncode": completed.returncode,
                          "output_directory": str(profile_dir), "worker_output": str(output),
                          "stdout": completed.stdout, "stderr": completed.stderr,
-                         "parsed": parsed,
-                         "valid": completed.returncode == 0 and parsed["parsed_kernel_rows"] > 0})
+                         "parsed": parsed, "output_fresh": fresh, "timed_out": timed_out,
+                         "valid": completed.returncode == 0 and fresh and not timed_out
+                                  and parsed["parsed_kernel_rows"] > 0})
     raw = {
-        "marker": MARKER, "manifest_sha256": manifest_sha, "complete": True,
+        "marker": MARKER, "manifest_sha256": manifest_sha,
+        "harness_contract_sha256": contract_sha, "complete": True,
         "primary_processes": records,
         "expected_primary_cases": manifest["expected_counts"]["supported_primary_cases"],
         "expected_primary_processes": manifest["expected_counts"]["fresh_primary_processes"],
@@ -333,13 +414,9 @@ def full_measurement(manifest_sha):
         "correctness_post": None,
     }
     post_path = root / "correctness_post.json"
-    post_completed = subprocess.run(
-        [sys.executable, str(snapshot_script), "--correctness-snapshot", str(post_path)],
-        cwd=ROOT, env=os.environ.copy(), capture_output=True, text=True,
-        timeout=contract["process_execution"]["timeout_seconds"],
+    raw["correctness_post"] = run_correctness_process(
+        snapshot_script, post_path, contract["process_execution"]["timeout_seconds"]
     )
-    raw["correctness_post"] = json.loads(post_path.read_text()) if post_path.exists() else {"passed": False, "error": "missing correctness_post"}
-    raw["correctness_post"]["returncode"] = post_completed.returncode
     RAW.write_text(json.dumps(raw, indent=2) + "\n")
     return subprocess.run([sys.executable, str(FINALIZER), "--raw", str(RAW)], cwd=ROOT).returncode
 
@@ -350,6 +427,7 @@ def main():
     parser.add_argument("--output", type=pathlib.Path)
     parser.add_argument("--execute-full", action="store_true")
     parser.add_argument("--confirm")
+    parser.add_argument("--resume-run-dir", type=pathlib.Path)
     args = parser.parse_args()
     audit = protocol_audit()
     if args.output:
@@ -361,7 +439,7 @@ def main():
         raise SystemExit("F0 protocol is not ready")
     if args.confirm != CONFIRMATION:
         raise SystemExit(f"Full F1 requires --confirm {CONFIRMATION}")
-    return full_measurement(audit["manifest_sha256"])
+    return full_measurement(audit["manifest_sha256"], args.resume_run_dir)
 
 
 if __name__ == "__main__":
