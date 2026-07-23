@@ -40,3 +40,64 @@ Correctness Pre/Post bestanden. Der lokale Vertragstest bestätigte:
 - mehr als ein Ersatzversuch: blockiert.
 
 Die Smoke-Zeiten sind keine F1-Ergebnisse und fließen nicht in die spätere 72-Prozess-Auswertung ein. Rohpfade, Prüfsummen und Einzelgates stehen in `phase3b1f0b_smoke.json`.
+
+## Verbindliches F1-Startkommando
+
+Das folgende Kommando ist vom Repository-Root
+`/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2`
+auszuführen. Es wählt ausschließlich das aktive F0b-Manifest; der Orchestrator
+verifiziert dessen SHA256 vor dem ersten Messprozess.
+
+Zuerst ist dieser nicht messende Dry-Run auszuführen:
+
+```bash
+cd /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2
+/home/oem/therock_test/venv/bin/python \
+  scripts/test_phase3b1f_performance.py \
+  --protocol-audit \
+  --output /tmp/phase3b1f1_preflight.json
+```
+
+Erst nach `PHASE3B1F0B_PROTOCOL_READY` wird das vollständige Messkommando
+bestätigt:
+
+```bash
+cd /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2
+mkdir -p /tmp/phase3b1f1_logs
+set -o pipefail
+PYTHONPATH="/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/lib.linux-x86_64-cpython-312:/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch:/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts" \
+  /home/oem/therock_test/venv/bin/python \
+  scripts/test_phase3b1f_performance.py \
+  --execute-full \
+  --confirm RUN_PHASE3B1F1_FULL_MEASUREMENT \
+  2>&1 | tee "/tmp/phase3b1f1_logs/phase3b1f1_full_$(date +%Y%m%dT%H%M%S).log"
+```
+
+Vor der Bestätigung muss der nicht messende Protokoll-Audit
+`PHASE3B1F0B_PROTOCOL_READY` sowie 24 Primärfälle, 3 Fresh Processes je Fall,
+72 Primärprozesse, 5 gepaarte Runden und den aktiven Manifest-SHA256
+`98bd1a1c2d447bfeaba419b9f8cd705320ff0a92f31ef1dca71adf4a3d272708`
+ausweisen.
+
+### Safe Resume
+
+Nach einem unterbrochenen Lauf ist `PHASE3B1F1_RUN_DIR` auf das bereits
+existierende, konkrete Run-Verzeichnis unter
+`/tmp/phase3b1f1_reproducible_runs` zu setzen. Der Orchestrator übernimmt
+vorhandene Prozessdateien nur nach seiner eingebauten Pfad-, SHA256-, Marker-,
+Fall-ID-, Prozessindex- und Manifestprüfung.
+
+```bash
+cd /home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2
+PHASE3B1F1_RUN_DIR=/tmp/phase3b1f1_reproducible_runs/EXISTIERENDE_RUN_ID
+test -d "$PHASE3B1F1_RUN_DIR"
+mkdir -p /tmp/phase3b1f1_logs
+set -o pipefail
+PYTHONPATH="/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch/build/lib.linux-x86_64-cpython-312:/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/bindings/torch:/home/oem/therock_test/tcnn_rdna4_port/workspace/repos/tiny-cuda-nn-phase2/scripts" \
+  /home/oem/therock_test/venv/bin/python \
+  scripts/test_phase3b1f_performance.py \
+  --execute-full \
+  --confirm RUN_PHASE3B1F1_FULL_MEASUREMENT \
+  --resume-run-dir "$PHASE3B1F1_RUN_DIR" \
+  2>&1 | tee "/tmp/phase3b1f1_logs/phase3b1f1_resume_$(date +%Y%m%dT%H%M%S).log"
+```
