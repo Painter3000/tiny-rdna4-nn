@@ -102,13 +102,16 @@ print("PyTorch:", torch.__version__)
 print("ROCm/HIP:", torch.version.hip)
 print("GPU:", torch.cuda.get_device_name(0))
 print("Architecture:", torch.cuda.get_device_properties(0).gcnArchName)
+print("tinycudann:", tcnn.__file__)
 print("tinycudann import: PASS")
 PY
 ```
 
 ## Python API
 
-The Python package and import name remain `tinycudann` for compatibility with existing tiny-cuda-nn applications:
+The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names are not silently redirected to different AMD implementations.
+
+The conservative FP32 reference path uses `PortableMLP`:
 
 ```python
 import torch
@@ -119,34 +122,62 @@ model = tcnn.NetworkWithInputEncoding(
     n_output_dims=4,
     encoding_config={
         "otype": "HashGrid",
-        "n_levels": 16,
+        "n_levels": 4,
         "n_features_per_level": 2,
-        "log2_hashmap_size": 19,
-        "base_resolution": 16,
+        "log2_hashmap_size": 12,
+        "base_resolution": 4,
         "per_level_scale": 2.0,
     },
     network_config={
-        "otype": "FullyFusedMLP",
+        "otype": "PortableMLP",
         "activation": "ReLU",
         "output_activation": "None",
-        "n_neurons": 64,
-        "n_hidden_layers": 2,
+        "n_neurons": 16,
+        "n_hidden_layers": 1,
     },
 ).to("cuda")
 
-x = torch.rand(16384, 3, device="cuda")
+x = torch.rand(256, 3, device="cuda", requires_grad=True)
 y = model(x)
 loss = y.float().square().mean()
 loss.backward()
+torch.cuda.synchronize()
+
+assert torch.isfinite(y).all()
+assert x.grad is not None and torch.isfinite(x.grad).all()
+print("PortableMLP forward/backward: PASS")
 ```
 
-The public configuration name `FullyFusedMLP` is retained for API compatibility. On the validated ROCm path, execution uses the RDNA4 portable/hipBLASLt backends implemented by this port rather than NVIDIA CUTLASS kernels.
+### ROCm network backend selection
+
+| `otype` | Precision | Purpose |
+|---|---|---|
+| `PortableMLP` | FP32 | Portable correctness-first reference backend |
+| `HipBLASLtMLP` | FP32 | Explicit accelerated AMD hipBLASLt backend |
+| `HipBLASLtMLPFP16` | FP16 | Explicit qualified FP16 backend; requires `"precision": "Fp16"` |
+| `FullyFusedMLP` | — | Not implemented on the qualified ROCm path and intentionally rejected rather than aliased |
+
+Example FP16 network configuration:
+
+```python
+network_config = {
+    "otype": "HipBLASLtMLPFP16",
+    "precision": "Fp16",
+    "activation": "ReLU",
+    "output_activation": "None",
+    "n_neurons": 64,
+    "n_hidden_layers": 2,
+}
+```
+
+`MLP`, `CutlassMLP`, `FullyFusedMLP`, and `MegakernelMLP` are NVIDIA-oriented backend names in upstream tiny-cuda-nn. They are deliberately not treated as aliases for the AMD backends because the implementations, precision rules, parameter behavior, and performance characteristics are not identical.
 
 ## Important differences from upstream tiny-cuda-nn
 
 - The validated build target is HIP/ROCm, not CUDA.
 - `gfx1201` is the currently qualified architecture.
-- NVIDIA CUTLASS, CUDA RTC, and CUDA JIT fusion are not part of the qualified ROCm path.
+- NVIDIA CUTLASS, FullyFusedMLP, CUDA RTC, and CUDA JIT fusion are not part of the qualified ROCm path.
+- AMD network backends must be selected explicitly as `PortableMLP`, `HipBLASLtMLP`, or `HipBLASLtMLPFP16`.
 - The root native CMake project still contains substantial upstream CUDA-oriented infrastructure. The supported and validated RDNA4 build path is currently `bindings/torch`.
 - File paths, C++ namespaces, header paths such as `tiny-cuda-nn/...`, and the Python import `tinycudann` remain unchanged where practical to preserve source compatibility.
 
@@ -168,11 +199,13 @@ The public PASS tag points to commit:
 2d7087c03442c66f8c4b6491c111e32cae2b40de
 ```
 
+A separate fresh-clone user validation of `main` confirmed recursive cloning, wheel build and installation in an independent Python environment, package and native-module provenance, ROCm library resolution, `HashGrid + PortableMLP` forward/backward, Adam steps, checkpoint reload, a second fresh Python process, and clean main/submodule worktrees. That validation also found and motivated the backend-name documentation correction in this README.
+
 ## Current limitations
 
 - Only `gfx1201` on the Radeon AI PRO R9700 has completed the full qualification described here.
 - Native C++ example and benchmark workflows from the upstream CUDA README are not yet the recommended RDNA4 entry point.
-- CUDA RTC/JIT fusion is disabled on the ROCm path.
+- `FullyFusedMLP`, CUDA RTC, and CUDA JIT fusion are unavailable on the ROCm path.
 - This port does not claim support for NVIDIA GPUs or for all ROCm-capable AMD architectures.
 - Performance depends strongly on batch size and topology; latency-bound workloads may see little or no FP16 speedup.
 
