@@ -38,7 +38,7 @@ The qualification work was performed with:
 
 ## Performance on Radeon AI PRO R9700
 
-Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP32 rounds per process. All 24 cases and all 72 primary processes were valid, with correctness passing before and after measurement.
+Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP32 rounds per process. All 24 cases and all 72 primary processes were valid, with correctness passing before and after me[...]
 
 | Category | FP16 speedup vs. FP32 | FP32/FP16 peak-memory factor |
 |---|---:|---:|
@@ -48,7 +48,7 @@ Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP3
 | Network only | **2.1658x** | 1.0310x |
 | Network with input encoding | **2.4003x** | 1.0527x |
 
-Small batch cases are largely launch-overhead dominated and are neutral in aggregate. Throughput-oriented cases show the main FP16 benefit. Results vary by topology; the full report includes every case, confidence interval, MAD, and memory peak.
+Small batch cases are largely launch-overhead dominated and are neutral in aggregate. Throughput-oriented cases show the main FP16 benefit. Results vary by topology; the full report includes every cas[...]
 
 See:
 
@@ -107,9 +107,23 @@ print("tinycudann import: PASS")
 PY
 ```
 
+### Expected GPU memory arena warning
+
+On the validated Radeon AI PRO R9700 / ROCm 7.2 setup, model creation may print:
+
+```text
+tiny-cuda-nn warning: GPUMemoryArena: GPU 0 does not support virtual memory.
+Falling back to regular allocations, which will be larger and can cause
+occasional stutter.
+```
+
+This warning is **expected on the currently qualified setup** and does not indicate a failed installation. The tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path on this platform, so the runtime falls back to regular GPU allocations. Forward, backward, training, and checkpoint operations remain fully functional, but memory usage may be higher and allocation-related pauses may occasionally occur.
+
+Treat the warning as non-fatal when the verification test completes successfully and all functional PASS markers appear.
+
 ## Python API
 
-The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names are not silently redirected to different AMD implementations.
+The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names [...]
 
 The conservative FP32 reference path uses `PortableMLP`:
 
@@ -170,7 +184,7 @@ network_config = {
 }
 ```
 
-`MLP`, `CutlassMLP`, `FullyFusedMLP`, and `MegakernelMLP` are NVIDIA-oriented backend names in upstream tiny-cuda-nn. They are deliberately not treated as aliases for the AMD backends because the implementations, precision rules, parameter behavior, and performance characteristics are not identical.
+`MLP`, `CutlassMLP`, `FullyFusedMLP`, and `MegakernelMLP` are NVIDIA-oriented backend names in upstream tiny-cuda-nn. They are deliberately not treated as aliases for the AMD backends because the impl[...]
 
 ## Important differences from upstream tiny-cuda-nn
 
@@ -199,7 +213,7 @@ The public PASS tag points to commit:
 2d7087c03442c66f8c4b6491c111e32cae2b40de
 ```
 
-A separate fresh-clone user validation of `main` confirmed recursive cloning, wheel build and installation in an independent Python environment, package and native-module provenance, ROCm library resolution, `HashGrid + PortableMLP` forward/backward, Adam steps, checkpoint reload, a second fresh Python process, and clean main/submodule worktrees. That validation also found and motivated the backend-name documentation correction in this README.
+A separate fresh-clone user validation of `main` confirmed recursive cloning, wheel build and installation in an independent Python environment, package and native-module provenance, ROCm library reso[...]
 
 ## Current limitations
 
@@ -208,6 +222,7 @@ A separate fresh-clone user validation of `main` confirmed recursive cloning, wh
 - `FullyFusedMLP`, CUDA RTC, and CUDA JIT fusion are unavailable on the ROCm path.
 - This port does not claim support for NVIDIA GPUs or for all ROCm-capable AMD architectures.
 - Performance depends strongly on batch size and topology; latency-bound workloads may see little or no FP16 speedup.
+- The validated ROCm 7.2 setup currently uses the regular-allocation fallback because the tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path. This results in higher memory usage and occasional allocation-related stutter, but does not affect correctness or training functionality.
 
 ## Upstream project and attribution
 
