@@ -73,6 +73,43 @@ if "--no-networks" in sys.argv:
 	sys.argv.remove("--no-networks")
 	print("Building >> without << neural networks (just the input encodings)")
 
+# TCNN_RDNA4_P4A2_P1_OPT_IN_SKELETON_001: explicit default-OFF production
+# skeleton. Invalid boolean values fail before compilation.
+def _tcnn_env_flag(name, default=False):
+	value = os.environ.get(name)
+	if value is None:
+		return default
+	normalized = value.strip().lower()
+	if normalized in ["1", "true", "on", "yes"]:
+		return True
+	if normalized in ["0", "false", "off", "no"]:
+		return False
+	raise EnvironmentError(f"{name} expects 0/1, false/true, off/on, or no/yes.")
+
+enable_rocwmma_width64_mlp = _tcnn_env_flag(
+	"TCNN_ENABLE_ROCWMMA_WIDTH64_MLP",
+	False,
+)
+
+if enable_rocwmma_width64_mlp:
+	if not is_rocm:
+		raise EnvironmentError(
+			"TCNN_ENABLE_ROCWMMA_WIDTH64_MLP is available only in the ROCm build."
+		)
+	if not include_networks:
+		raise EnvironmentError(
+			"TCNN_ENABLE_ROCWMMA_WIDTH64_MLP requires neural-network sources."
+		)
+	if rocm_arch != "gfx1201":
+		raise EnvironmentError(
+			"TCNN_ENABLE_ROCWMMA_WIDTH64_MLP requires PYTORCH_ROCM_ARCH=gfx1201."
+		)
+
+print(
+	"TCNN_ENABLE_ROCWMMA_WIDTH64_MLP: "
+	+ ("ON" if enable_rocwmma_width64_mlp else "OFF")
+)
+
 if os.name == "nt":
 	def find_cl_path():
 		import glob
@@ -218,6 +255,10 @@ if include_networks:
 else:
 	base_definitions.append("-DTCNN_NO_NETWORKS")
 
+# TCNN_RDNA4_P4A2_P1_OPT_IN_SKELETON_001: source inclusion is explicit.
+if is_rocm and include_networks and enable_rocwmma_width64_mlp:
+	base_source_files.append("../../src/rocwmma_width64_mlp.cu")
+
 # RTC/JIT is deliberately excluded from the ROCm encoding-only baseline.
 rtc_dir = os.path.join(bindings_dir, "tinycudann", "rtc")
 rtc_include_dir = os.path.join(rtc_dir, "include")
@@ -262,6 +303,8 @@ def make_extension(compute_capability):
 			definitions.append("-DTCNN_PORTABLE_MLP_ONLY")
 		else:
 			definitions.append("-DTCNN_NO_NETWORKS")
+		if enable_rocwmma_width64_mlp:
+			definitions.append("-DTCNN_WITH_ROCWMMA_WIDTH64_MLP")
 		hip_flags = base_nvcc_flags + [
 			"-U__HIP_NO_HALF_OPERATORS__",
 			"-U__HIP_NO_HALF_CONVERSIONS__",

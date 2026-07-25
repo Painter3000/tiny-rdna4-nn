@@ -197,7 +197,13 @@ Module* create_network_with_input_encoding(uint32_t n_input_dims, uint32_t n_out
 	// TCNN_RDNA4_P2_FIX_007: explicit FP32 network while encodings retain FP16/FP32 API.
 	// TCNN_RDNA4_P3B1B_FP16_FORWARD_001: only the explicitly named backend
 	// selects the FP16-parameter/output module; the FP32 default is unchanged.
-	if (equals_case_insensitive(network.value("otype", "PortableMLP"), "HipBLASLtMLPFP16")) {
+	// TCNN_RDNA4_P4A2_P1_OPT_IN_SKELETON_001: the explicit rocWMMA
+	// skeleton uses the existing FP16 parameter/output module wrapper.
+	const std::string requested_otype = network.value("otype", "PortableMLP");
+	if (
+		equals_case_insensitive(requested_otype, "HipBLASLtMLPFP16") ||
+		equals_case_insensitive(requested_otype, "RocWMMAWidth64MLP")
+	) {
 		return new DifferentiableObject<__half>{new tcnn::NetworkWithInputEncoding<__half>{n_input_dims, n_output_dims, encoding, network}};
 	}
 	return new DifferentiableObject<float>{new tcnn::NetworkWithInputEncoding<float>{n_input_dims, n_output_dims, encoding, network}};
