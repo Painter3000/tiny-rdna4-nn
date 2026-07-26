@@ -1,0 +1,125 @@
+{
+  "baseline": {
+    "build_opt_in": "TCNN_ENABLE_ROCWMMA_WIDTH64_MLP=1",
+    "fresh_build": true,
+    "mapping_header_sha256": "f7e25b69d3f55c63208e18cece9034bcda54b1114e65a68895c7f8b060ffa517",
+    "production_source_sha256": "7b8736534fd94a3d8135a2573a72285dc1e75015794adeeef222e0fd8b5bd6f4",
+    "required_head_prefix": "de76469",
+    "required_head_subject": "Add Phase 4A2-P3 rocWMMA Width-64 runtime integration closure",
+    "required_p3_decision": "PHASE4A2_P3_WIDTH64_RUNTIME_INTEGRATION_LIFECYCLE_CLOSURE_PASS",
+    "target": "gfx1201"
+  },
+  "claim_boundaries": {
+    "automatic_selection": "out_of_scope",
+    "backward": "fail_closed",
+    "occupancy": "not_claimed",
+    "per_instruction_pointer_provenance": "not_proven",
+    "performance": "not_measured",
+    "production_source_change": false,
+    "training_forward": "fail_closed"
+  },
+  "code_object_audit": {
+    "block_barriers": 6,
+    "bundle_target_contains": "gfx1201",
+    "ds_bpermute_b32_instructions": 192,
+    "ds_counting_semantics": {
+      "correction_marker": "TCNN_RDNA4_P4A2_P4_PRODUCTION_DS_INVENTORY_006",
+      "ds_bpermute_b32": "cross-lane DS permutation, recorded separately and not counted as an LDS memory-load instruction",
+      "lds_loads": "ds_load_* and ds_read_*",
+      "lds_stores": "ds_store_* and ds_write_*",
+      "observed_inventory": {
+        "ds_bpermute_b32": 192,
+        "ds_load_b128": 8,
+        "ds_store_b128": 2
+      },
+      "scope": "static instructions in the exact production-kernel ISA block"
+    },
+    "group_segment_fixed_size": 2048,
+    "instruction_parser": {
+      "accepted_formats": [
+        "AMDGPU mnemonic-first with // address encoding",
+        "LLVM address-prefixed disassembly"
+      ],
+      "marker": "TCNN_RDNA4_P4A2_P4_AMDGPU_OBJDUMP_SYNTAX_005",
+      "requires_nonzero_instruction_count": true
+    },
+    "kernel_metadata_companions": {
+      "classification": "symbols with exact raw-kernel prefix plus dot suffix",
+      "count_is_toolchain_dependent": true,
+      "examples": [
+        "has_dyn_sized_stack",
+        "has_recursion",
+        "num_agpr",
+        "num_vgpr",
+        "private_seg_size"
+      ],
+      "not_additional_kernels": true
+    },
+    "lds_load_instructions": 8,
+    "lds_store_instructions": 2,
+    "mfma_or_wmma_instructions": 12,
+    "private_segment_fixed_size": 0,
+    "record_global_memory_mnemonics_without_pointer_provenance_claim": true,
+    "record_vgpr_sgpr_without_occupancy_claim": true,
+    "required_ds_mnemonics": [
+      "ds_bpermute_b32",
+      "ds_load_b128",
+      "ds_store_b128"
+    ],
+    "scratch_instruction_count": 0
+  },
+  "kernel": {
+    "expected_kernel_symbols": 1,
+    "lds_bytes": 2048,
+    "mma_calls_per_block": 48,
+    "mma_calls_per_wave": 12,
+    "source_barriers": 3,
+    "source_symbol": "rocwmma_width64_inference_kernel",
+    "threads_per_block": 128,
+    "wave_size": 32,
+    "waves_per_block": 4
+  },
+  "marker": "TCNN_RDNA4_P4A2_P4_PRODUCTION_CODE_OBJECT_AUDIT_001",
+  "phase": "4A2-P4",
+  "release_closure": {
+    "allowed_execution_contexts": [
+      {
+        "changed_file_source": "git status porcelain",
+        "head_prefix": "de76469",
+        "head_subject": "Add Phase 4A2-P3 rocWMMA Width-64 runtime integration closure",
+        "mode": "p3_bundle_precommit"
+      },
+      {
+        "changed_file_source": "git diff-tree parent..HEAD",
+        "head_subject": "Add Phase 4A2-P4 rocWMMA Width-64 production code-object audit",
+        "mode": "p4_release_commit",
+        "parent_prefix": "de76469",
+        "parent_subject": "Add Phase 4A2-P3 rocWMMA Width-64 runtime integration closure"
+      }
+    ],
+    "marker": "TCNN_RDNA4_P4A2_P4_RELEASE_REPRODUCIBILITY_007",
+    "prior_p4_equivalence": {
+      "byte_identity_fields": [
+        "fresh_build.object_sha256",
+        "fresh_build.extension_sha256",
+        "production_artifacts.code_object_sha256",
+        "production_artifacts.source_sha256",
+        "production_artifacts.mapping_header_sha256",
+        "production_artifacts.network_bridge_sha256",
+        "runtime replay 1 JSON bytes",
+        "runtime replay 2 JSON bytes"
+      ],
+      "optional_for_fresh_runner": true,
+      "required_for_release_resume": true
+    }
+  },
+  "runtime_replay": {
+    "fresh_processes": 2,
+    "probe": "probes/phase4a2_p3_runtime_integration_probe.py",
+    "repeat_launches": 64,
+    "require_byte_identical_json": true,
+    "reuse_build": "fresh_P4_build"
+  },
+  "schema_version": 1,
+  "title": "Width-64 production code-object, ISA, resource, and replay audit"
+}
