@@ -201,7 +201,7 @@ scripts/fresh_clone_user_smoke.sh --runtime-only --all-backends
 
 The smoke is a correctness and reproducibility test, not a performance benchmark.
 
-The standard smoke validates the portable and hipBLASLt backends. It does **not** cover the default-off `RocWMMAWidth64MLP` backend, which requires an explicit build switch and supports inference only. A separate validation script for that backend exists under `scripts/phase4a2_inference_validate.sh`.
+The standard smoke validates the portable and hipBLASLt backends. It does **not** cover the default-off `RocWMMAWidth64MLP` backend, which requires an explicit build switch and supports inference only.
 
 ## Phase 4A2: rocWMMA Width-64 opt-in inference backend
 
