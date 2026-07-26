@@ -215,7 +215,7 @@ The standard smoke validates the portable and hipBLASLt backends. It does **not*
 - Exact topology `64 -> 64 -> 64 -> 64` with two ReLU hidden layers (three linear layers).
 - **Inference (forward) only.** Backward and training are intentionally fail-closed.
 - Deterministic correctness validated against a **CPU FP32 reference**, plus 64 bitwise-identical launch repeats, prefix invariance, parameter hot-swap, and dual-stream model isolation.
-- Public batch sizes are internally padded to the required tile boundaries. Production inference (Phase 4A2-P2) was validated across the batch sizes `1, 16, 17, 255, 256, 257` against the CPU reference before and after loss-scaling quantization.
+- Public batch sizes are internally padded to the required tile boundaries. Production inference (Phase 4A2-P2) was validated across the batch sizes `1, 16, 17, 255, 256, 257` against the CPU reference (FP32 matmul with FP16 layer boundaries); the separate runtime-lifecycle stage (Phase 4A2-P3) exercised a 20-case batch matrix and padding boundaries from 256 to 1024.
 - The linked production kernel was bound by an ISA/code-object audit at the release commit, and the full runtime matrix was replayed twice, byte-identically, from that commit.
 
 ### Minimal usage
@@ -267,7 +267,7 @@ VGPR field:              92
 SGPR field:              74
 ```
 
-> **Claim boundary.** These are recorded resource and instruction facts, not a performance result. Register values alone do not justify an occupancy or throughput claim, and the ISA audit does not contain a performance hypothesis.
+> **Claim boundary.** These are recorded resource and instruction facts, not a performance result. Register values alone do not justify an occupancy or throughput claim, and the ISA audit does not contain a performance hypothesis. The measured fragment/register mapping used during development is a version-bound diagnostic for ROCm 7.2 / rocWMMA on `gfx1201` and is treated as `LAYOUT_STABILITY: NOT_GUARANTEED_BY_ROCWMMA_API`; the kernel relies on official rocWMMA accesses rather than hard-wiring that mapping as a constant.
 
 ## Python API
 
