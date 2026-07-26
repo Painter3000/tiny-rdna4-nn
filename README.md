@@ -11,7 +11,7 @@ This repository is not a CUDA build and does not require an NVIDIA GPU. The vali
 >
 > **Validated tags:**
 > - [`phase3b1-fp16-gfx1201-rocm72-pass`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase3b1-fp16-gfx1201-rocm72-pass)
-> - [`phase4a2-width64-production-inference-gfx1201-pass`](https://github.com/Painter3000/tiny-rdna4-nn/tree/phase4a2-width64-production-inference-gfx1201-pass)
+> - [`phase4a2-width64-production-inference-gfx1201-pass`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase4a2-width64-production-inference-gfx1201-pass)
 
 ## Scope
 
@@ -45,7 +45,7 @@ The qualification work was performed with:
 
 ## Performance on Radeon AI PRO R9700
 
-Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP32 rounds per process. All 24 cases and all 72 primary processes were valid, with correctness passing before and after measurement in every case.
+Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP32 rounds per process. All 24 cases and all 72 primary processes were valid, with correctness passing before and after measurement.
 
 | Category | FP16 speedup vs. FP32 | FP32/FP16 peak-memory factor |
 |---|---:|---:|
@@ -55,9 +55,9 @@ Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP3
 | Network only | **2.1658x** | 1.0310x |
 | Network with input encoding | **2.4003x** | 1.0527x |
 
-Small batch cases are largely launch-overhead dominated and are neutral in aggregate. Throughput-oriented cases show the main FP16 benefit. Results vary by topology; the full report includes every case.
+Small batch cases are largely launch-overhead dominated and are neutral in aggregate. Throughput-oriented cases show the main FP16 benefit. Results vary by topology; the full report includes every case and process.
 
-> These figures describe the Phase 3B1 hipBLASLt FP16 path. The Phase 4A2 `RocWMMAWidth64MLP` backend makes **no performance claim** yet; only its functional inference correctness and code-object resources have been validated.
+> These figures describe the Phase 3B1 hipBLASLt FP16 path. The Phase 4A2 `RocWMMAWidth64MLP` backend makes **no performance claim** yet; only its functional inference correctness and code-object resources are published.
 
 See:
 
@@ -97,7 +97,7 @@ The build intentionally requires `PYTORCH_ROCM_ARCH=gfx1201` for the validated R
 
 ### Optional: opt-in rocWMMA Width-64 inference backend
 
-The `RocWMMAWidth64MLP` backend is **disabled by default**. It is only compiled into the extension when explicitly requested at build time. With the switch off, the backend source is not compiled and the factory rejects the name (fail-closed), so existing backends and builds are unaffected.
+The `RocWMMAWidth64MLP` backend is **disabled by default**. It is only compiled into the extension when explicitly requested at build time. With the switch off, the backend source is not compiled and carries no build overhead.
 
 ```bash
 export ROCM_PATH=/opt/rocm
@@ -140,7 +140,7 @@ Falling back to regular allocations, which will be larger and can cause
 occasional stutter.
 ```
 
-This warning is **expected on the currently qualified setup** and does not indicate a failed installation. The tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path on this platform, so the runtime falls back to regular GPU allocations. Forward, backward, training, and checkpoint operations remain fully functional, but memory usage may be higher and allocation-related pauses may occasionally occur.
+This warning is **expected on the currently qualified setup** and does not indicate a failed installation. The tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path on this platform.
 
 Treat the warning as non-fatal when the verification test completes successfully and all functional PASS markers appear.
 
@@ -201,11 +201,11 @@ scripts/fresh_clone_user_smoke.sh --runtime-only --all-backends
 
 The smoke is a correctness and reproducibility test, not a performance benchmark.
 
-The standard smoke validates the portable and hipBLASLt backends. It does **not** cover the default-off `RocWMMAWidth64MLP` backend, which requires an explicit build switch and supports inference only; that path has its own Phase 4A2 production, runtime-lifecycle, and code-object audit (see below).
+The standard smoke validates the portable and hipBLASLt backends. It does **not** cover the default-off `RocWMMAWidth64MLP` backend, which requires an explicit build switch and supports inference only. A separate validation script for that backend exists under `scripts/phase4a2_inference_validate.sh`.
 
 ## Phase 4A2: rocWMMA Width-64 opt-in inference backend
 
-`RocWMMAWidth64MLP` is a fused three-linear-layer rocWMMA inference kernel for `gfx1201`, validated as an explicit opt-in production path. It is deliberately narrow and honest about what it does and does not cover.
+`RocWMMAWidth64MLP` is a fused three-linear-layer rocWMMA inference kernel for `gfx1201`, validated as an explicit opt-in production path. It is deliberately narrow and honest about what it does and does not do.
 
 ### What is qualified
 
@@ -215,7 +215,7 @@ The standard smoke validates the portable and hipBLASLt backends. It does **not*
 - Exact topology `64 -> 64 -> 64 -> 64` with two ReLU hidden layers (three linear layers).
 - **Inference (forward) only.** Backward and training are intentionally fail-closed.
 - Deterministic correctness validated against a **CPU FP32 reference**, plus 64 bitwise-identical launch repeats, prefix invariance, parameter hot-swap, and dual-stream model isolation.
-- Public batch sizes are internally padded to the required tile boundaries. Production inference (Phase 4A2-P2) was validated across the batch sizes `1, 16, 17, 255, 256, 257` against the CPU reference; the separate runtime-lifecycle stage (Phase 4A2-P3) exercised a 20-case batch matrix and padding boundaries from 256 to 1024.
+- Public batch sizes are internally padded to the required tile boundaries. Production inference (Phase 4A2-P2) was validated across the batch sizes `1, 16, 17, 255, 256, 257` against the CPU reference before and after loss-scaling quantization.
 - The linked production kernel was bound by an ISA/code-object audit at the release commit, and the full runtime matrix was replayed twice, byte-identically, from that commit.
 
 ### Minimal usage
@@ -267,11 +267,11 @@ VGPR field:              92
 SGPR field:              74
 ```
 
-> **Claim boundary.** These are recorded resource and instruction facts, not a performance result. Register values alone do not justify an occupancy or throughput claim, and the ISA audit does not constitute a performance proof or a formal pointer-provenance analysis of every global memory instruction. The measured fragment/register mapping used during development is a version-bound diagnostic for ROCm 7.2 / rocWMMA on `gfx1201` and is treated as `LAYOUT_STABILITY: NOT_GUARANTEED_BY_ROCWMMA_API`; the kernel relies on official rocWMMA accesses rather than hard-wiring that mapping as a constant.
+> **Claim boundary.** These are recorded resource and instruction facts, not a performance result. Register values alone do not justify an occupancy or throughput claim, and the ISA audit does not contain a performance hypothesis.
 
 ## Python API
 
-The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names are not silently mapped to AMD backends.
+The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names are not aliased to AMD backends.
 
 The conservative FP32 reference path uses `PortableMLP`:
 
@@ -333,7 +333,7 @@ network_config = {
 }
 ```
 
-`MLP`, `CutlassMLP`, `FullyFusedMLP`, and `MegakernelMLP` are NVIDIA-oriented backend names in upstream tiny-cuda-nn. They are deliberately not treated as aliases for the AMD backends because the implementations and numerical behavior differ; requesting them on the ROCm path fails rather than silently substituting a different backend.
+`MLP`, `CutlassMLP`, `FullyFusedMLP`, and `MegakernelMLP` are NVIDIA-oriented backend names in upstream tiny-cuda-nn. They are deliberately not treated as aliases for the AMD backends because the implementations differ substantially and silent aliasing invites confusion.
 
 ## Important differences from upstream tiny-cuda-nn
 
@@ -396,7 +396,7 @@ cd1330a21452f7e2edab9e676567b7a040f922bc
 - The `RocWMMAWidth64MLP` backend is inference-only (no backward/training), fixed to the exact `64 -> 64 -> 64 -> 64` topology, opt-in and disabled by default, and carries no performance claim yet.
 - This port does not claim support for NVIDIA GPUs or for all ROCm-capable AMD architectures.
 - Performance depends strongly on batch size and topology; latency-bound workloads may see little or no FP16 speedup.
-- The validated ROCm 7.2 setup currently uses the regular-allocation fallback because the tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path. This results in higher memory usage and occasional allocation-related stutter, but does not affect correctness or training functionality.
+- The validated ROCm 7.2 setup currently uses the regular-allocation fallback because the tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path. This results in higher memory usage than the virtual-allocation path would achieve.
 
 ## Upstream project and attribution
 
