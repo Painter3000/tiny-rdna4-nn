@@ -229,6 +229,7 @@ model = tcnn.Network(
     n_output_dims=64,
     network_config={
         "otype": "RocWMMAWidth64MLP",
+        "precision": "Fp16",
         "activation": "ReLU",
         "output_activation": "None",
         "n_neurons": 64,
@@ -248,7 +249,7 @@ assert torch.isfinite(y).all()
 print("RocWMMAWidth64MLP inference: PASS")
 ```
 
-Requires the extension to have been built with `TCNN_ENABLE_ROCWMMA_WIDTH64_MLP=1` (see the opt-in build section). Without the switch, the name is rejected rather than aliased.
+Requires the extension to have been built with `TCNN_ENABLE_ROCWMMA_WIDTH64_MLP=1` (see the opt-in build section). Without the switch, the name is rejected rather than aliased. The network config must also set `"precision": "Fp16"`; the backend does not select a precision implicitly and rejects the request otherwise (fail-closed).
 
 ### Audited code-object resources
 
@@ -317,7 +318,7 @@ print("PortableMLP forward/backward: PASS")
 | `PortableMLP` | FP32 | yes | Portable correctness-first reference backend |
 | `HipBLASLtMLP` | FP32 | yes | Explicit accelerated AMD hipBLASLt backend |
 | `HipBLASLtMLPFP16` | FP16 | yes | Explicit qualified FP16 backend; requires `"precision": "Fp16"` |
-| `RocWMMAWidth64MLP` | FP16 | no (inference only) | Opt-in fused rocWMMA backend; `gfx1201`/Wave32, exact `64->64->64->64`, disabled by default |
+| `RocWMMAWidth64MLP` | FP16 | no (inference only) | Opt-in fused rocWMMA backend; `gfx1201`/Wave32, exact `64->64->64->64`, disabled by default. Requires `"precision": "Fp16"` |
 | `FullyFusedMLP` | — | — | Not implemented on the qualified ROCm path and intentionally rejected rather than aliased |
 
 Example FP16 network configuration:
