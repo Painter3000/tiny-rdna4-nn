@@ -4,9 +4,14 @@ A community port of [NVlabs/tiny-cuda-nn](https://github.com/NVlabs/tiny-cuda-nn
 
 This repository is not a CUDA build and does not require an NVIDIA GPU. The validated path is the PyTorch extension compiled with HIP for AMD RDNA4.
 
-> **Project status:** Phase 3B1 FP16 correctness, training, `NetworkWithInputEncoding`, and reproducible performance qualification passed.
+> **Project status**
 >
-> **Validated tag:** [`phase3b1-fp16-gfx1201-rocm72-pass`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase3b1-fp16-gfx1201-rocm72-pass)
+> - **Phase 3B1:** qualified FP16 forward, backward, training, `NetworkWithInputEncoding`, and reproducible performance validation.
+> - **Phase 4A2:** qualified opt-in `RocWMMAWidth64MLP` production **inference** path for AMD RDNA4 / `gfx1201` (forward only, no performance claim yet).
+>
+> **Validated tags:**
+> - [`phase3b1-fp16-gfx1201-rocm72-pass`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase3b1-fp16-gfx1201-rocm72-pass)
+> - [`phase4a2-width64-production-inference-gfx1201-pass`](https://github.com/Painter3000/tiny-rdna4-nn/tree/phase4a2-width64-production-inference-gfx1201-pass)
 
 ## Scope
 
@@ -19,9 +24,11 @@ The current port focuses on:
 - PyTorch ROCm extension
 - FP32 portable network backend
 - hipBLASLt FP32 and FP16 MLP backends
-- forward, backward, and Adam training
+- an opt-in rocWMMA Width-64 fused inference backend (`RocWMMAWidth64MLP`)
+- forward, backward, and Adam training (portable and hipBLASLt backends)
 - standalone encodings and `NetworkWithInputEncoding`
-- deterministic correctness and reproducible performance validation
+- deterministic correctness validation across the qualified backends
+- reproducible performance validation for the Phase 3B1 hipBLASLt FP16 path
 
 Other AMD architectures may require additional work and are not claimed as validated by this repository.
 
@@ -38,7 +45,7 @@ The qualification work was performed with:
 
 ## Performance on Radeon AI PRO R9700
 
-Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP32 rounds per process. All 24 cases and all 72 primary processes were valid, with correctness passing before and after me[...]
+Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP32 rounds per process. All 24 cases and all 72 primary processes were valid, with correctness passing before and after measurement in every case.
 
 | Category | FP16 speedup vs. FP32 | FP32/FP16 peak-memory factor |
 |---|---:|---:|
@@ -48,7 +55,9 @@ Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP3
 | Network only | **2.1658x** | 1.0310x |
 | Network with input encoding | **2.4003x** | 1.0527x |
 
-Small batch cases are largely launch-overhead dominated and are neutral in aggregate. Throughput-oriented cases show the main FP16 benefit. Results vary by topology; the full report includes every cas[...]
+Small batch cases are largely launch-overhead dominated and are neutral in aggregate. Throughput-oriented cases show the main FP16 benefit. Results vary by topology; the full report includes every case.
+
+> These figures describe the Phase 3B1 hipBLASLt FP16 path. The Phase 4A2 `RocWMMAWidth64MLP` backend makes **no performance claim** yet; only its functional inference correctness and code-object resources have been validated.
 
 See:
 
@@ -85,6 +94,20 @@ python -m pip install --no-build-isolation .
 ```
 
 The build intentionally requires `PYTORCH_ROCM_ARCH=gfx1201` for the validated RDNA4 path.
+
+### Optional: opt-in rocWMMA Width-64 inference backend
+
+The `RocWMMAWidth64MLP` backend is **disabled by default**. It is only compiled into the extension when explicitly requested at build time. With the switch off, the backend source is not compiled and the factory rejects the name (fail-closed), so existing backends and builds are unaffected.
+
+```bash
+export ROCM_PATH=/opt/rocm
+export PYTORCH_ROCM_ARCH=gfx1201
+export TCNN_ENABLE_ROCWMMA_WIDTH64_MLP=1
+export TCNN_HALF_PRECISION=1
+
+cd bindings/torch
+python -m pip install --no-build-isolation .
+```
 
 ## Quick verification
 
@@ -123,8 +146,7 @@ Treat the warning as non-fatal when the verification test completes successfully
 
 ## Reproducible fresh-clone smoke
 
-The repository includes a versioned end-to-end smoke test for the qualified
-ROCm / `gfx1201` path:
+The repository includes a versioned end-to-end smoke test for the qualified ROCm / `gfx1201` path:
 
 - `scripts/fresh_clone_user_smoke.sh`
 - `scripts/fresh_clone_user_smoke.py`
@@ -169,8 +191,7 @@ The test performs:
 - repository and recursive-submodule cleanliness checks,
 - machine-readable JSON evidence generation.
 
-The expected `GPUMemoryArena` warning is retained in the log and classified as
-non-fatal when all functional checks pass.
+The expected `GPUMemoryArena` warning is retained in the log and classified as non-fatal when all functional checks pass.
 
 For a runtime-only check of an already installed build:
 
@@ -178,12 +199,79 @@ For a runtime-only check of an already installed build:
 scripts/fresh_clone_user_smoke.sh --runtime-only --all-backends
 ```
 
-The smoke is a correctness and reproducibility test, not a performance
-benchmark.
+The smoke is a correctness and reproducibility test, not a performance benchmark.
+
+The standard smoke validates the portable and hipBLASLt backends. It does **not** cover the default-off `RocWMMAWidth64MLP` backend, which requires an explicit build switch and supports inference only; that path has its own Phase 4A2 production, runtime-lifecycle, and code-object audit (see below).
+
+## Phase 4A2: rocWMMA Width-64 opt-in inference backend
+
+`RocWMMAWidth64MLP` is a fused three-linear-layer rocWMMA inference kernel for `gfx1201`, validated as an explicit opt-in production path. It is deliberately narrow and honest about what it does and does not cover.
+
+### What is qualified
+
+- Explicit **opt-in only**; there is no automatic selection and no silent fallback.
+- Architecture `gfx1201`, Wave32.
+- FP16 parameters and FP16 output; consumes the normal tiny-cuda-nn parameter buffer. The qualified topology uses exactly 12,480 FP16 parameter values, corresponding to 24,960 bytes.
+- Exact topology `64 -> 64 -> 64 -> 64` with two ReLU hidden layers (three linear layers).
+- **Inference (forward) only.** Backward and training are intentionally fail-closed.
+- Deterministic correctness validated against a **CPU FP32 reference**, plus 64 bitwise-identical launch repeats, prefix invariance, parameter hot-swap, and dual-stream model isolation.
+- Public batch sizes are internally padded to the required tile boundaries. Production inference (Phase 4A2-P2) was validated across the batch sizes `1, 16, 17, 255, 256, 257` against the CPU reference; the separate runtime-lifecycle stage (Phase 4A2-P3) exercised a 20-case batch matrix and padding boundaries from 256 to 1024.
+- The linked production kernel was bound by an ISA/code-object audit at the release commit, and the full runtime matrix was replayed twice, byte-identically, from that commit.
+
+### Minimal usage
+
+```python
+import torch
+import tinycudann as tcnn
+
+model = tcnn.Network(
+    n_input_dims=64,
+    n_output_dims=64,
+    network_config={
+        "otype": "RocWMMAWidth64MLP",
+        "activation": "ReLU",
+        "output_activation": "None",
+        "n_neurons": 64,
+        "n_hidden_layers": 2,
+    },
+).to("cuda").eval()
+
+# FP16 input; non-multiple-of-16 batch is padded internally.
+x = torch.randn(257, 64, device="cuda", dtype=torch.float16)
+
+with torch.inference_mode():
+    y = model(x)
+
+assert y.shape == (257, 64)
+assert y.dtype == torch.float16
+assert torch.isfinite(y).all()
+print("RocWMMAWidth64MLP inference: PASS")
+```
+
+Requires the extension to have been built with `TCNN_ENABLE_ROCWMMA_WIDTH64_MLP=1` (see the opt-in build section). Without the switch, the name is rejected rather than aliased.
+
+### Audited code-object resources
+
+The Phase 4A2-P4 audit recorded the following facts for the linked production kernel on `gfx1201`:
+
+```text
+Group segment (LDS):   2048 bytes
+Private segment:          0 bytes
+Scratch instructions:     0
+MFMA/WMMA instructions:  12
+ds_load_b128:             8
+ds_store_b128:            2
+ds_bpermute_b32:        192
+Block barriers:           6
+VGPR field:              92
+SGPR field:              74
+```
+
+> **Claim boundary.** These are recorded resource and instruction facts, not a performance result. Register values alone do not justify an occupancy or throughput claim, and the ISA audit does not constitute a performance proof or a formal pointer-provenance analysis of every global memory instruction. The measured fragment/register mapping used during development is a version-bound diagnostic for ROCm 7.2 / rocWMMA on `gfx1201` and is treated as `LAYOUT_STABILITY: NOT_GUARANTEED_BY_ROCWMMA_API`; the kernel relies on official rocWMMA accesses rather than hard-wiring that mapping as a constant.
 
 ## Python API
 
-The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names [...]
+The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names are not silently mapped to AMD backends.
 
 The conservative FP32 reference path uses `PortableMLP`:
 
@@ -224,12 +312,13 @@ print("PortableMLP forward/backward: PASS")
 
 ### ROCm network backend selection
 
-| `otype` | Precision | Purpose |
-|---|---|---|
-| `PortableMLP` | FP32 | Portable correctness-first reference backend |
-| `HipBLASLtMLP` | FP32 | Explicit accelerated AMD hipBLASLt backend |
-| `HipBLASLtMLPFP16` | FP16 | Explicit qualified FP16 backend; requires `"precision": "Fp16"` |
-| `FullyFusedMLP` | — | Not implemented on the qualified ROCm path and intentionally rejected rather than aliased |
+| `otype` | Precision | Training | Purpose |
+|---|---|---|---|
+| `PortableMLP` | FP32 | yes | Portable correctness-first reference backend |
+| `HipBLASLtMLP` | FP32 | yes | Explicit accelerated AMD hipBLASLt backend |
+| `HipBLASLtMLPFP16` | FP16 | yes | Explicit qualified FP16 backend; requires `"precision": "Fp16"` |
+| `RocWMMAWidth64MLP` | FP16 | no (inference only) | Opt-in fused rocWMMA backend; `gfx1201`/Wave32, exact `64->64->64->64`, disabled by default |
+| `FullyFusedMLP` | — | — | Not implemented on the qualified ROCm path and intentionally rejected rather than aliased |
 
 Example FP16 network configuration:
 
@@ -244,14 +333,15 @@ network_config = {
 }
 ```
 
-`MLP`, `CutlassMLP`, `FullyFusedMLP`, and `MegakernelMLP` are NVIDIA-oriented backend names in upstream tiny-cuda-nn. They are deliberately not treated as aliases for the AMD backends because the impl[...]
+`MLP`, `CutlassMLP`, `FullyFusedMLP`, and `MegakernelMLP` are NVIDIA-oriented backend names in upstream tiny-cuda-nn. They are deliberately not treated as aliases for the AMD backends because the implementations and numerical behavior differ; requesting them on the ROCm path fails rather than silently substituting a different backend.
 
 ## Important differences from upstream tiny-cuda-nn
 
 - The validated build target is HIP/ROCm, not CUDA.
 - `gfx1201` is the currently qualified architecture.
 - NVIDIA CUTLASS, FullyFusedMLP, CUDA RTC, and CUDA JIT fusion are not part of the qualified ROCm path.
-- AMD network backends must be selected explicitly as `PortableMLP`, `HipBLASLtMLP`, or `HipBLASLtMLPFP16`.
+- A fused AMD path does exist as the opt-in, inference-only `RocWMMAWidth64MLP` backend, but it is disabled by default and is not a replacement for `FullyFusedMLP`.
+- AMD network backends must be selected explicitly as `PortableMLP`, `HipBLASLtMLP`, `HipBLASLtMLPFP16`, or (opt-in) `RocWMMAWidth64MLP`.
 - The root native CMake project still contains substantial upstream CUDA-oriented infrastructure. The supported and validated RDNA4 build path is currently `bindings/torch`.
 - File paths, C++ namespaces, header paths such as `tiny-cuda-nn/...`, and the Python import `tinycudann` remain unchanged where practical to preserve source compatibility.
 
@@ -267,7 +357,7 @@ The following functional blocks have completed their audited candidate qualifica
 - deterministic numerical comparison
 - reproducible FP16 performance measurement
 
-The public PASS tag points to commit:
+The Phase 3B1 PASS tag points to commit:
 
 ```text
 2d7087c03442c66f8c4b6491c111e32cae2b40de
@@ -279,17 +369,31 @@ The versioned fresh-clone smoke was validated successfully against commit:
 49c08d0cd5ec4b5078c09d36a6016f0cbf659538
 ```
 
-These are two distinct records: the PASS tag documents the frozen
-performance/correctness state, while the smoke commit documents the publicly
-available reproducibility tooling.
+These are two distinct records: the PASS tag documents the frozen performance/correctness state, while the smoke commit documents the publicly available reproducibility tooling.
 
-A separate fresh-clone user validation of `main` confirmed recursive cloning, wheel build and installation in an independent Python environment, package and native-module provenance, ROCm library reso[...]
+### Phase 4A2 rocWMMA Width-64 inference
+
+The opt-in `RocWMMAWidth64MLP` inference path has completed its audited qualification:
+
+- opt-in, default-off build switch with fail-closed factory behavior
+- exact `64 -> 64 -> 64 -> 64` topology, two ReLU hidden layers, FP16
+- production inference correctness against a CPU FP32 reference
+- runtime lifecycle: multi-batch, padding boundaries, 64 bitwise repeats, prefix invariance, parameter hot-swap, dual-stream model isolation
+- training-mode execution is unsupported and fails closed; the qualified runtime matrix explicitly validates training-forward rejection, and backward/training is not implemented
+- ISA/code-object audit of the linked production kernel with a byte-identical runtime replay
+
+The Phase 4A2 PASS tag points to commit:
+
+```text
+cd1330a21452f7e2edab9e676567b7a040f922bc
+```
 
 ## Current limitations
 
 - Only `gfx1201` on the Radeon AI PRO R9700 has completed the full qualification described here.
 - Native C++ example and benchmark workflows from the upstream CUDA README are not yet the recommended RDNA4 entry point.
 - `FullyFusedMLP`, CUDA RTC, and CUDA JIT fusion are unavailable on the ROCm path.
+- The `RocWMMAWidth64MLP` backend is inference-only (no backward/training), fixed to the exact `64 -> 64 -> 64 -> 64` topology, opt-in and disabled by default, and carries no performance claim yet.
 - This port does not claim support for NVIDIA GPUs or for all ROCm-capable AMD architectures.
 - Performance depends strongly on batch size and topology; latency-bound workloads may see little or no FP16 speedup.
 - The validated ROCm 7.2 setup currently uses the regular-allocation fallback because the tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path. This results in higher memory usage and occasional allocation-related stutter, but does not affect correctness or training functionality.
