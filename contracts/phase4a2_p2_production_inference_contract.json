@@ -1,0 +1,77 @@
+{
+  "baseline": {
+    "p1_skeleton_source_sha256": "f989764e9aa6171e750daeed558fefc8baefb5c7b558f55b6689b97ef6587b8b",
+    "p4_mapping_header_sha256": "f7e25b69d3f55c63208e18cece9034bcda54b1114e65a68895c7f8b060ffa517",
+    "p4_reference_source": "scripts/phase4a1_p4_width64_three_layer_fused.cpp",
+    "p4_reference_source_sha256": "54e03ee731046bb007d0c554c6d1e6ec2dea99d4f4fe150bb60563e36c4b3382",
+    "required_head_prefix": "c1b95f6",
+    "required_head_subject": "Add Phase 4A2-P1 rocWMMA Width-64 opt-in backend skeleton",
+    "required_p1_decision": "PHASE4A2_P1_OPT_IN_CLASS_BUILD_FACTORY_SKELETON_PASS",
+    "required_p4_decision": "PHASE4A1_P4_WIDTH64_THREE_LAYER_FUSED_CONSOLIDATED_PASS"
+  },
+  "marker": "TCNN_RDNA4_P4A2_P2_PRODUCTION_INFERENCE_001",
+  "phase": "4A2-P2",
+  "probe": {
+    "batch_sizes": [
+      1,
+      16,
+      17,
+      255,
+      256,
+      257
+    ],
+    "max_abs_tolerance": 0.005,
+    "normalized_l2_tolerance": 0.002,
+    "padded_internal_batches": [
+      256,
+      512
+    ],
+    "prefix_invariance": true,
+    "public_entry": "Python tcnn.Network with Identity encoding",
+    "reference": "CPU FP32 matmul with FP16 layer boundaries",
+    "repeatability": "bitwise identical repeated inference",
+    "stream": "non-default HIP stream correctness"
+  },
+  "production_kernel": {
+    "bias_compute": "promote to FP32 in epilogue",
+    "bias_storage": "FP16",
+    "caller_stream": true,
+    "diagnostic_counters": false,
+    "grid": "batch/16 blocks",
+    "hidden_activation": "ReLU",
+    "host_pass_hotfix_marker": "TCNN_RDNA4_P4A2_P2_HIP_HOST_PASS_HOTFIX_005",
+    "host_synchronization": false,
+    "input": "FP16 ColumnMajor [64][batch]",
+    "k_tiles_per_layer": 4,
+    "lds_buffers": 1,
+    "lds_bytes": 2048,
+    "mma_calls_per_block": 48,
+    "mma_calls_per_wave": 12,
+    "oracle_arguments": false,
+    "output": "FP16 ColumnMajor [64][batch]",
+    "output_activation": "None",
+    "parameter_buffer": "FP16 [W0,b0,W1,b1,W2,b2]",
+    "parameter_elements": 12480,
+    "register_file_element_api": "fragment::size() unpacked elements",
+    "register_size_assert_scope": "__HIP_DEVICE_COMPILE__",
+    "source_barriers": 3,
+    "source_sha256": "7b8736534fd94a3d8135a2573a72285dc1e75015794adeeef222e0fd8b5bd6f4",
+    "symbol": "rocwmma_width64_inference_kernel",
+    "threads_per_block": 128,
+    "tile_rows": 16,
+    "wave_size": 32,
+    "waves_per_block": 4,
+    "weight_layout": "ColumnMajor 64x64"
+  },
+  "schema_version": 1,
+  "scope": {
+    "automatic_selection": false,
+    "backward": "fail_closed",
+    "inference": "qualified_by_P2",
+    "performance_claim": "none",
+    "production_isa_claim": "deferred_to_4A2_P4",
+    "silent_fallback": false,
+    "training_forward": "fail_closed"
+  },
+  "title": "Width-64 production inference kernel and parameter ABI adaptation"
+}

@@ -50,13 +50,26 @@ public:
 		// qualified FP16 padding/layout contract. Reject that combination rather
 		// than silently connecting an encoding-preferred layout.
 		const auto params = network->hyperparams();
-		if (equals_case_insensitive(params.value("otype", ""), "HipBLASLtMLPFP16")) {
-			throw std::runtime_error{"NetworkWithInputEncoding(shared encoding, shared HipBLASLtMLPFP16) is unqualified; use the JSON/factory constructor."};
+		const std::string backend = params.value("otype", "");
+		if (
+			equals_case_insensitive(backend, "HipBLASLtMLPFP16") ||
+			equals_case_insensitive(backend, "RocWMMAWidth64MLP")
+		) {
+			throw std::runtime_error{
+				"NetworkWithInputEncoding(shared encoding, shared explicit FP16 "
+				"backend) is unqualified; use the JSON/factory constructor."
+			};
 		}
 	}
 
 	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, uint32_t n_output_dims, const json& network) : m_encoding{encoding} {
 		m_fp16_hipblaslt = equals_case_insensitive(network.value("otype", ""), "HipBLASLtMLPFP16");
+		// TCNN_RDNA4_P4A2_P2_PRODUCTION_INFERENCE_001: the rocWMMA backend
+		// consumes the same contiguous ColumnMajor [width][batch] bridge.
+		m_fp16_rocwmma_width64 = equals_case_insensitive(
+			network.value("otype", ""),
+			"RocWMMAWidth64MLP"
+		);
 		m_logical_encoding_width = encoding->output_width();
 		const uint32_t alignment = minimum_alignment(network);
 		encoding->set_alignment(alignment);
@@ -77,6 +90,18 @@ public:
 			encoding->set_padded_output_width(supported);
 		}
 
+		if (m_fp16_rocwmma_width64) {
+			encoding->set_padding_value((T)0.0f);
+			if (m_logical_encoding_width != 64) {
+				throw std::runtime_error{fmt::format(
+					"RocWMMAWidth64MLP requires an encoding width of exactly "
+					"64, but received {}.",
+					m_logical_encoding_width
+				)};
+			}
+			encoding->set_padded_output_width(64);
+		}
+
 		json local_network_config = network;
 		local_network_config["n_input_dims"] = m_encoding->padded_output_width();
 		local_network_config["n_output_dims"] = n_output_dims;
@@ -92,7 +117,9 @@ public:
 		// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: the explicit FP16
 		// hipBLASLt backend consumes contiguous column-major matrices. Encodings
 		// may prefer SoA, but their dynamic matrix kernels support this layout.
-		return m_fp16_hipblaslt ? MatrixLayout::ColumnMajor : m_encoding->preferred_output_layout();
+		return (m_fp16_hipblaslt || m_fp16_rocwmma_width64)
+			? MatrixLayout::ColumnMajor
+			: m_encoding->preferred_output_layout();
 	}
 
 	void inference_mixed_precision_impl(hipStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>& output, bool use_inference_params = true) override {
@@ -304,6 +331,7 @@ private:
 	std::shared_ptr<Encoding<T>> m_encoding;
 	std::shared_ptr<Network<T>> m_network;
 	bool m_fp16_hipblaslt = false;
+	bool m_fp16_rocwmma_width64 = false;
 	uint32_t m_logical_encoding_width = 0;
 
 	struct ForwardContext : public Context {
