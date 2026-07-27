@@ -10,13 +10,97 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from phase4a3_q0c_common import MAGIC, calibrate_count, enumerate_bundles, load_contract, matrix, padded_batch, symbol_lines
-from phase4a3_q0c_worker import argument_parser
+from phase4a3_q0c_worker import (
+    argument_parser,
+    correctness,
+    inference_call,
+    public_once,
+    public_queued,
+)
 from capture_phase4a3_q0c_build_object import capture
 from check_phase4a3_q0c_provenance import (
     P4_AUDIT_PASS,
     validate_build_object,
     validate_p4_audit,
 )
+
+
+class FakeTensor:
+    def __init__(self, value=1.0):
+        self.value = float(value)
+
+    def clone(self):
+        return FakeTensor(self.value)
+
+    def float(self):
+        return self
+
+    def norm(self):
+        return abs(self.value)
+
+    def all(self):
+        return True
+
+    def __sub__(self, other):
+        return FakeTensor(self.value - other.value)
+
+
+class FakeStream:
+    def synchronize(self):
+        pass
+
+
+class FakeEvent:
+    def __init__(self, enable_timing):
+        pass
+
+    def record(self, stream):
+        pass
+
+    def elapsed_time(self, other):
+        return 1.0
+
+
+class FakeTorch:
+    class _NoGrad:
+        def __init__(self, owner):
+            self.owner = owner
+
+        def __enter__(self):
+            self.before = self.owner.grad_enabled
+            self.owner.grad_enabled = False
+
+        def __exit__(self, *_):
+            self.owner.grad_enabled = self.before
+
+    class _Cuda:
+        Event = FakeEvent
+
+        @staticmethod
+        def current_stream():
+            return FakeStream()
+
+    def __init__(self):
+        self.grad_enabled = True
+        self.cuda = self._Cuda()
+
+    def no_grad(self):
+        return self._NoGrad(self)
+
+    def is_grad_enabled(self):
+        return self.grad_enabled
+
+    @staticmethod
+    def isfinite(value):
+        return value
+
+    @staticmethod
+    def equal(left, right):
+        return left.value == right.value
+
+    @staticmethod
+    def allclose(left, right, atol, rtol):
+        return abs(left.value - right.value) <= atol + rtol * abs(right.value)
 
 
 class Q0cTests(unittest.TestCase):
@@ -105,6 +189,99 @@ class Q0cTests(unittest.TestCase):
         self.assertEqual(calibrate_count(0.01, 300, 4096, 65536), 30000)
         self.assertEqual(calibrate_count(100, 300, 4096, 65536), 4096)
         self.assertEqual(calibrate_count(0.0001, 300, 4096, 65536), 65536)
+
+    def test_inference_only_callable_passes_via_worker_guard(self):
+        torch = FakeTorch()
+
+        class InferenceOnlyCallable:
+            def __call__(self, x):
+                if torch.is_grad_enabled():
+                    raise RuntimeError("autograd unexpectedly enabled")
+                return x.clone()
+
+        value = FakeTensor()
+        self.assertTrue(torch.is_grad_enabled())
+        output = inference_call(torch, lambda: InferenceOnlyCallable()(value))
+        self.assertTrue(torch.equal(output, value))
+        self.assertTrue(torch.is_grad_enabled())
+
+    def test_inference_only_callable_fails_with_autograd(self):
+        torch = FakeTorch()
+
+        class InferenceOnlyCallable:
+            def __call__(self, x):
+                if torch.is_grad_enabled():
+                    raise RuntimeError("autograd unexpectedly enabled")
+                return x.clone()
+
+        with self.assertRaisesRegex(RuntimeError, "autograd unexpectedly enabled"):
+            InferenceOnlyCallable()(FakeTensor())
+
+    def test_worker_guard_fails_closed_if_no_grad_contract_is_broken(self):
+        torch = FakeTorch()
+
+        class BrokenNoGrad:
+            def __enter__(self):
+                pass
+
+            def __exit__(self, *_):
+                pass
+
+        torch.no_grad = BrokenNoGrad
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "Q0c inference measurement entered with autograd enabled",
+        ):
+            inference_call(torch, lambda: FakeTensor())
+
+    def test_correctness_candidate_and_reference_are_no_grad(self):
+        torch = FakeTorch()
+
+        states = {"candidate": [], "reference": []}
+
+        class RecordingCallable:
+            def __init__(self, name):
+                self.name = name
+
+            def __call__(self, x):
+                states[self.name].append(torch.is_grad_enabled())
+                return x.clone()
+
+        result = correctness(
+            torch,
+            RecordingCallable("candidate"),
+            RecordingCallable("reference"),
+            FakeTensor(),
+            {"atol": 0.0, "rtol": 0.0, "normalized_l2_max": 0.0},
+        )
+        self.assertTrue(result["passed"])
+        self.assertEqual(states, {"candidate": [False, False], "reference": [False, False]})
+
+    def test_public_lp_tp_g_calls_are_no_grad_and_context_precedes_timers(self):
+        import phase4a3_q0c_worker as worker
+
+        torch = FakeTorch()
+        trace = []
+
+        class RecordingCallable:
+            def __call__(self, x):
+                trace.append(("call", torch.is_grad_enabled()))
+                return x.clone()
+
+        original_timer = worker.time.perf_counter_ns
+
+        def timer():
+            trace.append(("timer", torch.is_grad_enabled()))
+            return len(trace)
+
+        worker.time.perf_counter_ns = timer
+        try:
+            public_once(torch, RecordingCallable(), FakeTensor())
+            public_queued(torch, RecordingCallable(), FakeTensor(), 2)
+        finally:
+            worker.time.perf_counter_ns = original_timer
+        self.assertTrue(trace)
+        self.assertTrue(all(not enabled for _, enabled in trace))
 
     def test_patch_build_restore_cycle_preserves_production_file(self):
         source = ROOT / "bindings/torch/tinycudann/bindings.cpp"

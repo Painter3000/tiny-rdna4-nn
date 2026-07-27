@@ -28,28 +28,43 @@ def model(tcnn: Any, otype: str, seed: int) -> Any:
     return tcnn.Network(64, 64, {"otype": otype, "precision": "Fp16", "n_neurons": 64, "n_hidden_layers": 2, "activation": "ReLU", "output_activation": "None"}, seed=seed).cuda().eval()
 
 
+def inference_call(torch: Any, call: Callable[[], Any]) -> Any:
+    """Enter the Q0c inference contract before any measured/model operation."""
+    with torch.no_grad():
+        if torch.is_grad_enabled():
+            raise RuntimeError(
+                "Q0c inference measurement entered with autograd enabled"
+            )
+        return call()
+
+
 def public_once(torch: Any, instance: Any, x: Any) -> tuple[float, Any]:
-    start = time.perf_counter_ns()
-    output = instance(x)
-    torch.cuda.current_stream().synchronize()
-    return float(time.perf_counter_ns() - start), output
+    def measured() -> tuple[float, Any]:
+        start = time.perf_counter_ns()
+        output = instance(x)
+        torch.cuda.current_stream().synchronize()
+        return float(time.perf_counter_ns() - start), output
+
+    return inference_call(torch, measured)
 
 
 def public_queued(torch: Any, instance: Any, x: Any, iterations: int) -> tuple[dict[str, Any], Any]:
-    stream = torch.cuda.current_stream()
-    begin_event, end_event = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
-    total_start = time.perf_counter_ns()
-    begin_event.record(stream)
-    last = None
-    submit_start = time.perf_counter_ns()
-    with torch.inference_mode():
+    def measured() -> tuple[dict[str, Any], Any]:
+        stream = torch.cuda.current_stream()
+        begin_event, end_event = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
+        total_start = time.perf_counter_ns()
+        begin_event.record(stream)
+        last = None
+        submit_start = time.perf_counter_ns()
         for _ in range(iterations):
             last = instance(x)
-    submission_ns = time.perf_counter_ns() - submit_start
-    end_event.record(stream)
-    stream.synchronize()
-    total_ns = time.perf_counter_ns() - total_start
-    return {"iterations": iterations, "host_submission_ns": submission_ns, "host_total_ns": total_ns, "event_ms": begin_event.elapsed_time(end_event)}, last
+        submission_ns = time.perf_counter_ns() - submit_start
+        end_event.record(stream)
+        stream.synchronize()
+        total_ns = time.perf_counter_ns() - total_start
+        return {"iterations": iterations, "host_submission_ns": submission_ns, "host_total_ns": total_ns, "event_ms": begin_event.elapsed_time(end_event)}, last
+
+    return inference_call(torch, measured)
 
 
 def convergence(call: Callable[[], tuple[float, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
@@ -86,7 +101,9 @@ def latency_score(call: Callable[[], tuple[float, Any]], cfg: dict[str, Any]) ->
 
 
 def correctness(torch: Any, a: Any, b: Any, x: Any, cfg: dict[str, Any]) -> dict[str, Any]:
-    a1, b1, a2, b2 = a(x), b(x), a(x), b(x)
+    a1, b1, a2, b2 = inference_call(
+        torch, lambda: (a(x), b(x), a(x), b(x))
+    )
     torch.cuda.current_stream().synchronize()
     diff = a1.float() - b1.float()
     value = {"finite": bool(torch.isfinite(a1).all() and torch.isfinite(b1).all()), "repeat": bool(torch.equal(a1, a2) and torch.equal(b1, b2)), "allclose": bool(torch.allclose(a1.float(), b1.float(), atol=cfg["atol"], rtol=cfg["rtol"])), "normalized_l2": float(diff.norm()) / (float(b1.float().norm()) or 1.0)}
@@ -161,7 +178,12 @@ def main() -> int:
     x32 = torch.nn.functional.pad(x, [0, 0, 0, padded - batch]).to(torch.float32).contiguous()
 
     def native_call(instance: Any, params: Any, iterations: int = 1, sync_each: bool = True, gap_ns: int = 0) -> tuple[dict[str, Any], Any]:
-        record, output = instance.native_tcnn_module.phase4a3_q0c_benchmark_inference(x32, params, iterations, sync_each, gap_ns)
+        record, output = inference_call(
+            torch,
+            lambda: instance.native_tcnn_module.phase4a3_q0c_benchmark_inference(
+                x32, params, iterations, sync_each, gap_ns
+            ),
+        )
         return dict(record), output
 
     names = {"A": ("candidate", candidate), "B": ("reference", reference)}
