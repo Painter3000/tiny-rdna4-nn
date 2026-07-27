@@ -1,0 +1,36 @@
+{
+  "marker": "TCNN_RDNA4_P4A3_Q0A_RAW_EVIDENCE_FORENSICS_001",
+  "decision": "PROCEED_TO_PHASE4A3_Q0B_APPARATUS_REDESIGN",
+  "source_evidence": "phase4a3_q0_20260726T133440Z",
+  "included_files_verified": 52,
+  "included_hash_mismatches": 0,
+  "single_shot_backend_sequences": 48,
+  "first_block_greater_than_last": 48,
+  "negative_block_trend": 48,
+  "strong_negative_block_correlation": 47,
+  "original_backend_sequences_with_spread_le_5pct": 17,
+  "after_drop_first_block_spread_le_5pct": 43,
+  "after_drop_first_two_blocks_spread_le_5pct": 48,
+  "median_idle_gap_ratio": {
+    "rocwmma": 4.64,
+    "hipblaslt": 3.3
+  },
+  "telemetry_sclk_before_range_mhz": [
+    6,
+    41
+  ],
+  "maximum_junction_temperature_c": 46,
+  "diagnostic_single_shot_geomean": {
+    "auto": 1.58845,
+    "spin": 1.58813,
+    "full_all": 1.58829,
+    "last_four_blocks_all": 1.57875
+  },
+  "interpretation_constraints": {
+    "minimal_gpu_completion_is_not_common_additive_S": true,
+    "no_floor_subtraction": true,
+    "no_q0b_ratio_direction_preregistered": true,
+    "q0b_pipeline_must_be_frozen_before_data": true
+  },
+  "performance_claim_allowed": false
+}

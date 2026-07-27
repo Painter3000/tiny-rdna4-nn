@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "phase": "4A3-Q0b",
+  "marker": "TCNN_RDNA4_P4A3_Q0B_APPARATUS_REDESIGN_001",
+  "purpose": "Qualify redesigned warm single-shot, public product, queued, and gap-sensitivity apparatus before Phase 4A3 protocol freeze.",
+  "prior_evidence": {
+    "q0a_summary": "prior_evidence/phase4a3_q0a_forensic_summary.json",
+    "q0a_summary_sha256": "517a831ed778424133b6f0721ccf393e8e1091db15346d63e5cc38a25e639ae8",
+    "known_q0_diagnostic_ratio_approximately": 1.59,
+    "known_ratio_must_not_influence_pipeline": true
+  },
+  "baseline": {
+    "release_tag": "phase4a2-width64-production-inference-gfx1201-pass",
+    "release_commit": "cd1330a21452f7e2edab9e676567b7a040f922bc",
+    "production_source": "src/rocwmma_width64_mlp.cu",
+    "production_source_sha256": "7b8736534fd94a3d8135a2573a72285dc1e75015794adeeef222e0fd8b5bd6f4",
+    "mapping_header": "include/tiny-cuda-nn/networks/rocwmma_width64_mapping_gfx1201.h",
+    "mapping_header_sha256": "f7e25b69d3f55c63208e18cece9034bcda54b1114e65a68895c7f8b060ffa517",
+    "torch_binding": "bindings/torch/tinycudann/bindings.cpp",
+    "setup_py": "bindings/torch/setup.py",
+    "production_change_allowed": false,
+    "temporary_test_binding_patch_must_be_restored_before_workers": true
+  },
+  "environment": {
+    "required_arch": "gfx1201",
+    "required_torch": "2.13.0+rocm7.2",
+    "required_hip_prefix": "7.2",
+    "real_tty_required": true,
+    "display_manager_inactive_required": true,
+    "no_foreign_gpu_processes_required": true,
+    "schedule_modes": [
+      "spin",
+      "auto"
+    ],
+    "primary_schedule_mode": "spin",
+    "sensitivity_schedule_mode": "auto",
+    "forbidden_nonzero_environment": [
+      "HIP_LAUNCH_BLOCKING",
+      "AMD_SERIALIZE_KERNEL",
+      "AMD_SERIALIZE_COPY"
+    ],
+    "fixed_cpu_affinity_per_worker": true
+  },
+  "comparison": {
+    "candidate": "RocWMMAWidth64MLP",
+    "reference": "HipBLASLtMLPFP16",
+    "precision": "Fp16",
+    "public_input_dtype": "torch.float16",
+    "native_input_dtype": "torch.float32",
+    "topology": "64->64->64->64, ReLU/ReLU/None",
+    "parameter_elements": 12480,
+    "same_fp32_parameter_master": true,
+    "ratio_orientation": "reference_time / candidate_time",
+    "no_ratio_direction_expected": true,
+    "required_api_batch_size_granularity": 256,
+    "native_harness_padding_rule": "padded_batch = ceil(public_batch / _C.batch_size_granularity()) * _C.batch_size_granularity(); frozen release requires 256",
+    "hardcoded_backend_tile_granularity_for_cpp_api_forbidden": true
+  },
+  "matrix": {
+    "batches": [
+      1,
+      31,
+      128
+    ],
+    "processes_per_batch_and_schedule": 4,
+    "process_start_orders": [
+      "AB",
+      "BA",
+      "AB",
+      "BA"
+    ],
+    "paired_rounds_per_process": 4,
+    "round_orders_for_AB_process": [
+      "AB",
+      "BA",
+      "AB",
+      "BA"
+    ],
+    "round_orders_for_BA_process": [
+      "BA",
+      "AB",
+      "BA",
+      "AB"
+    ],
+    "no_replacement_runs": true
+  },
+  "convergence": {
+    "native_samples_per_window": 32,
+    "minimum_windows": 5,
+    "maximum_windows": 40,
+    "last_windows": 5,
+    "last_window_spread_max": 0.01,
+    "endpoint_drift_max": 0.005,
+    "convergence_values_are_never_scored": true,
+    "telemetry_between_convergence_and_measurement_forbidden": true
+  },
+  "measurement": {
+    "native_single_shot": {
+      "blocks_per_round": 6,
+      "samples_per_block": 32,
+      "block_spread_max": 0.02,
+      "block_deviation_from_round_median_max": 0.02,
+      "aggregation": "round median = median of six block medians"
+    },
+    "public_python_single_shot": {
+      "blocks_per_round": 6,
+      "samples_per_block": 24,
+      "block_spread_max": 0.05,
+      "block_deviation_from_round_median_max": 0.05,
+      "aggregation": "round median = median of six block medians",
+      "all_padding_conversion_allocation_slice_and_sync_costs_included": true
+    },
+    "native_queued": {
+      "blocks_per_round": 5,
+      "target_gpu_ms_per_block": 200.0,
+      "minimum_iterations": 64,
+      "maximum_iterations": 65536,
+      "submission_over_gpu_max": 0.8,
+      "aggregation": "round median = median of five per-forward event times"
+    },
+    "gap_sweep_native_ms": [
+      0.0,
+      0.5,
+      1.0,
+      2.0,
+      4.0,
+      8.0,
+      16.666667,
+      50.0
+    ],
+    "gap_sweep_public_ms": [
+      0.0,
+      16.666667,
+      50.0
+    ],
+    "gap_sweep_samples": 24,
+    "gap_sweep_sacrificial_samples_per_point": 1,
+    "gap_order": "ascending in even process index; descending in odd process index",
+    "profiler_forbidden": true,
+    "smi_polling_in_or_between_scored_windows_forbidden": true,
+    "per_kernel_events_forbidden": true
+  },
+  "floors": {
+    "samples": 128,
+    "report_timer_floor": true,
+    "report_empty_stream_sync": true,
+    "report_minimal_gpu_completion": true,
+    "report_python_noop_call": true,
+    "subtract_any_floor": false,
+    "common_additive_S_assumption_forbidden": true,
+    "empty_sync_fraction_max": 0.05
+  },
+  "correctness": {
+    "atol": 0.003,
+    "rtol": 0.02,
+    "normalized_l2_max": 0.005,
+    "finite_required": true,
+    "bitwise_repeat_required_per_backend": true,
+    "before_and_after_required": true
+  },
+  "analysis_pipeline_frozen": {
+    "worker_validity": "all convergence, native stationarity, public stationarity, queued headroom, correctness, cache, environment, and floor gates pass",
+    "round_ratio": "reference round median / candidate round median",
+    "process_ratio": "geometric mean of exactly four paired round ratios",
+    "group_ratio": "geometric mean of valid process ratios, diagnostic only",
+    "group_ci": "two-sided Student-t 95% interval on process log ratios; exponentiate bounds",
+    "order_effect": "absolute difference between median AB-start and BA-start process log ratios",
+    "order_effect_abs_log_max": 0.02,
+    "minimum_valid_processes_per_group": 3,
+    "outlier_removal": "none",
+    "posthoc_block_dropping": false,
+    "adaptive_extension": false,
+    "individual_samples_are_not_statistical_units": true,
+    "no_performance_pass_or_fail": true
+  },
+  "gap_mechanism_diagnostic": {
+    "prediction": "For long gaps, candidate and reference may acquire approximately common additive wake-up increments relative to gap=0.",
+    "evaluated_gaps_ms": [
+      8.0,
+      16.666667,
+      50.0
+    ],
+    "relative_increment_difference_definition": "abs(delta_ref-delta_candidate)/max(abs(delta_ref),abs(delta_candidate),1ns)",
+    "support_threshold": 0.1,
+    "minimum_supported_gap_points_per_batch": 2,
+    "diagnostic_only_not_apparatus_gate": true
+  },
+  "decisions": {
+    "pass": "PROCEED_TO_PHASE4A3_P0_PROTOCOL_FREEZE",
+    "blocked": "PHASE4A3_Q0B_BLOCKED"
+  },
+  "claims": {
+    "performance_claim_allowed": false,
+    "q0b_is_apparatus_only": true,
+    "known_q0_ratio_not_a_gate": true,
+    "tool_repair_revision": "TCNN_RDNA4_P4A3_Q0B_TOOL_REPAIR_003"
+  },
+  "implementation_revision": 2,
+  "tool_repairs": [
+    {
+      "marker": "TCNN_RDNA4_P4A3_Q0B_TOOL_REPAIR_002",
+      "cause": "The native hook was passed Module.params, which is the public FP32 master tensor, although the hook contract requires c10_param_precision() == FP16.",
+      "repair": "Preconvert and retain one FP16 native parameter tensor per backend outside all timing windows; add a fail-fast public-vs-native hook smoke before the 24-worker matrix.",
+      "measurement_object_changed": false,
+      "production_source_changed": false,
+      "analysis_pipeline_changed": false,
+      "prior_run_valid_measurements": 0
+    }
+  ]
+}
