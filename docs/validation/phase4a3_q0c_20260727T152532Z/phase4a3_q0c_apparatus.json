@@ -1,0 +1,528 @@
+{
+  "marker": "TCNN_RDNA4_P4A3_Q0C_SPLIT_APPARATUS_001",
+  "phase": "4A3-Q0c",
+  "worker_manifest": {
+    "marker": "TCNN_RDNA4_P4A3_Q0C_WORKER_MANIFEST_001",
+    "passed": true,
+    "expected_count": 100,
+    "manifest_count": 100,
+    "accepted_count": 100,
+    "returncode_zero_count": 100,
+    "json_recorded_present_count": 100,
+    "failures": []
+  },
+  "groups": {
+    "LN/spin/batch256": {
+      "workers_seen": 4,
+      "valid_processes": 0,
+      "process_ratios": [],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "LN/auto/batch256": {
+      "workers_seen": 4,
+      "valid_processes": 0,
+      "process_ratios": [],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "LP/spin/batch1": {
+      "workers_seen": 4,
+      "valid_processes": 1,
+      "process_ratios": [
+        {
+          "start_order": "BA",
+          "ratio": 1.7525166198636848
+        }
+      ],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "LP/spin/batch31": {
+      "workers_seen": 4,
+      "valid_processes": 0,
+      "process_ratios": [],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "LP/spin/batch128": {
+      "workers_seen": 4,
+      "valid_processes": 1,
+      "process_ratios": [
+        {
+          "start_order": "BA",
+          "ratio": 1.718150802393381
+        }
+      ],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "LP/auto/batch1": {
+      "workers_seen": 4,
+      "valid_processes": 1,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.6973304502135027
+        }
+      ],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "LP/auto/batch31": {
+      "workers_seen": 4,
+      "valid_processes": 1,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.700872199189539
+        }
+      ],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "LP/auto/batch128": {
+      "workers_seen": 4,
+      "valid_processes": 1,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.6937141683415675
+        }
+      ],
+      "passed": false,
+      "reason": "fewer than three valid fresh-process clusters"
+    },
+    "TP/spin/batch1": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.533767894556208
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.512653720787745
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.5167077468246093
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.5058425855975284
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.517208128041214,
+      "student_t_95_ci": [
+        1.4984423080091689,
+        1.5362089627946087
+      ],
+      "order_effect_abs_log": 0.010525637748719952,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TP/spin/batch31": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.5027231709774762
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.505794314664124
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.5190453376442767
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.5098529782479375
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.509341481587313,
+      "student_t_95_ci": [
+        1.4981156209385185,
+        1.5206514612089994
+      ],
+      "order_effect_abs_log": 0.0020140781030129062,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TP/spin/batch128": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.516884391618274
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.5045720539958813
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.5095407152309246
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.5147173636263347
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.5114210872393716,
+      "student_t_95_ci": [
+        1.5026709573791712,
+        1.5202221695533973
+      ],
+      "order_effect_abs_log": 0.002363280105120047,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TP/spin/batch257": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.5027608942980195
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.5023898879315023
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.5057034493233057
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.5003767589691686
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.502806544278977,
+      "student_t_95_ci": [
+        1.4993165410688412,
+        1.5063046712722323
+      ],
+      "order_effect_abs_log": 0.001895430809160159,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TP/spin/batch512": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.6844360118453496
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.7048254653606005
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.664618997849751
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.6669510575174133
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.6801305717461101,
+      "student_t_95_ci": [
+        1.6507996486350451,
+        1.7099826380808596
+      ],
+      "order_effect_abs_log": 0.006715959513350356,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TP/spin/batch1024": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.697988698207602
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.7054715327999592
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.6600959318831097
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.6853238837107491
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.6871315916255003,
+      "student_t_95_ci": [
+        1.6556582602283543,
+        1.7192032171350426
+      ],
+      "order_effect_abs_log": 0.009739784799699946,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TP/spin/batch4096": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.6809037654075314
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.6940589520918776
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.6796147412559923
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.6780912612266625
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.6831551711662815,
+      "student_t_95_ci": [
+        1.6715211474305816,
+        1.6948701693536006
+      ],
+      "order_effect_abs_log": 0.003444169408561626,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TP/spin/batch16384": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.4386296927987563
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.4353727474249875
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.4424147109135346
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.4578964164840869
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.4435526618257954,
+      "student_t_95_ci": [
+        1.42781661307904,
+        1.4594621384679065
+      ],
+      "order_effect_abs_log": 0.004204752919329591,
+      "headroom_all_blocks_both_backends": true,
+      "passed": true
+    },
+    "TD/spin/batch256": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 3.0777915430970824
+        },
+        {
+          "start_order": "BA",
+          "ratio": 3.055903876370933
+        },
+        {
+          "start_order": "AB",
+          "ratio": 3.066144048515023
+        },
+        {
+          "start_order": "BA",
+          "ratio": 2.9510158703386433
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 3.0372864152251693,
+      "student_t_95_ci": [
+        2.9448180401737494,
+        3.1326583314353305
+      ],
+      "order_effect_abs_log": 0.022704089796660165,
+      "headroom_all_blocks_both_backends": false,
+      "passed": false
+    },
+    "TD/spin/batch512": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 3.009947594020342
+        },
+        {
+          "start_order": "BA",
+          "ratio": 3.033029088742001
+        },
+        {
+          "start_order": "AB",
+          "ratio": 2.973374580318523
+        },
+        {
+          "start_order": "BA",
+          "ratio": 2.833085993347793
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 2.961326020790295,
+      "student_t_95_ci": [
+        2.820469285149002,
+        3.109217266638804
+      ],
+      "order_effect_abs_log": 0.02034590207755338,
+      "headroom_all_blocks_both_backends": false,
+      "passed": false
+    },
+    "TD/spin/batch1024": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.3502237163701267
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.3395752908177905
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.3403278110943007
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.3432697659011426
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.3433425844496745,
+      "student_t_95_ci": [
+        1.3356533656614078,
+        1.3510760692781385
+      ],
+      "order_effect_abs_log": 0.002862565832490116,
+      "headroom_all_blocks_both_backends": false,
+      "passed": false
+    },
+    "TD/spin/batch4096": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 1.4115604196698455
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.3978198144284797
+        },
+        {
+          "start_order": "AB",
+          "ratio": 1.4326972759684642
+        },
+        {
+          "start_order": "BA",
+          "ratio": 1.4033830914076677
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 1.4113032279224413,
+      "student_t_95_ci": [
+        1.3872465919012988,
+        1.435777036881713
+      ],
+      "order_effect_abs_log": 0.015227542409281036,
+      "headroom_all_blocks_both_backends": false,
+      "passed": false
+    },
+    "TD/spin/batch16384": {
+      "workers_seen": 4,
+      "valid_processes": 4,
+      "process_ratios": [
+        {
+          "start_order": "AB",
+          "ratio": 0.783653679126678
+        },
+        {
+          "start_order": "BA",
+          "ratio": 0.7834904924086332
+        },
+        {
+          "start_order": "AB",
+          "ratio": 0.7835535704237959
+        },
+        {
+          "start_order": "BA",
+          "ratio": 0.7823716198237425
+        }
+      ],
+      "geometric_mean_ratio_diagnostic": 0.7832671674793836,
+      "student_t_95_ci": [
+        0.7823112079853921,
+        0.7842242951255692
+      ],
+      "order_effect_abs_log": 0.0008589239249768288,
+      "headroom_all_blocks_both_backends": false,
+      "passed": false
+    },
+    "G/spin/native256": {
+      "workers_seen": 8,
+      "passed": true,
+      "diagnostic_only": true
+    },
+    "G/spin/public1": {
+      "workers_seen": 8,
+      "passed": true,
+      "diagnostic_only": true
+    }
+  },
+  "subphases": {
+    "P": {
+      "passed": true,
+      "decision": "PHASE4A3_Q0C_P_PROVENANCE_PASS"
+    },
+    "LN": {
+      "passed": false,
+      "decision": "PHASE4A3_Q0C_LN_APPARATUS_BLOCKED"
+    },
+    "LP": {
+      "passed": false,
+      "decision": "PHASE4A3_Q0C_LP_APPARATUS_BLOCKED"
+    },
+    "TP": {
+      "passed": true,
+      "decision": "PHASE4A3_Q0C_TP_APPARATUS_PASS"
+    },
+    "TD": {
+      "passed": false,
+      "qualified_batches": [],
+      "decision": "PHASE4A3_Q0C_TD_REGION_NOT_QUALIFIED"
+    },
+    "G": {
+      "passed": true,
+      "is_gate": false,
+      "decision": "PHASE4A3_Q0C_G_DIAGNOSTIC_COMPLETE"
+    }
+  },
+  "overall_decision": "PHASE4A3_Q0C_PROTOCOL_PREREQUISITES_BLOCKED",
+  "performance_pass_fail": null,
+  "performance_claim_allowed": false
+}
