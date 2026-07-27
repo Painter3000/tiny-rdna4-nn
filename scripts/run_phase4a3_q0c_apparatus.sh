@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # TCNN_RDNA4_P4A3_Q0C_SPLIT_APPARATUS_001
+# TCNN_RDNA4_P4A3_Q0C_WORKER_MANIFEST_FIX_001
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -7,6 +8,7 @@ CONTRACT="$ROOT/contracts/phase4a3_q0c_apparatus_contract.json"
 PATCHER="$ROOT/scripts/patch_phase4a3_q0c_binding.py"
 WORKER="$ROOT/scripts/phase4a3_q0c_worker.py"
 FINALIZER="$ROOT/scripts/finalize_phase4a3_q0c.py"
+MANIFEST_TOOL="$ROOT/scripts/phase4a3_q0c_worker_manifest.py"
 PROVENANCE="$ROOT/scripts/check_phase4a3_q0c_provenance.py"
 OBJECT_CAPTURE="$ROOT/scripts/capture_phase4a3_q0c_build_object.py"
 SMOKE="$ROOT/scripts/phase4a3_q0c_hook_smoke.py"
@@ -145,7 +147,10 @@ for item in items:
     print("\t".join(str(item.get(key, "-")) for key in
                     ("phase","schedule","batch","metric","process_index","start_order")))
 PY
-set +e
+"$PYTHON_BIN" "$MANIFEST_TOOL" init \
+    --matrix "$EVIDENCE/matrix.tsv" \
+    --output "$EVIDENCE/worker_manifest.json"
+
 while IFS=$'\t' read -r phase schedule batch metric process_index start_order; do
 	[[ "$batch" != "-" || "$metric" != "-" ]] || { echo "matrix row has neither batch nor metric" >&2; exit 16; }
 	[[ "$batch" == "-" || "$metric" == "-" ]] || { echo "matrix row has both batch and metric" >&2; exit 16; }
@@ -154,12 +159,36 @@ while IFS=$'\t' read -r phase schedule batch metric process_index start_order; d
 	extra=(); [[ "$batch" == "-" ]] || extra+=(--batch "$batch"); [[ "$metric" == "-" ]] || extra+=(--metric "$metric")
 	# The built extension retains the hook; the source tree must not.
 	cmp -s "$BINDING" "$EVIDENCE/backup/bindings.cpp.release" || { echo "$stem: test-only source hook reappeared" >&2; exit 15; }
-	env PYTHONPATH="$EVIDENCE/build/lib:$ROOT/bindings/torch:$ROOT/scripts" PYTHONPYCACHEPREFIX="$EVIDENCE/pycache/$stem" "$PYTHON_BIN" "$WORKER" --contract "$CONTRACT" --bridge "$EVIDENCE/build/libphase4a3_q0c_bridge.so" --phase "$phase" --schedule "$schedule" "${extra[@]}" --process-index "$process_index" --start-order "$start_order" --cpu "$BENCH_CPU" --output "$EVIDENCE/workers/$stem.json" > "$EVIDENCE/workers/$stem.log" 2>&1
-	echo "$stem returncode=$?"
+	set +e
+	env PYTHONPATH="$EVIDENCE/build/lib:$ROOT/bindings/torch:$ROOT/scripts" \
+		PYTHONPYCACHEPREFIX="$EVIDENCE/pycache/$stem" \
+		"$PYTHON_BIN" "$WORKER" \
+		--contract "$CONTRACT" \
+		--bridge "$EVIDENCE/build/libphase4a3_q0c_bridge.so" \
+		--phase "$phase" --schedule "$schedule" "${extra[@]}" \
+		--process-index "$process_index" --start-order "$start_order" \
+		--cpu "$BENCH_CPU" --output "$EVIDENCE/workers/$stem.json" \
+		> "$EVIDENCE/workers/$stem.log" 2>&1 &
+	worker_pid=$!
+	wait "$worker_pid"
+	worker_rc=$?
+	set -e
+
+	"$PYTHON_BIN" "$MANIFEST_TOOL" record \
+		--manifest "$EVIDENCE/worker_manifest.json" \
+		--workers "$EVIDENCE/workers" \
+		--worker-id "$stem" \
+		--pid "$worker_pid" \
+		--returncode "$worker_rc"
+	echo "$stem pid=$worker_pid returncode=$worker_rc"
 done < "$EVIDENCE/matrix.tsv"
-set -e
 set +e
-PYTHONPATH="$ROOT/scripts" "$PYTHON_BIN" "$FINALIZER" --contract "$CONTRACT" --workers "$EVIDENCE/workers" --provenance "$EVIDENCE/provenance/phase4a3_q0c_provenance.json" --output "$EVIDENCE/phase4a3_q0c_apparatus.json"
+PYTHONPATH="$ROOT/scripts" "$PYTHON_BIN" "$FINALIZER" \
+	--contract "$CONTRACT" \
+	--workers "$EVIDENCE/workers" \
+	--worker-manifest "$EVIDENCE/worker_manifest.json" \
+	--provenance "$EVIDENCE/provenance/phase4a3_q0c_provenance.json" \
+	--output "$EVIDENCE/phase4a3_q0c_apparatus.json"
 FINAL_RC=$?
 set -e
 echo "Finalizer return code: $FINAL_RC"
