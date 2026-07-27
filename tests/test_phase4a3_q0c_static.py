@@ -11,7 +11,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from phase4a3_q0c_common import MAGIC, calibrate_count, enumerate_bundles, load_contract, matrix, padded_batch, symbol_lines
 from capture_phase4a3_q0c_build_object import capture
-from check_phase4a3_q0c_provenance import validate_build_object
+from check_phase4a3_q0c_provenance import (
+    P4_AUDIT_PASS,
+    validate_build_object,
+    validate_p4_audit,
+)
 
 
 class Q0cTests(unittest.TestCase):
@@ -36,6 +40,62 @@ class Q0cTests(unittest.TestCase):
     def test_local_symbol(self):
         fixture = "12: 0000 120 FUNC LOCAL DEFAULT 7 _GLOBAL__N_1foo_rocwmma_width64_inference_kernel"
         self.assertEqual(len(symbol_lines(fixture, "rocwmma_width64_inference_kernel")), 1)
+
+    def p4_audit(self, companions=None):
+        raw_symbol = "_ZL33rocwmma_width64_inference_kernelPKDF16_"
+        return {
+            "decision": P4_AUDIT_PASS,
+            "gates": {
+                "exactly_one_kernel_symbol": True,
+                "metadata_companions_classified": True,
+            },
+            "kernel": {
+                "raw_symbol": raw_symbol,
+                "metadata_companion_symbols": (
+                    [raw_symbol + ".kd"] if companions is None else companions
+                ),
+            },
+        }
+
+    def test_p4_audit_accepts_kd_companion(self):
+        raw_symbol, companions = validate_p4_audit(
+            self.p4_audit(), "rocwmma_width64_inference_kernel"
+        )
+        self.assertEqual(companions, [raw_symbol + ".kd"])
+
+    def test_p4_audit_accepts_multiple_metadata_companions(self):
+        audit = self.p4_audit([])
+        raw_symbol = audit["kernel"]["raw_symbol"]
+        audit["kernel"]["metadata_companion_symbols"] = [
+            raw_symbol + ".kd",
+            raw_symbol + ".num_vgpr",
+            raw_symbol + ".has_recursion",
+        ]
+        self.assertEqual(len(validate_p4_audit(
+            audit, "rocwmma_width64_inference_kernel"
+        )[1]), 3)
+
+    def test_p4_audit_rejects_two_executable_symbols_gate(self):
+        audit = self.p4_audit()
+        audit["gates"]["exactly_one_kernel_symbol"] = False
+        with self.assertRaisesRegex(RuntimeError, "exactly_one_kernel_symbol"):
+            validate_p4_audit(audit, "rocwmma_width64_inference_kernel")
+
+    def test_p4_audit_rejects_foreign_prefix_companion(self):
+        audit = self.p4_audit(["_ZL15different_kernelv.kd"])
+        with self.assertRaisesRegex(RuntimeError, "unclassified kernel metadata companions"):
+            validate_p4_audit(audit, "rocwmma_width64_inference_kernel")
+
+    def test_p4_audit_rejects_failed_decision(self):
+        audit = self.p4_audit()
+        audit["decision"] = "PHASE4A2_P4_PRODUCTION_CODE_OBJECT_AUDIT_FAIL"
+        with self.assertRaisesRegex(RuntimeError, "did not pass"):
+            validate_p4_audit(audit, "rocwmma_width64_inference_kernel")
+
+    def test_p4_audit_rejects_missing_kernel_token(self):
+        audit = self.p4_audit()
+        with self.assertRaisesRegex(RuntimeError, "does not contain"):
+            validate_p4_audit(audit, "different_kernel")
 
     def test_padding(self):
         self.assertEqual([(x, padded_batch(x)) for x in (1,31,128,257)], [(1,256),(31,256),(128,256),(257,512)])

@@ -10,7 +10,10 @@ import subprocess
 import sys
 import tempfile
 
-from phase4a3_q0c_common import MARKER, enumerate_bundles, load_contract, sha256, symbol_lines
+from phase4a3_q0c_common import MARKER, enumerate_bundles, load_contract, sha256
+
+
+P4_AUDIT_PASS = "PHASE4A2_P4_PRODUCTION_CODE_OBJECT_AUDIT_PASS"
 
 
 def run(command: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -65,6 +68,48 @@ def validate_build_object(obj: pathlib.Path, expected_basename: str) -> pathlib.
     return obj
 
 
+def validate_p4_audit(audit_result: object, kernel_token: str) -> tuple[str, list[str]]:
+    if not isinstance(audit_result, dict):
+        raise RuntimeError("P4 structural audit result is not a JSON object")
+    if audit_result.get("decision") != P4_AUDIT_PASS:
+        raise RuntimeError("exact measurement object did not pass the P4 structural audit")
+
+    gates = audit_result.get("gates")
+    if not isinstance(gates, dict) or not gates:
+        raise RuntimeError("P4 structural audit contains no gates")
+    failed_gates = sorted(
+        name for name, passed in gates.items()
+        if not isinstance(name, str) or passed is not True
+    )
+    if failed_gates:
+        raise RuntimeError(
+            "P4 structural audit contains failed gates: " + ", ".join(map(str, failed_gates))
+        )
+
+    kernel = audit_result.get("kernel")
+    if not isinstance(kernel, dict):
+        raise RuntimeError("P4 structural audit contains no kernel classification")
+    raw_symbol = kernel.get("raw_symbol")
+    companions = kernel.get("metadata_companion_symbols")
+    if not isinstance(raw_symbol, str) or not raw_symbol:
+        raise RuntimeError("P4 structural audit contains no executable kernel symbol")
+    if kernel_token not in raw_symbol:
+        raise RuntimeError(
+            "audited executable kernel symbol does not contain "
+            f"{kernel_token!r}: {raw_symbol!r}"
+        )
+    if not isinstance(companions, list) or not all(isinstance(symbol, str) for symbol in companions):
+        raise RuntimeError("P4 structural audit contains invalid kernel metadata companions")
+    invalid_companions = [
+        symbol for symbol in companions if not symbol.startswith(raw_symbol + ".")
+    ]
+    if invalid_companions:
+        raise RuntimeError(
+            "unclassified kernel metadata companions: " + repr(invalid_companions)
+        )
+    return raw_symbol, companions
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--contract", type=pathlib.Path, required=True)
@@ -93,12 +138,13 @@ def main() -> int:
     if audit.returncode or not audit_json.is_file():
         raise RuntimeError("P4 structural audit failed on exact measurement object")
 
-    readelf, objdump = tool("llvm-readelf"), tool("llvm-objdump")
-    symbols = run([readelf, "--symbols", "--wide", str(audit_dir / "gfx1201_code_object.hsaco")]).stdout
-    hits = symbol_lines(symbols, cfg["kernel_token"])
-    if len(hits) != 1:
-        raise RuntimeError(f"LOCAL/GLOBAL-independent object symbol count is {len(hits)}")
+    audit_result = json.loads(audit_json.read_text())
+    raw_symbol, metadata_companions = validate_p4_audit(
+        audit_result, cfg["kernel_token"]
+    )
+    print("PHASE4A3_Q0C_OBJECT_KERNEL_SYMBOL_CLASSIFIED: PASS")
 
+    objdump = tool("llvm-objdump")
     data = args.extension.read_bytes()
     bundles = enumerate_bundles(data)
     if not bundles:
@@ -130,7 +176,12 @@ def main() -> int:
         "marker": MARKER,
         "subphase": "P",
         "decision": contract["decisions"]["P_pass"],
-        "object": {"path": str(obj), "sha256": sha256(obj), "symbol_line": hits[0]},
+        "object": {
+            "path": str(obj),
+            "sha256": sha256(obj),
+            "raw_symbol": raw_symbol,
+            "metadata_companion_symbols": metadata_companions,
+        },
         "extension": {"path": str(args.extension.resolve()), "sha256": sha256(args.extension)},
         "bundle_count": len(bundles),
         "code_objects": code_objects,
@@ -139,7 +190,7 @@ def main() -> int:
         "p4_audit_json_sha256": sha256(audit_json),
         "build_command": args.build_command_file.read_text().strip(),
         "link_command": args.link_command_file.read_text().strip(),
-        "tools": {"readelf": version(readelf), "objdump": version(objdump)}
+        "tools": {"objdump": version(objdump)}
     }
     (args.output_dir / "phase4a3_q0c_provenance.json").write_text(json.dumps(result, indent=2) + "\n")
     print(contract["decisions"]["P_pass"])
