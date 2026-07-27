@@ -10,6 +10,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from phase4a3_q0c_common import MAGIC, calibrate_count, enumerate_bundles, load_contract, matrix, padded_batch, symbol_lines
+from phase4a3_q0c_worker import argument_parser
 from capture_phase4a3_q0c_build_object import capture
 from check_phase4a3_q0c_provenance import (
     P4_AUDIT_PASS,
@@ -122,6 +123,53 @@ class Q0cTests(unittest.TestCase):
         items = matrix(self.contract)
         self.assertEqual(len(items), 8 + 24 + 32 + 20 + 16)
         self.assertIn({"phase":"TP","schedule":"spin","batch":257,"process_index":0,"start_order":"AB"}, items)
+
+    def test_matrix_worker_commands_parse_and_identities_are_unique(self):
+        items = matrix(self.contract)
+        identities = []
+        for item in items:
+            label = item.get("batch", item.get("metric"))
+            stem = f"{item['phase']}_{item['schedule']}_{label}_p{item['process_index']}_{item['start_order']}"
+            identities.append((stem, f"workers/{stem}.json"))
+            argv = [
+                "--contract", str(self.contract_path), "--bridge", "/preflight/bridge.so",
+                "--phase", item["phase"], "--schedule", item["schedule"],
+                "--process-index", str(item["process_index"]),
+                "--start-order", item["start_order"], "--cpu", "0",
+                "--output", f"/preflight/{stem}.json",
+            ]
+            argv[6:6] = (["--batch", str(item["batch"])] if "batch" in item
+                          else ["--metric", item["metric"]])
+            args = argument_parser().parse_args(argv)
+            self.assertIsInstance(args.process_index, int)
+            self.assertFalse(stem.endswith("_"))
+        self.assertEqual(len(identities), 100)
+        self.assertEqual(len(set(identities)), 100)
+
+    def test_matrix_has_exact_process_indices_and_start_orders_per_group(self):
+        groups = {}
+        for item in matrix(self.contract):
+            key = (item["phase"], item["schedule"], item.get("batch"), item.get("metric"))
+            groups.setdefault(key, []).append((item["process_index"], item["start_order"]))
+        for key, values in groups.items():
+            count = (self.contract["matrix"]["G"]["processes_per_metric"]
+                     if key[0] == "G"
+                     else self.contract["matrix"]["processes_per_group"])
+            self.assertEqual(
+                values,
+                [(index, ("AB" if index % 2 == 0 else "BA"))
+                 for index in range(count)],
+            )
+
+    def test_worker_parser_rejects_empty_process_index(self):
+        argv = [
+            "--contract", str(self.contract_path), "--bridge", "/preflight/bridge.so",
+            "--phase", "LN", "--schedule", "spin", "--batch", "256",
+            "--process-index", "", "--start-order", "AB", "--cpu", "0",
+            "--output", "/preflight/out.json",
+        ]
+        with self.assertRaises(SystemExit):
+            argument_parser().parse_args(argv)
 
     def test_setuptools_sibling_object_exact_path_handshake(self):
         with tempfile.TemporaryDirectory() as raw:

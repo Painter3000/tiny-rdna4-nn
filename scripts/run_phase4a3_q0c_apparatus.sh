@@ -119,13 +119,39 @@ env PYTHONPATH="$EVIDENCE/build/lib:$ROOT/bindings/torch" "$PYTHON_BIN" "$SMOKE"
 PYTHONPATH="$ROOT/scripts" "$PYTHON_BIN" - "$CONTRACT" "$SELECT" > "$EVIDENCE/matrix.tsv" <<'PY'
 import pathlib, sys
 from phase4a3_q0c_common import load_contract, matrix
-for item in matrix(load_contract(pathlib.Path(sys.argv[1])), tuple(sys.argv[2].split(","))):
-    print("\t".join(str(item.get(key, "")) for key in ("phase","schedule","batch","metric","process_index","start_order")))
+from phase4a3_q0c_worker import argument_parser
+
+items = matrix(load_contract(pathlib.Path(sys.argv[1])), tuple(sys.argv[2].split(",")))
+identities = []
+for item in items:
+    label = item.get("batch", item.get("metric"))
+    stem = f"{item['phase']}_{item['schedule']}_{label}_p{item['process_index']}_{item['start_order']}"
+    identities.append((stem, f"workers/{stem}.json"))
+    argv = [
+        "--contract", sys.argv[1], "--bridge", "/preflight/bridge.so",
+        "--phase", item["phase"], "--schedule", item["schedule"],
+        "--process-index", str(item["process_index"]),
+        "--start-order", item["start_order"], "--cpu", "0",
+        "--output", f"/preflight/{stem}.json",
+    ]
+    argv[6:6] = (["--batch", str(item["batch"])] if "batch" in item
+                  else ["--metric", item["metric"]])
+    argument_parser().parse_args(argv)
+if len(set(identities)) != len(items):
+    raise SystemExit("Q0c matrix contains duplicate worker IDs or output paths")
+for item in items:
+    # A visible sentinel prevents Bash IFS whitespace from collapsing optional
+    # TSV columns and shifting process_index/start_order to the left.
+    print("\t".join(str(item.get(key, "-")) for key in
+                    ("phase","schedule","batch","metric","process_index","start_order")))
 PY
 set +e
 while IFS=$'\t' read -r phase schedule batch metric process_index start_order; do
-	stem="${phase}_${schedule}_${batch:-$metric}_p${process_index}_${start_order}"
-	extra=(); [[ -n "$batch" ]] && extra+=(--batch "$batch"); [[ -n "$metric" ]] && extra+=(--metric "$metric")
+	[[ "$batch" != "-" || "$metric" != "-" ]] || { echo "matrix row has neither batch nor metric" >&2; exit 16; }
+	[[ "$batch" == "-" || "$metric" == "-" ]] || { echo "matrix row has both batch and metric" >&2; exit 16; }
+	label="$batch"; [[ "$label" != "-" ]] || label="$metric"
+	stem="${phase}_${schedule}_${label}_p${process_index}_${start_order}"
+	extra=(); [[ "$batch" == "-" ]] || extra+=(--batch "$batch"); [[ "$metric" == "-" ]] || extra+=(--metric "$metric")
 	# The built extension retains the hook; the source tree must not.
 	cmp -s "$BINDING" "$EVIDENCE/backup/bindings.cpp.release" || { echo "$stem: test-only source hook reappeared" >&2; exit 15; }
 	env PYTHONPATH="$EVIDENCE/build/lib:$ROOT/bindings/torch:$ROOT/scripts" PYTHONPYCACHEPREFIX="$EVIDENCE/pycache/$stem" "$PYTHON_BIN" "$WORKER" --contract "$CONTRACT" --bridge "$EVIDENCE/build/libphase4a3_q0c_bridge.so" --phase "$phase" --schedule "$schedule" "${extra[@]}" --process-index "$process_index" --start-order "$start_order" --cpu "$BENCH_CPU" --output "$EVIDENCE/workers/$stem.json" > "$EVIDENCE/workers/$stem.log" 2>&1
