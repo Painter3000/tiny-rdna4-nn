@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "phase": "4A3-Q0c",
+  "marker": "TCNN_RDNA4_P4A3_Q0C_SPLIT_APPARATUS_001",
+  "status": "FROZEN_BEFORE_Q0C_EXECUTION",
+  "purpose": "Fail-closed apparatus qualification only; no performance PASS or FAIL is authorized.",
+  "baseline": {
+    "release_tag": "phase4a2-width64-production-inference-gfx1201-pass",
+    "release_commit": "cd1330a21452f7e2edab9e676567b7a040f922bc",
+    "candidate": "RocWMMAWidth64MLP",
+    "reference": "HipBLASLtMLPFP16",
+    "topology": "64->64->64->64, ReLU/ReLU/None",
+    "precision": "Fp16",
+    "parameter_elements": 12480,
+    "required_arch": "gfx1201",
+    "required_torch": "2.13.0+rocm7.2",
+    "required_hip_prefix": "7.2",
+    "api_batch_size_granularity": 256
+  },
+  "provenance": {
+    "p4_reference_evidence": "workspace/evidence/phase4a2_p4_20260726T030952Z",
+    "p4_reference_kernel_isa_sha256": "2c03a92c6c4e3c7986411c4dd40fb8b9d8745f05681c046562190ffc029886ec",
+    "reference_hash_frozen_before_measurement": true,
+    "build_object_basename": "rocwmma_width64_mlp.o",
+    "exact_build_object_path_handshake_required": true,
+    "build_object_capture_scope": "fresh_evidence_directory",
+    "kernel_token": "rocwmma_width64_inference_kernel",
+    "exact_build_objects": 1,
+    "exact_final_extension_kernels": 1,
+    "accept_symbol_bindings": ["LOCAL", "GLOBAL"],
+    "whole_fatbin_sha_is_identity_proof": false,
+    "p4_structural_audit_required": true,
+    "all_extension_bundles_must_be_enumerated": true
+  },
+  "environment": {
+    "real_tty_required": true,
+    "display_manager_inactive_required": true,
+    "no_foreign_gpu_processes_required": true,
+    "fixed_cpu_affinity_per_worker": true,
+    "forbidden_nonzero_environment": ["HIP_LAUNCH_BLOCKING", "AMD_SERIALIZE_KERNEL", "AMD_SERIALIZE_COPY"],
+    "primary_schedule": "spin",
+    "sensitivity_schedule": "auto"
+  },
+  "matrix": {
+    "processes_per_group": 4,
+    "start_orders": ["AB", "BA", "AB", "BA"],
+    "paired_rounds": 4,
+    "round_orders_AB": ["AB", "BA", "AB", "BA"],
+    "round_orders_BA": ["BA", "AB", "BA", "AB"],
+    "LN": {"schedules": ["spin", "auto"], "batches": [256]},
+    "LP": {"schedules": ["spin", "auto"], "batches": [1, 31, 128]},
+    "TP": {"schedules": ["spin"], "batches": [1, 31, 128, 257, 512, 1024, 4096, 16384]},
+    "TD": {"schedules": ["spin"], "batches": [256, 512, 1024, 4096, 16384]},
+    "G": {"schedules": ["spin"], "metrics": ["native256", "public1"], "processes_per_metric": 8}
+  },
+  "latency": {
+    "LN": {
+      "convergence": {"target_ms": 150, "min_samples": 2048, "max_samples": 32768, "min_windows": 5, "max_windows": 30, "last_windows": 5, "spread_max": 0.01, "drift_max": 0.005},
+      "scoring": {"target_ms": 300, "min_samples": 4096, "max_samples": 65536, "blocks": 6, "spread_max": 0.02, "deviation_max": 0.02}
+    },
+    "LP": {
+      "public_path_convergence_required": true,
+      "includes": ["padding", "input_fp16_to_fp32", "parameter_fp32_to_fp16", "allocations", "output_slice", "current_stream_completion"],
+      "convergence": {"target_ms": 200, "min_samples": 1024, "max_samples": 16384, "min_windows": 5, "max_windows": 30, "last_windows": 5, "spread_max": 0.02, "drift_max": 0.01},
+      "scoring": {"target_ms": 300, "min_samples": 2048, "max_samples": 32768, "blocks": 6, "spread_max": 0.05, "deviation_max": 0.05}
+    }
+  },
+  "throughput": {
+    "TP": {"calibration_clock": "host_total", "target_ms": 500, "min_iterations": 64, "max_iterations": 1048576, "blocks": 5, "metric": "host_total_ns_per_completed_public_forward", "submission_headroom_is_gate": false},
+    "TD": {"calibration_clock": "hip_event", "target_ms": 500, "min_iterations": 64, "max_iterations": 1048576, "blocks": 5, "metric": "hip_event_ns_per_native_forward", "submission_over_gpu_max": 0.8, "all_blocks_both_backends": true}
+  },
+  "gap": {
+    "gaps_ms": [0.0, 0.5, 1.0, 2.0, 4.0, 8.0, 16.666667, 50.0],
+    "latin_base": [0, 1, 7, 2, 6, 3, 5, 4],
+    "cyclic_rows": 8,
+    "sacrificial_samples_per_gap": 4,
+    "blocks": 3,
+    "samples_per_block": 12,
+    "raw_samples_required": true,
+    "floor_subtraction": false,
+    "common_additive_S_assumed": false,
+    "is_gate": false
+  },
+  "correctness": {"before_after_each_worker": true, "finite": true, "bitwise_repeat": true, "atol": 0.003, "rtol": 0.02, "normalized_l2_max": 0.005, "same_fp32_master": true, "equal_native_parameter_hashes": true},
+  "floors": {"samples": 256, "subtract": false, "empty_sync_fraction_max": 0.05},
+  "analysis": {
+    "unit": "fresh_process_pair_cluster",
+    "round_ratio": "reference/candidate",
+    "process_ratio": "geometric_mean_of_exactly_four_round_ratios",
+    "ci": "two_sided_student_t_95_on_process_log_ratios",
+    "minimum_valid_processes": 3,
+    "order_effect_abs_log_max": 0.02,
+    "outlier_removal": false,
+    "replacement_runs": false,
+    "best_run": false,
+    "posthoc_block_drop": false,
+    "known_q0_q0b_ratio_direction_used": false,
+    "performance_decision_allowed": false
+  },
+  "decisions": {
+    "P_pass": "PHASE4A3_Q0C_P_PROVENANCE_PASS",
+    "P_fail": "PHASE4A3_Q0C_P_PROVENANCE_BLOCKED",
+    "LN_pass": "PHASE4A3_Q0C_LN_APPARATUS_PASS",
+    "LP_pass": "PHASE4A3_Q0C_LP_APPARATUS_PASS",
+    "TP_pass": "PHASE4A3_Q0C_TP_APPARATUS_PASS",
+    "TD_pass": "PHASE4A3_Q0C_TD_REGION_QUALIFIED",
+    "G_complete": "PHASE4A3_Q0C_G_DIAGNOSTIC_COMPLETE",
+    "overall_proceed": "PROCEED_TO_PHASE4A3_P0_PROTOCOL_FREEZE",
+    "overall_blocked": "PHASE4A3_Q0C_PROTOCOL_PREREQUISITES_BLOCKED"
+  }
+}
