@@ -7,11 +7,13 @@ This repository is not a CUDA build and does not require an NVIDIA GPU. The vali
 > **Project status**
 >
 > - **Phase 3B1:** qualified FP16 forward, backward, training, `NetworkWithInputEncoding`, and reproducible performance validation.
-> - **Phase 4A2:** qualified opt-in `RocWMMAWidth64MLP` production **inference** path for AMD RDNA4 / `gfx1201` (forward only, no performance claim yet).
+> - **Phase 4A2:** qualified opt-in `RocWMMAWidth64MLP` production **inference** path for AMD RDNA4 / `gfx1201` (forward only).
+> - **Phase 4A3-Q0c/Q0d:** qualified public rocWMMA-vs-hipBLASLt throughput as a Q0c sub-metric, with observed ratios of approximately **1.44–1.69x** across the qualified public cases. The Q0d LP latency measurement sub-apparatus passed for batches `1`, `31`, and `128`, while LN at batch `256` remained blocked. No overall or combined rocWMMA performance claim is allowed; `performance_claim_allowed=false`.
 >
-> **Validated tags:**
+> **Validated milestones and evidence freezes:**
 > - [`phase3b1-fp16-gfx1201-rocm72-pass`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase3b1-fp16-gfx1201-rocm72-pass)
 > - [`phase4a2-width64-production-inference-gfx1201-pass`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase4a2-width64-production-inference-gfx1201-pass)
+> - [`phase4a3-q0d-20260728-lp-pass-overall-blocked`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase4a3-q0d-20260728-lp-pass-overall-blocked)
 
 ## Scope
 
@@ -29,6 +31,7 @@ The current port focuses on:
 - standalone encodings and `NetworkWithInputEncoding`
 - deterministic correctness validation across the qualified backends
 - reproducible performance validation for the Phase 3B1 hipBLASLt FP16 path
+- a qualified Phase 4A3 Q0c public-throughput sub-metric and a separately documented Q0d latency-apparatus result
 
 Other AMD architectures may require additional work and are not claimed as validated by this repository.
 
@@ -57,7 +60,7 @@ Phase 3B1-F1 measured 24 cases using 72 fresh processes and five paired FP16/FP3
 
 Small batch cases are largely launch-overhead dominated and are neutral in aggregate. Throughput-oriented cases show the main FP16 benefit. Results vary by topology; the full report includes every case and process.
 
-> These figures describe the Phase 3B1 hipBLASLt FP16 path. The Phase 4A2 `RocWMMAWidth64MLP` backend makes **no performance claim** yet; only its functional inference correctness and code-object resources are published.
+> These figures describe the Phase 3B1 hipBLASLt FP16 path. For the `RocWMMAWidth64MLP` backend, Phase 4A3 qualifies only public throughput as a Q0c sub-metric. It makes no overall or combined rocWMMA performance claim. The Q0d LP latency sub-apparatus passed, but LN remained blocked; therefore `performance_claim_allowed=false`.
 
 See:
 
@@ -270,6 +273,45 @@ SGPR field:              74
 
 > **Claim boundary.** These are recorded resource and instruction facts, not a performance result. Register values alone do not justify an occupancy or throughput claim, and the ISA audit does not contain a performance hypothesis. The measured fragment/register mapping used during development is a version-bound diagnostic for ROCm 7.2 / rocWMMA on `gfx1201` and is treated as `LAYOUT_STABILITY: NOT_GUARANTEED_BY_ROCWMMA_API`; the kernel relies on official rocWMMA accesses rather than hard-wiring that mapping as a constant.
 
+## Phase 4A3: rocWMMA performance-apparatus qualification
+
+Phase 4A3 evaluated the qualified `RocWMMAWidth64MLP` inference backend against the hipBLASLt FP16 reference path. Correctness qualification from Phase 4A2 remained a prerequisite and was not replaced by performance measurements.
+
+### Q0c throughput sub-metric
+
+The public throughput apparatus passed as a qualified sub-metric. Across the qualified public cases, the observed rocWMMA-vs-hipBLASLt ratios were approximately **1.44–1.69x**.
+
+These results are a partial throughput result only. They must not be interpreted as an overall backend speedup, a latency qualification, or a general result for arbitrary network topologies and batch sizes.
+
+### Q0d latency apparatus
+
+| Region | Result |
+|---|---|
+| LP, batch 1 | 4/4 valid processes — PASS |
+| LP, batch 31 | 4/4 valid processes — PASS |
+| LP, batch 128 | 4/4 valid processes — PASS |
+| LN, batch 256 | 1/4 valid processes — BLOCKED |
+
+Final Q0d status:
+
+```text
+PHASE4A3_Q0D_LATENCY_PROFILE_BLOCKED
+spin_profile_qualified=false
+performance_claim_allowed=false
+```
+
+All 16 workers completed successfully and retained their correctness and general worker gates. The LN blocking condition came from measurement-score instability, including distinct faster timing blocks within several processes. It was not classified as a correctness failure, kernel crash, manifest failure, or worker return-code failure.
+
+No thresholds were relaxed, no outliers were removed, no replacement runs were performed, and the experiment was not adaptively extended.
+
+> **Claim boundary.** Q0c public throughput is a qualified sub-metric, and the Q0d LP measurement sub-apparatus passed. The combined latency profile is not qualified because LN remained blocked. Consequently, this phase permits no overall or combined rocWMMA performance claim.
+
+Evidence freeze and release:
+
+- [`phase4a3-q0d-20260728-lp-pass-overall-blocked`](https://github.com/Painter3000/tiny-rdna4-nn/releases/tag/phase4a3-q0d-20260728-lp-pass-overall-blocked)
+- Freeze commit: `d85469bf33e43d04de8943dbd9044d27fb87b0f9`
+- Evidence bundle SHA-256: `0133a42aa56c2668c7230e56e19ece419cd2cd44ab400d057db9a6b9508c7225`
+
 ## Python API
 
 The Python package and import name remain `tinycudann`. The high-level model classes are kept where practical, but network backend names are selected explicitly on the ROCm path. NVIDIA backend names are not aliased to AMD backends.
@@ -389,12 +431,27 @@ The Phase 4A2 PASS tag points to commit:
 cd1330a21452f7e2edab9e676567b7a040f922bc
 ```
 
+### Phase 4A3 rocWMMA performance apparatus
+
+The Phase 4A3 performance work completed with a qualified Q0c public-throughput sub-metric and a partially qualified Q0d latency apparatus:
+
+- Q0c public throughput: qualified sub-metric, approximately `1.44–1.69x` across the qualified public cases
+- Q0d LP batches `1`, `31`, and `128`: PASS, 4/4 valid processes each
+- Q0d LN batch `256`: BLOCKED, 1/4 valid processes
+- no overall or combined performance claim; `performance_claim_allowed=false`
+
+The Q0d evidence-freeze tag points to commit:
+
+```text
+d85469bf33e43d04de8943dbd9044d27fb87b0f9
+```
+
 ## Current limitations
 
 - Only `gfx1201` on the Radeon AI PRO R9700 has completed the full qualification described here.
 - Native C++ example and benchmark workflows from the upstream CUDA README are not yet the recommended RDNA4 entry point.
 - `FullyFusedMLP`, CUDA RTC, and CUDA JIT fusion are unavailable on the ROCm path.
-- The `RocWMMAWidth64MLP` backend is inference-only (no backward/training), fixed to the exact `64 -> 64 -> 64 -> 64` topology, opt-in and disabled by default, and carries no performance claim yet.
+- The `RocWMMAWidth64MLP` backend is inference-only (no backward/training), fixed to the exact `64 -> 64 -> 64 -> 64` topology, opt-in and disabled by default. Phase 4A3 qualifies only the Q0c public-throughput sub-metric; no overall or combined performance claim is allowed because Q0d LN remained blocked.
 - This port does not claim support for NVIDIA GPUs or for all ROCm-capable AMD architectures.
 - Performance depends strongly on batch size and topology; latency-bound workloads may see little or no FP16 speedup.
 - The validated ROCm 7.2 setup currently uses the regular-allocation fallback because the tiny-cuda-nn GPU memory arena does not obtain a usable virtual memory path. This results in higher memory usage than the virtual-allocation path would achieve.
