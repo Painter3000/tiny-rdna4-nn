@@ -3,6 +3,7 @@
 *.o
 __pycache__
 build*
+!scripts/build_phase4a2_image_path_modules.sh
 dist
 rtc
 /.cache
