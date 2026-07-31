@@ -22,7 +22,12 @@ OUTPUT = pathlib.Path(
         str(ROOT / "phase4a2_image_path_evidence"),
     )
 ).resolve()
-BUILD = ROOT / ".phase4a2_image_build"
+BUILD = pathlib.Path(
+    os.environ.get(
+        "PHASE4A2_BUILD_ROOT",
+        str(ROOT / ".phase4a2_image_build"),
+    )
+).resolve()
 TCNN_BINARY = BUILD / "runtime/tiny-rdna4-nn/tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so"
 GSPLAT_BINARY = BUILD / "runtime/amd-gsplat/gsplat/csrc.so"
 QUALIFIED = {
