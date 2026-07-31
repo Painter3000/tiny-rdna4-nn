@@ -258,14 +258,18 @@ def main() -> int:
         value["actual"] == value["expected"]
         for value in qualified_hashes.values()
     )
-    gates = {
-        "PHASE4A2_IMAGE_PATH_PREFLIGHT": (
-            sys.prefix != sys.base_prefix
-            and pathlib.Path(sys.executable).resolve().is_relative_to(
-                pathlib.Path(sys.prefix).resolve()
+    preflight = {
+        "virtual_environment_active": sys.prefix != sys.base_prefix,
+        "python_executable_lexically_under_prefix": (
+            pathlib.Path(os.path.abspath(sys.executable)).is_relative_to(
+                pathlib.Path(os.path.abspath(sys.prefix))
             )
-            and TCNN_BINARY.is_file() and GSPLAT_BINARY.is_file()
         ),
+        "tiny_rdna4_nn_binary_present": TCNN_BINARY.is_file(),
+        "amd_gsplat_binary_present": GSPLAT_BINARY.is_file(),
+    }
+    gates = {
+        "PHASE4A2_IMAGE_PATH_PREFLIGHT": all(preflight.values()),
         "PHASE4A2_IMAGE_PATH_QUALIFIED_KERNEL_IMMUTABILITY": immutable,
         "PHASE4A2_IMAGE_PATH_INITIAL_STATE_IDENTITY": initial_identity,
         "PHASE4A2_REAL_DECODER_FORWARD": step0_forward and step0_tolerance_ok,
@@ -297,6 +301,7 @@ def main() -> int:
         source_digest.update(path.read_bytes())
     summary = {
         "gates": gates,
+        "preflight": preflight,
         "environment": {
             "python": sys.executable,
             "python_version": platform.python_version(),
