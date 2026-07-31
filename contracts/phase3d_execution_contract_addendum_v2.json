@@ -1,0 +1,69 @@
+{
+  "activity_rules": {
+    "global_effective_step_fraction_minimum": 0.95,
+    "layer_consecutive_no_op_steps_blocked_at": 256
+  },
+  "addendum_id": "PHASE3D_EXECUTION_CONTRACT_ADDENDUM_V2",
+  "addendum_version": 2,
+  "baseline": {
+    "archive_sha256": "ed9bb0ad316e589af0eb7bda558036013d0c30ced09e697d0567b8bc2f202323",
+    "commit": "8632e9cc3cdf4c92f35caae94f90dc577ae627a2",
+    "tag": "phase3d0-inprocess-bridge-gfx1201-pass"
+  },
+  "beta_power": {
+    "beta1_first_subnormal_step": 829,
+    "beta1_first_zero_step": null,
+    "beta1_fixed_point_bits": "0x00000004",
+    "beta1_fixed_point_first_step": 964,
+    "direct_pow_reference": "observation_only",
+    "evaluation": "iterative_fp32_recurrence"
+  },
+  "cases": [
+    "dense_a_m32",
+    "sparse_a_m48",
+    "dense_b_m64",
+    "partial_b_m45"
+  ],
+  "drift": {
+    "d_combined_bound": 1.9607843137254901,
+    "d_combined_bound_formula": "2 / (1 + rtol)",
+    "d_max_ge": 1.0,
+    "d_max_ge_result": "MANUAL_REVIEW_BLOCKED",
+    "e_max_gt": 1.0,
+    "e_max_gt_result": "FAIL",
+    "rtol": 0.02
+  },
+  "parent_contract": {
+    "mutation_allowed": false,
+    "path": "contracts/phase3d_preregistration_contract_v1.json",
+    "sha256": "9963c9863154b599f651fa8a95878845f291d487cfcb57912ecbd18d28b4cafc"
+  },
+  "phase3da": {
+    "fresh_complete_replays_per_case": 3,
+    "oracle_points": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      50,
+      64,
+      100
+    ],
+    "steps": 100
+  },
+  "phase3db": {
+    "fresh_complete_replays_per_case": 3,
+    "steps": 30000
+  },
+  "review_policy": {
+    "review_may_be_reclassified_to_pass_in_same_run": false
+  },
+  "trend_validator_required_series": [
+    "flat",
+    "falling",
+    "rising",
+    "noisy"
+  ]
+}

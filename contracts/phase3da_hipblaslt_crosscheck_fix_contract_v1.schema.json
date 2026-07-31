@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "baseline",
+    "problem_class",
+    "change_policy",
+    "authoritative_operation",
+    "hipblaslt_mapping",
+    "implementation",
+    "fixtures",
+    "step53_anchor",
+    "short_matrix",
+    "reproducibility"
+  ],
+  "properties": {
+    "contract_id": {"const": "PHASE3DA_HIPBLASLT_CROSSCHECK_FIX_CONTRACT_V1"},
+    "contract_version": {"const": 1},
+    "baseline": {"type": "object"},
+    "problem_class": {"const": "R1_CROSSCHECK_HARNESS"},
+    "change_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "production_kernel_change_allowed",
+        "optimizer_change_allowed",
+        "training_state_change_allowed",
+        "metric_threshold_change_allowed",
+        "historical_result_reclassification_allowed"
+      ]
+    },
+    "authoritative_operation": {"type": "object"},
+    "hipblaslt_mapping": {"type": "object"},
+    "implementation": {"type": "object"},
+    "fixtures": {"type": "object"},
+    "step53_anchor": {"type": "object"},
+    "short_matrix": {"type": "object"},
+    "reproducibility": {"type": "object"}
+  }
+}

@@ -1,0 +1,66 @@
+# Public path rewrite report
+
+Automatisch angewandte, exakt begrenzte Pfadabbildungen:
+
+- `scripts/run_phase4a2_image_path.py`
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_adam_update.hip` → `src/impl/qualified/phase3b_adam_update.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_training_step.hip` → `src/impl/qualified/phase3b_training_step.hip` (1×)
+- `scripts/finalize_phase4a2_abc_mikrogates.py`
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_adam_update.hip` → `src/impl/qualified/phase3b_adam_update.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_training_step.hip` → `src/impl/qualified/phase3b_training_step.hip` (1×)
+- `scripts/prepare_phase4a2_freeze.py`
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_adam_update.hip` → `src/impl/qualified/phase3b_adam_update.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_training_step.hip` → `src/impl/qualified/phase3b_training_step.hip` (1×)
+- `scripts/build_phase4a2_freeze_archive.sh`
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_adam_update.hip` → `src/impl/qualified/phase3b_adam_update.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_training_step.hip` → `src/impl/qualified/phase3b_training_step.hip` (1×)
+- `scripts/validate_phase4a2_forward_bridge.py`
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_adam_update.hip` → `src/impl/qualified/phase3b_adam_update.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_training_step.hip` → `src/impl/qualified/phase3b_training_step.hip` (1×)
+- `tools/build_phase3da3_100_step_driver.sh`
+  - `impl/phase3d_inprocess_driver.cpp` → `src/impl/phase3d_inprocess_driver.cpp` (1×)
+  - `impl/phase3d_inprocess_loop.cpp` → `src/impl/phase3d_inprocess_loop.cpp` (1×)
+- `tools/validate_phase3c_self_contained.py`
+  - `impl/phase3d_inprocess_driver.cpp` → `src/impl/phase3d_inprocess_driver.cpp` (1×)
+  - `impl/phase3d_inprocess_loop.cpp` → `src/impl/phase3d_inprocess_loop.cpp` (1×)
+  - `impl/phase3d_inprocess_loop.hpp` → `src/impl/phase3d_inprocess_loop.hpp` (1×)
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (2×)
+  - `phase3b_training_adam/impl/native/phase3b_adam_update.hip` → `src/impl/qualified/phase3b_adam_update.hip` (1×)
+- `tools/phase3da_hipblaslt_crosscheck_fixed_v1.hip`
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+- `tools/phase3c_portable_smoke.py`
+  - `reference/phase3c_portable_input_hashes_v1.json` → `tests/reference/phase3c_portable_input_hashes_v1.json` (1×)
+  - `reference/phase3c_s100_reference_v1.json` → `tests/reference/phase3c_s100_reference_v1.json` (1×)
+  - `impl/phase3d_inprocess_driver.cpp` → `src/impl/phase3d_inprocess_driver.cpp` (1×)
+  - `impl/phase3d_inprocess_loop.cpp` → `src/impl/phase3d_inprocess_loop.cpp` (1×)
+  - `phase3b_training_adam/evidence_phase3b_final/` → `tests/reference/tier1_initial_states/` (1×)
+- `tools/phase3da_dmax_lt_layer_probe.hip`
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+- `tools/collect_phase3da3_driver_provenance.py`
+  - `impl/phase3d_inprocess_driver.cpp` → `src/impl/phase3d_inprocess_driver.cpp` (2×)
+  - `impl/phase3d_inprocess_loop.cpp` → `src/impl/phase3d_inprocess_loop.cpp` (2×)
+- `tools/run_phase3da3_driver_equivalence.py`
+  - `phase3b_training_adam/evidence_phase3b_final/` → `tests/reference/tier1_initial_states/` (1×)
+- `tools/phase3da_dmax_roc_layer_probe.cpp`
+  - `impl/phase3d_inprocess_loop.hpp` → `src/impl/phase3d_inprocess_loop.hpp` (1×)
+  - `phase3a_fused_backward/impl/native/phase3a_fused_backward.hip` → `src/impl/qualified/phase3a_fused_backward.hip` (1×)
+  - `phase3b_training_adam/impl/native/phase3b_adam_update.hip` → `src/impl/qualified/phase3b_adam_update.hip` (1×)
+- `tools/validate_phase3d0_bridge.py`
+  - `phase3b_training_adam/evidence_phase3b_final/` → `tests/reference/tier1_initial_states/` (1×)
+- `tests/state_machine_probe.cpp`
+  - `impl/phase3d_inprocess_loop.hpp` → `src/impl/phase3d_inprocess_loop.hpp` (1×)
+- `tests/test_phase3d0_state_machine.py`
+  - `impl/phase3d_inprocess_loop.cpp` → `src/impl/phase3d_inprocess_loop.cpp` (2×)
+  - `impl/phase3d_inprocess_loop.hpp` → `src/impl/phase3d_inprocess_loop.hpp` (1×)
+- `tests/test_phase3d0_negative.py`
+  - `phase3b_training_adam/evidence_phase3b_final/` → `tests/reference/tier1_initial_states/` (1×)
+- `tests/test_phase3c_portable_smoke.py`
+  - `reference/phase3c_portable_input_hashes_v1.json` → `tests/reference/phase3c_portable_input_hashes_v1.json` (1×)
+- `tests/test_phase3d0_static.py`
+  - `impl/phase3d_inprocess_driver.cpp` → `src/impl/phase3d_inprocess_driver.cpp` (2×)
+  - `impl/phase3d_inprocess_loop.cpp` → `src/impl/phase3d_inprocess_loop.cpp` (1×)

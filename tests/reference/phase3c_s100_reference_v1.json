@@ -1,0 +1,14 @@
+{
+  "version": "phase3c-s100-reference-v1",
+  "informational_only": true,
+  "affects_tier1_result": false,
+  "reference_tag": "phase3da3-100-step-gfx1201-pass",
+  "reference_commit": "035179794d24d118fa287a1d585e45b91e9d8102",
+  "qualified_horizon": 100,
+  "state_sha256": {
+    "dense_a_m32": "cae85c3691ca39e2c0b76f38a24326d0ab3a1bdf6c56aa37df85d1636850758e",
+    "sparse_a_m48": "780f221eb6081f3e8f3014275890cdec7a7978cdaf5aaa98512d7d9ef7547673",
+    "dense_b_m64": "8f406072e131875a7b67be811656e4fe6cffebf7dbfb7e7bf02d9cf909ad56b7",
+    "partial_b_m45": "fc3c54e613011f2413024c62f56fa782314e478d43c2e1d11244ae3f1d4198ae"
+  }
+}

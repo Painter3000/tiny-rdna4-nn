@@ -1,0 +1,226 @@
+{
+  "contract_id": "PHASE3DA2_100_STEP_EXECUTION_CONTRACT_V1",
+  "contract_version": 1,
+  "anchors": {
+    "phase3d0_freeze_commit": "8632e9cc3cdf4c92f35caae94f90dc577ae627a2",
+    "phase3d0_freeze_tag": "phase3d0-inprocess-bridge-gfx1201-pass",
+    "phase3d0_archive_sha256": "ed9bb0ad316e589af0eb7bda558036013d0c30ced09e697d0567b8bc2f202323",
+    "phase3da_contract_commit": "624f206152ba7f6dcb2c2360f67c43f093e00e56",
+    "phase3da_r1_diagnosis_commit": "cf8b4fb14784c737b49eba642d1081f00f5422ad",
+    "phase3da_r1_fix_commit": "cd60898957e1e7a4c1092b3b8870ecc6d94c734c",
+    "crosscheck_harness_path": "build_phase3da_r1_fix/phase3da_hipblaslt_crosscheck_fixed_v1",
+    "crosscheck_harness_sha256": "e9416fdde6394b0944e7d858332dd52a7826140dfad1c4405e6113a32f1a5748",
+    "driver_path": "build_phase3d0/phase3d_inprocess_driver",
+    "driver_sha256": "7f507b8d4a522c7652597568f0c59bbea08a52ed8a159484d6e02c0e30ad67f0",
+    "fix_evidence_sha256sums_sha256": "c86ec503ed325c3fa9b9841f6db666c9f1d546d3f8ca582d5d04d37dc2fc6b14",
+    "historical_addendum_v2_sha256": "05c352cc819d5ff3fe06952c94b7f11ee96c03367e31d07c7fac6c7f9c64c74f",
+    "runtime_profile_sha256": "951cfad8e319c11160ff1234fe8273262acb23fd9afdae9efbef8d41ce6772b1"
+  },
+  "historical_phase3da": {
+    "status": "BLOCKED",
+    "reason": "R1_hipBLASLt_crosscheck_transpose",
+    "historical_results_reusable_as_primary_evidence": false,
+    "historical_results_reclassifiable": false,
+    "allowed_uses": [
+      "diagnostic_context",
+      "regression_fixture",
+      "provenance_anchor"
+    ],
+    "forbidden_uses": [
+      "reuse_primary_steps",
+      "count_old_replays",
+      "reuse_old_resume_branches",
+      "reuse_old_D_metrics"
+    ]
+  },
+  "primary_matrix": {
+    "cases": [
+      "dense_a_m32",
+      "sparse_a_m48",
+      "dense_b_m64",
+      "partial_b_m45"
+    ],
+    "fresh_complete_replays_per_case": 3,
+    "persistent_steps_per_replay": 100,
+    "primary_processes": 12,
+    "primary_steps": 1200,
+    "resume_processes": 12,
+    "resume_start_step": 51,
+    "resume_end_step": 66,
+    "replacement_runs_allowed": false,
+    "adaptive_extension_allowed": false,
+    "best_result_selection_allowed": false,
+    "primary_process_reuse_allowed": false,
+    "crashed_replay_continuation_allowed": false
+  },
+  "run_ids": {
+    "primary_template": "{case}_replay_{replay}_phase3da2_100",
+    "resume_template": "{case}_replay_{replay}_phase3da2_resume_51_66",
+    "required_namespace": "phase3da2",
+    "historical_unnamespaced_pattern_allowed": false
+  },
+  "teacher_forced_cpu_oracle": {
+    "points": [1, 2, 4, 8, 16, 32, 50, 64, 100],
+    "transition": "S_(s-1) + X_s + T_s -> S_s",
+    "required_comparisons": [
+      "Forward",
+      "dY",
+      "dX",
+      "dW0",
+      "dW1",
+      "dW2",
+      "W_master",
+      "W_compute",
+      "m",
+      "v",
+      "optimizer_step",
+      "beta1_power",
+      "beta2_power"
+    ],
+    "e_max_fail_if_greater_than": 1.0,
+    "e_max_manual_review_if_greater_than_or_equal": 0.9,
+    "manual_review_result": "MANUAL_REVIEW_BLOCKED"
+  },
+  "corrected_gpu_crosscheck": {
+    "logical_shapes": {
+      "X": "[M,K]",
+      "W": "[K,N]",
+      "Y": "[M,N]"
+    },
+    "logical_equation": "Y = X * W",
+    "physical_weight_mapping": "row-major W[K,N] as column-major A[N,K]",
+    "additional_host_transpose": false,
+    "marker": "P3DA-R1-HIPBLASLT-LAYOUT-FIX-V1",
+    "startup_hash_check_required": true,
+    "d_max_manual_review_if_greater_than_or_equal": 1.0,
+    "d_combined_bound": 1.9607843137254901,
+    "combined_bound_replaces_review_gate": false,
+    "manual_review_result": "MANUAL_REVIEW_BLOCKED",
+    "required_every_step": true,
+    "required_tensors": ["Forward", "dY", "dX", "dW0", "dW1", "dW2"],
+    "required_metrics": [
+      "D_max",
+      "D_p99",
+      "D_mean",
+      "D_median",
+      "argmax_index",
+      "rocWMMA_value",
+      "hipBLASLt_value",
+      "absolute_difference",
+      "denominator"
+    ]
+  },
+  "trend_rule": {
+    "points": [16, 32, 50, 64, 100],
+    "minimum_rising_transitions": 3,
+    "transition_count": 4,
+    "first_last_ratio_minimum": 2.0,
+    "epsilon": 5.960464477539063e-08,
+    "last_e_max_minimum": 0.5,
+    "all_conditions_required": true,
+    "result": "MANUAL_REVIEW_BLOCKED",
+    "required_negative_series": [
+      "flat",
+      "falling",
+      "monotonic_rising",
+      "noisy_without_trigger",
+      "noisy_with_trigger",
+      "only_four_points",
+      "wrong_point_order"
+    ]
+  },
+  "resume_contract": {
+    "checkpoint_after_completed_step": 50,
+    "required_checkpoint_fields": [
+      "W_master",
+      "W_compute",
+      "m",
+      "v",
+      "optimizer_step",
+      "beta1_power",
+      "beta2_power",
+      "generator_version",
+      "global_seed",
+      "case_id",
+      "next_step_index"
+    ],
+    "optimizer_step": 50,
+    "next_step_index": 51,
+    "fresh_process_required": true,
+    "start_step": 51,
+    "end_step": 66,
+    "required_bit_identical_comparisons": [
+      "input_hashes_51_66",
+      "target_hashes_51_66",
+      "pre_state_hashes_51_66",
+      "post_state_hashes_51_66",
+      "W_master_S66",
+      "W_compute_S66",
+      "m_S66",
+      "v_S66",
+      "optimizer_step",
+      "beta1_power_bits",
+      "beta2_power_bits",
+      "Forward_step_66",
+      "canonical_state_hash_S66"
+    ]
+  },
+  "replay_determinism": {
+    "replays": [1, 2, 3],
+    "comparison": "BYTE_IDENTICAL",
+    "canonical_serialization_or_raw_bits_required": true,
+    "required_domains": [
+      "all_input_hashes",
+      "all_target_hashes",
+      "all_state_hashes",
+      "all_beta_power_raw_bits",
+      "all_E_metrics",
+      "all_D_metrics",
+      "all_activity_metrics",
+      "all_checkpoints",
+      "all_resume_final_states",
+      "final_state_S100"
+    ]
+  },
+  "activity": {
+    "each_trainable_layer_minimum_fp32_master_updates": 1,
+    "global_effective_step_count_minimum_exclusive": 0,
+    "metrics_complete_finite_noninvasive": true,
+    "diagnostic_metrics": [
+      "effective_step_fraction",
+      "longest_no_op_streak",
+      "effective_updates_per_layer"
+    ],
+    "long_horizon_no_op_trigger": 256,
+    "long_horizon_global_effective_step_fraction_minimum": 0.95,
+    "claim_full_phase3db_gate_at_100_steps": false
+  },
+  "production_immutability": {
+    "driver_sha256_required": "7f507b8d4a522c7652597568f0c59bbea08a52ed8a159484d6e02c0e30ad67f0",
+    "frozen_source_count": 14,
+    "frozen_source_manifest_path": "evidence_phase3d0_final/source_hashes.json",
+    "frozen_source_manifest_sha256": "5eb7f9d2cae396937f465273752d7183d91bb50e8fa0a6e9fdf34c37d0839699",
+    "qualified_phase3b_binary_count": 5,
+    "qualified_phase3b_sha256sums_sha256": "d5866821a3682d03f8da36fb1f9b119c51db234751728b3fb5b72e6c041c60a1",
+    "phase3d0_commit_required": "8632e9cc3cdf4c92f35caae94f90dc577ae627a2",
+    "runtime_profile_sha256_required": "951cfad8e319c11160ff1234fe8273262acb23fd9afdae9efbef8d41ce6772b1",
+    "addendum_v2_sha256_required": "05c352cc819d5ff3fe06952c94b7f11ee96c03367e31d07c7fac6c7f9c64c74f",
+    "crosscheck_harness_sha256_required": "e9416fdde6394b0944e7d858332dd52a7826140dfad1c4405e6113a32f1a5748"
+  },
+  "evidence_paths": {
+    "work": "evidence_phase3da2_100_step_work",
+    "final": "evidence_phase3da2_100_step_final",
+    "fresh_copy": "evidence_phase3da2_100_step_final_fresh_copy",
+    "historical_paths_may_be_overwritten": false,
+    "historical_paths_may_be_new_evidence_basis": false
+  },
+  "final_decision": {
+    "phase3da2_pass_gate": "RDNA4_FUSED_MLP_PHASE3DA2_100_STEP: PASS",
+    "corrected_phase_decision_if_phase3da2_passes": "RDNA4_FUSED_MLP_PHASE3DA_100_STEP_CORRECTED: PASS",
+    "historical_status_remains_visible": true,
+    "manual_review_may_be_reclassified_after_full_run": false,
+    "phase3db_allowed_before_pass": false,
+    "qualified_horizon_30000_allowed_before_pass": false,
+    "pass_tag_allowed_before_pass": false
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "tiny-rdna4-nn Tier-3 field report",
+  "type": "object",
+  "required": ["operating_system", "kernel", "gpu_model", "gpu_pci_revision", "gcn_arch_name", "rocm_version", "hip_version", "pytorch_version", "rocwmma_version_commit", "compiler_complete_version", "compiler_flags", "linker_flags", "build_command", "tiny_rdna4_nn_commit", "amd_gsplat_commit", "local_binary_sha256", "tier1_result", "tier2_status", "runtime", "peak_vram", "failure_log"],
+  "properties": {
+    "operating_system": {"type": "string", "minLength": 1},
+    "kernel": {"type": "string", "minLength": 1},
+    "gpu_model": {"type": "string", "minLength": 1},
+    "gpu_pci_revision": {"type": "string", "minLength": 1},
+    "gcn_arch_name": {"type": "string", "minLength": 1},
+    "rocm_version": {"type": "string", "minLength": 1},
+    "hip_version": {"type": "string", "minLength": 1},
+    "pytorch_version": {"type": "string", "minLength": 1},
+    "rocwmma_version_commit": {"type": "string", "minLength": 1},
+    "compiler_complete_version": {"type": "string", "minLength": 1},
+    "compiler_flags": {"type": "string"},
+    "linker_flags": {"type": "string"},
+    "build_command": {"type": "string", "minLength": 1},
+    "tiny_rdna4_nn_commit": {"type": "string", "minLength": 1},
+    "amd_gsplat_commit": {"type": "string", "minLength": 1},
+    "local_binary_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "tier1_result": {"enum": ["PASS", "FAIL"]},
+    "tier2_status": {"enum": ["MATCH", "MISMATCH", "NOT_RUN"]},
+    "runtime": {"type": "string", "minLength": 1},
+    "peak_vram": {"type": "string", "minLength": 1},
+    "failure_log": {"type": "string"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,78 @@
+{
+  "manifest_id": "PHASE3DA3_HISTORICAL_TRAJECTORY_ANCHORS_V1",
+  "manifest_version": 1,
+  "historical_reference_legitimacy": {
+    "classification": "functional_trajectory_reference",
+    "qualified_training_path": true,
+    "historical_blocked_reason": "R1_hipBLASLt_crosscheck_transpose",
+    "training_gates_pass": [
+      "INPROCESS_LOOP_100_STEP_INVARIANTS",
+      "INPROCESS_LOOP_100_STEP_CPU_ORACLE",
+      "INPROCESS_LOOP_100_STEP_RESUME",
+      "INPROCESS_LOOP_100_STEP_REPLAY_DETERMINISM",
+      "INPROCESS_LOOP_100_STEP_SIGNAL_ACTIVITY"
+    ],
+    "not_evidence_for": [
+      "historical_crosscheck_correctness",
+      "complete_historical_runtime_provenance"
+    ]
+  },
+  "source_integrity": {
+    "source_evidence_path": "evidence_phase3da_100_step_final/per_step_state_hashes/all.json",
+    "source_evidence_sha256": "8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2",
+    "source_sha256sums_path": "evidence_phase3da_100_step_final/SHA256SUMS",
+    "source_sha256sums_sha256": "655f94e385248a2902b9b6458649565adfa0f345ac51eb3805e681719e9a463b",
+    "historical_reference_generated_by_new_gpu_run": false
+  },
+  "required_steps": [1, 4, 50, 100],
+  "anchors": [
+    {"case_id":"dense_a_m32","step":1,"expected_canonical_state_hash":"81c64e2a87e6c664d00488b242cc704b83bfe6ee930e8b27de83a8cc54b9fae3","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"dense_a_m32","step":4,"expected_canonical_state_hash":"717dac166185e62438e2687c4d6dd197807129e81240941aff9e9cdb46ab241b","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"dense_a_m32","step":50,"expected_canonical_state_hash":"3a9b4f00f0ccc2f9a695a98b1985c203323fa016cb94076bfb1969f5383eaed0","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"dense_a_m32","step":100,"expected_canonical_state_hash":"cae85c3691ca39e2c0b76f38a24326d0ab3a1bdf6c56aa37df85d1636850758e","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"sparse_a_m48","step":1,"expected_canonical_state_hash":"cc03baaf2f30c4af74e6e56b9b9c749b72283697a233958d5e5f894e4d4ea563","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"sparse_a_m48","step":4,"expected_canonical_state_hash":"6bee27ddf6ec4e204284aae2d62f001c8bd0aae2e39d7bbcaaf00bae43e79c5a","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"sparse_a_m48","step":50,"expected_canonical_state_hash":"56faa6216db2fe7ed7488df1769cc36b01e343125c5571e0fd05038342cff166","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"sparse_a_m48","step":100,"expected_canonical_state_hash":"780f221eb6081f3e8f3014275890cdec7a7978cdaf5aaa98512d7d9ef7547673","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"dense_b_m64","step":1,"expected_canonical_state_hash":"2dd77fad040ee16ff8f81fbbb86082dc48700c09e8d044acf7e8f264b62bd4a0","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"dense_b_m64","step":4,"expected_canonical_state_hash":"c9e63530cc51c3135c872401183f6b525d3e3233716916ea2d71446e190dbbad","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"dense_b_m64","step":50,"expected_canonical_state_hash":"782a39116459de563cd5bfb856a90c7f033bdf7791e19f6004e9c2a456694f9d","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"dense_b_m64","step":100,"expected_canonical_state_hash":"8f406072e131875a7b67be811656e4fe6cffebf7dbfb7e7bf02d9cf909ad56b7","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"partial_b_m45","step":1,"expected_canonical_state_hash":"878a08693815e8bd52330289fd40b49f1c664b388de392468b7e115b0f89530a","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"partial_b_m45","step":4,"expected_canonical_state_hash":"3852245f2e8af136de00255d9f07b5295fb13873fee0d26dd3dc8cb2422280c9","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"partial_b_m45","step":50,"expected_canonical_state_hash":"b88f8cb16f5e1e2c87d187b0054d5be3d1469bcf399889eaa49fe3257a2c65a3","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"},
+    {"case_id":"partial_b_m45","step":100,"expected_canonical_state_hash":"fc3c54e613011f2413024c62f56fa782314e478d43c2e1d11244ae3f1d4198ae","historical_replay_match_count":3,"historical_replay_total":3,"source_evidence_path":"evidence_phase3da_100_step_final/per_step_state_hashes/all.json","source_evidence_sha256":"8ae21f8b1f6e9ed0e1cfddb601abb62880bb0712d4b4d90e6808b2721b51f3c2","capture_classification":"EXACT_RUNTIME_CAPTURE"}
+  ],
+  "mismatch_policy": {
+    "qualification_decision": "FAIL",
+    "phase_decision": "FAIL",
+    "reclassification_allowed": false,
+    "stop_unstarted_primary_replays": true,
+    "binary_search_first_divergent_step_when_per_step_hashes_available": true
+  },
+  "localization": {
+    "S1": "initialization_data_stream_driver_identity_or_first_kernel_transition",
+    "S4": "bridge_equivalence_or_early_persistent_state_update",
+    "S50": "long_loop_observation_path_runtime_identity_or_determinism",
+    "S100": "late_trajectory_divergence_steps_51_to_100"
+  },
+  "triage": {
+    "paths": {
+      "A": "training_without_hipblaslt_observation",
+      "B": "training_with_corrected_hipblaslt_observation",
+      "C": "fresh_process_repeat_of_A"
+    },
+    "same_input_and_last_common_state_required": true,
+    "classifications": {
+      "T1": "A_NE_B_AND_A_EQ_C_CROSSCHECK_INVASIVE",
+      "T2": "A_EQ_B_AND_A_NE_C_RUNTIME_NONDETERMINISM",
+      "T3": "A_EQ_B_AND_A_EQ_C_BUT_NE_HISTORICAL_DRIVER_OR_ENVIRONMENT_NOT_FUNCTIONALLY_IDENTICAL",
+      "T4": "A_NE_B_AND_A_NE_C_MULTIPLE_CAUSES_OR_UNSTABLE_RUNTIME"
+    },
+    "may_change_a3_fail": false,
+    "replacement_run": false,
+    "qualification_run_id_allowed": false,
+    "counts_as_primary_evidence": false,
+    "gate_values": ["PASS_CLASSIFIED", "NOT_TRIGGERED", "INCONCLUSIVE"]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "contract_id": "PHASE4A2_LAYOUT_CONVENTION_B_V1",
+  "logical_tensor_convention": {
+    "X": "[B,I]",
+    "W": "[I,O]",
+    "Y": "X * W",
+    "dY": "[B,O]",
+    "dX": "dY * transpose(W)",
+    "dW": "transpose(X) * dY"
+  },
+  "three_layer_backward": {
+    "dZ1": "FP16((dY * transpose(W2))_FP32 * ReLUPrime(Z1))",
+    "dZ0": "FP16((dZ1 * transpose(W1))_FP32 * ReLUPrime(Z0))",
+    "dX": "(dZ0 * transpose(W0))_FP32",
+    "dW2": "transpose(H1) * dY",
+    "dW1": "transpose(H0) * dZ1",
+    "dW0": "transpose(X) * dZ0"
+  },
+  "physical_view_rule": "A mathematical transpose does not imply that a physical buffer must be transposed; rocWMMA operand role, layout, leading dimension, and parameter ABI determine the physical view.",
+  "change_prohibition_before_root_cause": [
+    "qualified Phase-3A backward kernels",
+    "deterministic dW reduction",
+    "Phase-3B optimizer",
+    "rocWMMA operand roles",
+    "leading dimensions",
+    "physical W or dW transposition"
+  ]
+}

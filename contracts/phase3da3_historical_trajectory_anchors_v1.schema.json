@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_id","manifest_version","historical_reference_legitimacy","source_integrity","required_steps","anchors","mismatch_policy","localization","triage"],
+  "properties": {
+    "manifest_id": {"const": "PHASE3DA3_HISTORICAL_TRAJECTORY_ANCHORS_V1"},
+    "manifest_version": {"const": 1},
+    "historical_reference_legitimacy": {"type": "object"},
+    "source_integrity": {"type": "object"},
+    "required_steps": {"const": [1,4,50,100]},
+    "anchors": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id","step","expected_canonical_state_hash","historical_replay_match_count","historical_replay_total","source_evidence_path","source_evidence_sha256","capture_classification"],
+        "properties": {
+          "case_id": {"enum": ["dense_a_m32","sparse_a_m48","dense_b_m64","partial_b_m45"]},
+          "step": {"enum": [1,4,50,100]},
+          "expected_canonical_state_hash": {"pattern": "^[0-9a-f]{64}$"},
+          "historical_replay_match_count": {"const": 3},
+          "historical_replay_total": {"const": 3},
+          "source_evidence_path": {"type": "string"},
+          "source_evidence_sha256": {"pattern": "^[0-9a-f]{64}$"},
+          "capture_classification": {"enum": ["EXACT_RUNTIME_CAPTURE","DERIVED_FROM_INTEGRITY_PROTECTED_CHECKPOINT","NOT_AVAILABLE"]}
+        }
+      }
+    },
+    "mismatch_policy": {"type": "object"},
+    "localization": {"type": "object"},
+    "triage": {"type": "object"}
+  }
+}

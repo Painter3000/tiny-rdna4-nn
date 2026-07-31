@@ -1,0 +1,15 @@
+{
+  "version": "phase3c-portable-tolerances-v1",
+  "oracle": {
+    "atol": 0.02,
+    "rtol": 0.02,
+    "definition": "abs(gpu-cpu)/(atol+rtol*abs(cpu)) <= 1"
+  },
+  "source_contracts": {
+    "contracts/phase3d_preregistration_contract_v1.json": "9963c9863154b599f651fa8a95878845f291d487cfcb57912ecbd18d28b4cafc",
+    "contracts/phase3d_execution_contract_addendum_v2.json": "05c352cc819d5ff3fe06952c94b7f11ee96c03367e31d07c7fac6c7f9c64c74f",
+    "contracts/phase3da3_100_step_execution_contract_v1.json": "863dc082835adcb144bd87f875af279880a90ac2faf2ff4fde12319854671e03"
+  },
+  "tensor_families": ["Forward", "dY", "dX", "dW0", "dW1", "dW2"],
+  "backends": ["rocWMMA", "hipBLASLt"]
+}

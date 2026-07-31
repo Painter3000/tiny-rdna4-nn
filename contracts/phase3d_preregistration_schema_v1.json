@@ -1,0 +1,116 @@
+{
+  "case_ids": [
+    "dense_a_m32",
+    "sparse_a_m48",
+    "dense_b_m64",
+    "partial_b_m45"
+  ],
+  "case_m": {
+    "dense_a_m32": 32,
+    "dense_b_m64": 64,
+    "partial_b_m45": 45,
+    "sparse_a_m48": 48
+  },
+  "exact": {
+    "activity.global_effective_step_fraction_blocked_lt": 0.95,
+    "activity.layer_no_master_update_streak_blocked_ge": 256,
+    "base.commit": "a5a6e6fe2a0eacc3f048dca33f22905063c0fe17",
+    "base.tag": "phase3b-training-adam-gfx1201-pass",
+    "contract_id": "PHASE3D_LONG_HORIZON_PREREGISTRATION_V1",
+    "contract_version": 1,
+    "data_stream.generator": "splitmix64_v1_fp16_table",
+    "data_stream.stateful": false,
+    "decisions.integration_claim_allowed": false,
+    "decisions.pass_requires_no_review": true,
+    "decisions.performance_claim_allowed": false,
+    "decisions.review_is_blocked": true,
+    "decisions.threshold_changes_after_lock_allowed": false,
+    "drift.hard_fail_d_max_gt": 1.0,
+    "drift.hard_fail_e_max_gt": 1.0,
+    "drift.review_headroom_e_max_ge": 0.9,
+    "drift.review_last_e_max_ge": 0.5,
+    "drift.review_p99_ratio_ge": 2.0,
+    "drift.review_required_increases": 3,
+    "drift.review_result": "BLOCKED",
+    "drift.review_window_points": 5,
+    "oracle.atol": 0.02,
+    "oracle.beta_power_fp64_is_gate": false,
+    "oracle.free_running_cpu_is_gate": false,
+    "oracle.mode": "teacher_forced",
+    "oracle.rtol": 0.02,
+    "oracle.transition_length": 1,
+    "phase3d0.bitwise_bridge_required": true,
+    "phase3d0.fresh_replays_per_case": 3,
+    "phase3d0.start_long_runs": false,
+    "phase3d0.steps": 4,
+    "phase3da.resume_points": [
+      50
+    ],
+    "phase3da.resume_window": 16,
+    "phase3da.steps": 100,
+    "phase3db.oracle_points": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64,
+      100,
+      128,
+      256,
+      512,
+      850,
+      1000,
+      2000,
+      5000,
+      10000,
+      20000,
+      30000
+    ],
+    "phase3db.resume_points": [
+      100,
+      1000,
+      5000,
+      20000
+    ],
+    "phase3db.resume_window": 16,
+    "phase3db.steps": 30000,
+    "sequence": [
+      "3D-0",
+      "3D-A",
+      "3D-B"
+    ],
+    "target.architecture": "gfx1201",
+    "target.qualified_horizon_target": 30000,
+    "target.topology": [
+      64,
+      64,
+      64,
+      64
+    ]
+  },
+  "required_top_level": [
+    "contract_id",
+    "contract_version",
+    "base",
+    "target",
+    "sequence",
+    "cases",
+    "phase3d0",
+    "phase3da",
+    "phase3db",
+    "oracle",
+    "drift",
+    "activity",
+    "data_stream",
+    "decisions"
+  ],
+  "schema_id": "PHASE3D_PREREGISTRATION_SCHEMA_V1",
+  "sha256_fields": [
+    "base.commit",
+    "base.archive_sha256",
+    "base.manifest_sha256",
+    "base.final_evidence_sha256sums_sha256"
+  ]
+}

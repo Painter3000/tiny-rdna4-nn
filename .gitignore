@@ -1,0 +1,27 @@
+.DS_Store
+*.egg-info
+*.o
+__pycache__
+build*
+dist
+rtc
+/.cache
+/.vscode
+/.direnv
+/*.jpg
+# Phase-1A freeze: pre-existing local qualification worktree.
+/tiny-cuda-nn-q0c-run/
+# Compact local output of the public Phase-3C smoke.
+/phase3c_smoke_result/
+/phase4a_amd_gsplat_result/
+/.phase4a_build/
+/.phase4a_negative/
+/.phase4a_fresh_result/
+
+# Model-B local/private state
+/.claude/
+/.model-b-private/
+/.phase4a2_image_build/
+__pycache__/
+*.pyc
+*.so

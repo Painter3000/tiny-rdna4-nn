@@ -1,0 +1,121 @@
+{
+  "contract_id": "PHASE3DA_DMAX_REVIEW_CONTRACT_V1",
+  "contract_version": 1,
+  "baseline": {
+    "branch_point_commit": "b7b225bbc06d24aecf245cdd3b5695fb4ebc5bff",
+    "contract_commit": "624f206152ba7f6dcb2c2360f67c43f093e00e56",
+    "historical_addendum_path": "contracts/phase3d_execution_contract_addendum_v2.json",
+    "historical_addendum_sha256": "05c352cc819d5ff3fe06952c94b7f11ee96c03367e31d07c7fac6c7f9c64c74f",
+    "historical_final_sha256sums_sha256": "655f94e385248a2902b9b6458649565adfa0f345ac51eb3805e681719e9a463b",
+    "historical_result": "RDNA4_FUSED_MLP_PHASE3DA_100_STEP: BLOCKED"
+  },
+  "diagnostic_target": {
+    "case": "sparse_a_m48",
+    "transition": {
+      "from_state": 52,
+      "to_step": 53
+    },
+    "tensor": "Forward",
+    "reported_linear_index": 2129
+  },
+  "constraints": {
+    "historical_addendum_mutation_allowed": false,
+    "d_threshold_mutation_allowed": false,
+    "historical_blocked_reinterpretation_allowed": false,
+    "full_100_step_primary_rerun_allowed": false,
+    "kernel_or_production_fix_allowed": false
+  },
+  "reconstruction": {
+    "source_checkpoint": {
+      "step": 50,
+      "next_step_index": 51
+    },
+    "steps_to_execute": [
+      51,
+      52
+    ],
+    "required_comparisons": [
+      "input_sha256",
+      "target_sha256",
+      "W_master",
+      "W_compute",
+      "m",
+      "v",
+      "optimizer_step",
+      "beta1_power_bits",
+      "beta2_power_bits",
+      "canonical_state_hash"
+    ],
+    "mismatch_action": "STOP_BEFORE_STEP53"
+  },
+  "teacher_forced_step": {
+    "step": 53,
+    "shared_prestate": "S52",
+    "shared_input": "X53",
+    "shared_target": "T53",
+    "isolated_paths": [
+      "rocWMMA",
+      "hipBLASLt",
+      "CPU_contract_oracle"
+    ],
+    "required_tensors": [
+      "Forward",
+      "dY",
+      "dX",
+      "dW0",
+      "dW1",
+      "dW2"
+    ]
+  },
+  "layerwise_bisection": {
+    "stages": [
+      "layer0_gemm_raw",
+      "layer0_relu",
+      "layer1_gemm_raw",
+      "layer1_relu",
+      "layer2_gemm_raw",
+      "final_output"
+    ],
+    "required_metadata": [
+      "shape",
+      "strides",
+      "leading_dimensions",
+      "active_domain",
+      "padding_domain",
+      "max_error",
+      "raw_bits"
+    ]
+  },
+  "hypotheses": [
+    "P1_state_mismatch",
+    "P2_layout_or_leading_dimension_mismatch_M48",
+    "P3_sentinel_or_uninitialized_output",
+    "P4_epilog_or_activation_mismatch",
+    "P5_D_metric_or_index_alignment"
+  ],
+  "reproducibility": {
+    "fresh_processes": 3,
+    "transition": "S52_TO_S53",
+    "required_match": "BYTE_IDENTICAL_DIAGNOSTIC_OUTPUTS"
+  },
+  "classification": {
+    "combined_d_bound": 1.9607843137254901,
+    "e_pass_max": 1.0,
+    "rules": {
+      "R1": "E_rocWMMA <= 1 AND E_hipBLASLt > 1",
+      "R2": "E_rocWMMA > 1 AND E_hipBLASLt <= 1",
+      "R3": "E_rocWMMA <= 1 AND E_hipBLASLt <= 1 AND D > 1.9607843137254901",
+      "R4": "E_rocWMMA > 1 AND E_hipBLASLt > 1",
+      "R5": "reported index is outside the logically active output domain"
+    }
+  },
+  "required_gates": [
+    "PHASE3DA_BLOCKED_EVIDENCE_PRESERVED",
+    "PHASE3DA_DMAX_REVIEW_CONTRACT_LOCK",
+    "PHASE3DA_DMAX_S52_RECONSTRUCTION",
+    "PHASE3DA_DMAX_STEP53_TEACHER_FORCED_TRIAGE",
+    "PHASE3DA_DMAX_FIRST_DIVERGENCE_LOCALIZED",
+    "PHASE3DA_DMAX_REVIEW_REPRODUCIBILITY",
+    "PHASE3DA_DMAX_REVIEW_CLASSIFICATION"
+  ]
+}

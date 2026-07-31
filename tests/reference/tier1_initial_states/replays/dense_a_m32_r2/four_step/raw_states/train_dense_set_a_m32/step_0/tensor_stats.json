@@ -1,0 +1,76 @@
+{
+  "tensors": [
+    {
+      "bytes": 49152,
+      "dtype": "fp32",
+      "elements": 12288,
+      "inf": 0,
+      "max": 0.625,
+      "mean": 0.011201885901286346,
+      "min": 0.0009764099377207458,
+      "name": "W_master.fp32.bin",
+      "nan": 0,
+      "raw_bits_sha256": null,
+      "sha256": "8e50f88cb7c4f2267a25bda63508d182fd500fef0f0f7885895aa08050e25578",
+      "shape": [
+        3,
+        64,
+        64
+      ]
+    },
+    {
+      "bytes": 24576,
+      "dtype": "fp16",
+      "elements": 12288,
+      "inf": 0,
+      "max": 0.625,
+      "mean": 0.011202494303385416,
+      "min": 0.0009765625,
+      "name": "W_compute.fp16.bin",
+      "nan": 0,
+      "raw_bits_sha256": "c135bd9886d529097ce59ca1202b48be30e4fbd49f08583299c23048802ae2d3",
+      "sha256": "c135bd9886d529097ce59ca1202b48be30e4fbd49f08583299c23048802ae2d3",
+      "shape": [
+        3,
+        64,
+        64
+      ]
+    },
+    {
+      "bytes": 49152,
+      "dtype": "fp32",
+      "elements": 12288,
+      "inf": 0,
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "name": "m.fp32.bin",
+      "nan": 0,
+      "raw_bits_sha256": null,
+      "sha256": "2aae7dc846aaf25f1cadf55f1666862046c6db9d65d84bdc07fa039dac405606",
+      "shape": [
+        3,
+        64,
+        64
+      ]
+    },
+    {
+      "bytes": 49152,
+      "dtype": "fp32",
+      "elements": 12288,
+      "inf": 0,
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "name": "v.fp32.bin",
+      "nan": 0,
+      "raw_bits_sha256": null,
+      "sha256": "2aae7dc846aaf25f1cadf55f1666862046c6db9d65d84bdc07fa039dac405606",
+      "shape": [
+        3,
+        64,
+        64
+      ]
+    }
+  ]
+}

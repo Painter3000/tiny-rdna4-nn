@@ -1,0 +1,10 @@
+MODEL-B PUBLIC AUDIT
+====================
+
+Private/local host references:
+
+Forbidden runtime references:
+
+Nested .git entries:
+
+Possible secret-like assignments:

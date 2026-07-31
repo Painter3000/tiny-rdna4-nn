@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "baseline",
+    "diagnostic_target",
+    "constraints",
+    "reconstruction",
+    "teacher_forced_step",
+    "layerwise_bisection",
+    "hypotheses",
+    "reproducibility",
+    "classification",
+    "required_gates"
+  ],
+  "properties": {
+    "contract_id": {"const": "PHASE3DA_DMAX_REVIEW_CONTRACT_V1"},
+    "contract_version": {"const": 1},
+    "baseline": {
+      "type": "object",
+      "required": ["branch_point_commit", "contract_commit", "historical_addendum_path", "historical_addendum_sha256", "historical_final_sha256sums_sha256", "historical_result"]
+    },
+    "diagnostic_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case", "transition", "tensor", "reported_linear_index"],
+      "properties": {
+        "case": {"const": "sparse_a_m48"},
+        "transition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["from_state", "to_step"],
+          "properties": {
+            "from_state": {"const": 52},
+            "to_step": {"const": 53}
+          }
+        },
+        "tensor": {"const": "Forward"},
+        "reported_linear_index": {"const": 2129}
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["historical_addendum_mutation_allowed", "d_threshold_mutation_allowed", "historical_blocked_reinterpretation_allowed", "full_100_step_primary_rerun_allowed", "kernel_or_production_fix_allowed"],
+      "properties": {
+        "historical_addendum_mutation_allowed": {"const": false},
+        "d_threshold_mutation_allowed": {"const": false},
+        "historical_blocked_reinterpretation_allowed": {"const": false},
+        "full_100_step_primary_rerun_allowed": {"const": false},
+        "kernel_or_production_fix_allowed": {"const": false}
+      }
+    },
+    "reconstruction": {"type": "object"},
+    "teacher_forced_step": {"type": "object"},
+    "layerwise_bisection": {"type": "object"},
+    "hypotheses": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "reproducibility": {
+      "type": "object",
+      "required": ["fresh_processes", "transition", "required_match"],
+      "properties": {
+        "fresh_processes": {"const": 3},
+        "transition": {"const": "S52_TO_S53"},
+        "required_match": {"const": "BYTE_IDENTICAL_DIAGNOSTIC_OUTPUTS"}
+      }
+    },
+    "classification": {"type": "object"},
+    "required_gates": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "additional_required_surfaces": [
+    {
+      "path": "bindings/torch/setup.py",
+      "role": "Default-OFF opt-in parsing, conditional source inclusion, and TCNN_WITH_ROCWMMA_WIDTH64_MLP compile definition."
+    },
+    {
+      "path": "src/cpp_api.cu",
+      "role": "Select the existing FP16 module wrapper for the explicit RocWMMAWidth64MLP otype."
+    }
+  ],
+  "marker": "TCNN_RDNA4_P4A2_P1_SURFACE_ADDENDUM_001",
+  "p0_contract_preserved": true,
+  "phase": "4A2-P1",
+  "reason": "The validated PyTorch entry point requires one build-system surface and one precision-dispatch surface that were not listed in the P0 planned-surface ledger.",
+  "schema_version": 1,
+  "unchanged_p0_semantics": [
+    "explicit_otype_only",
+    "default_disabled",
+    "no_silent_fallback",
+    "gfx1201_only",
+    "inference_only_initial_scope",
+    "existing_backends_unchanged",
+    "no_performance_claim"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "phase3da3_metric_trajectory_addendum_v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "addendum_id",
+    "addendum_version",
+    "parent_contract",
+    "historical_s100",
+    "backend_error_metrics",
+    "trend_evaluation",
+    "d_consistency",
+    "activity_saturation",
+    "noninvasivity",
+    "historical_provenance_classification"
+  ],
+  "properties": {
+    "addendum_id": {"const": "PHASE3DA3_METRIC_TRAJECTORY_ADDENDUM_V1"},
+    "addendum_version": {"const": 1},
+    "parent_contract": {
+      "type": "object",
+      "required": ["path", "sha256", "commit", "thresholds_unchanged"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"pattern": "^[0-9a-f]{64}$"},
+        "commit": {"pattern": "^[0-9a-f]{40}$"},
+        "thresholds_unchanged": {"const": true}
+      }
+    },
+    "historical_s100": {"type": "object"},
+    "backend_error_metrics": {"type": "object"},
+    "trend_evaluation": {"type": "object"},
+    "d_consistency": {"type": "object"},
+    "activity_saturation": {"type": "object"},
+    "noninvasivity": {"type": "object"},
+    "historical_provenance_classification": {"type": "object"}
+  }
+}

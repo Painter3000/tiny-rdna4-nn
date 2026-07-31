@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "parent_contract",
+    "historical_status",
+    "historical_execution_provenance",
+    "artifact_roles",
+    "driver_provenance",
+    "driver_equivalence",
+    "driver_capability",
+    "series",
+    "inherited_rules",
+    "evidence_paths"
+  ],
+  "properties": {
+    "contract_id": {"const": "PHASE3DA3_100_STEP_EXECUTION_CONTRACT_V1"},
+    "contract_version": {"const": 1},
+    "parent_contract": {"type": "object"},
+    "historical_status": {"type": "object"},
+    "historical_execution_provenance": {"type": "object"},
+    "artifact_roles": {"type": "object"},
+    "driver_provenance": {"type": "object"},
+    "driver_equivalence": {"type": "object"},
+    "driver_capability": {"type": "object"},
+    "series": {"type": "object"},
+    "inherited_rules": {"type": "object"},
+    "evidence_paths": {"type": "object"}
+  }
+}

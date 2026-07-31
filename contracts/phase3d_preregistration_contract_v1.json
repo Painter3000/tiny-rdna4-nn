@@ -1,0 +1,175 @@
+{
+  "activity": {
+    "global_effective_step_fraction_blocked_lt": 0.95,
+    "layer_no_master_update_streak_blocked_ge": 256,
+    "metrics": [
+      "gradient_l2",
+      "gradient_max_abs",
+      "gradient_exact_zero_fraction",
+      "adam_update_l2",
+      "adam_update_max_abs",
+      "master_weight_changed_elements",
+      "compute_weight_changed_elements",
+      "master_weight_changed_fraction",
+      "compute_weight_changed_fraction"
+    ]
+  },
+  "base": {
+    "archive_sha256": "f5b342000aad2ffaa5346a66a36b95160523d0d9193cf312dea405cd833c0fe1",
+    "commit": "a5a6e6fe2a0eacc3f048dca33f22905063c0fe17",
+    "final_evidence_sha256sums_sha256": "6b92a673a5307efff7ebcfe380975c0dcd5fa1489228f189bb9c4957e236654e",
+    "manifest_sha256": "044ae78fbe8e54cfc37a1870711f0bd35a546b8b8675647fd2b1023944718988",
+    "run_id": "20260730T030754Z_76583",
+    "tag": "phase3b-training-adam-gfx1201-pass"
+  },
+  "cases": [
+    {
+      "id": "dense_a_m32",
+      "m": 32,
+      "phase3b_id": "train_dense_set_a_m32",
+      "profile": "dense_a"
+    },
+    {
+      "id": "sparse_a_m48",
+      "m": 48,
+      "phase3b_id": "train_sparse_set_a_m48",
+      "profile": "sparse_a"
+    },
+    {
+      "id": "dense_b_m64",
+      "m": 64,
+      "phase3b_id": "train_dense_set_b_m64",
+      "profile": "dense_b"
+    },
+    {
+      "id": "partial_b_m45",
+      "m": 45,
+      "phase3b_id": "train_partial_set_b_m45",
+      "profile": "partial_b"
+    }
+  ],
+  "contract_id": "PHASE3D_LONG_HORIZON_PREREGISTRATION_V1",
+  "contract_version": 1,
+  "data_stream": {
+    "checkpoint_fields": [
+      "generator_version",
+      "global_seed",
+      "case_id",
+      "next_step_index"
+    ],
+    "fp16_bit_table": [
+      48128,
+      47616,
+      47104,
+      46080,
+      45056,
+      0,
+      12288,
+      13312,
+      14336,
+      14848,
+      15360
+    ],
+    "generator": "splitmix64_v1_fp16_table",
+    "global_seed": "0x5033444c4f4e4731",
+    "stateful": false
+  },
+  "decisions": {
+    "integration_claim_allowed": false,
+    "pass_requires_no_review": true,
+    "performance_claim_allowed": false,
+    "review_is_blocked": true,
+    "threshold_changes_after_lock_allowed": false
+  },
+  "drift": {
+    "d_definition": "abs(rocwmma-hipblaslt)/(atol+rtol*max(abs(rocwmma),abs(hipblaslt)))",
+    "e_definition": "abs(gpu-cpu)/(atol+rtol*abs(cpu))",
+    "hard_fail_d_max_gt": 1.0,
+    "hard_fail_e_max_gt": 1.0,
+    "metrics": [
+      "max",
+      "p99",
+      "mean",
+      "median"
+    ],
+    "review_headroom_e_max_ge": 0.9,
+    "review_last_e_max_ge": 0.5,
+    "review_p99_ratio_ge": 2.0,
+    "review_required_increases": 3,
+    "review_result": "BLOCKED",
+    "review_window_points": 5
+  },
+  "oracle": {
+    "atol": 0.02,
+    "beta_power_fp64_is_gate": false,
+    "cpu_contract_arithmetic": "fp32_phase3b_emulation",
+    "free_running_cpu_is_gate": false,
+    "ftz_policy": "measure_before_phase3da_and_freeze",
+    "mode": "teacher_forced",
+    "rtol": 0.02,
+    "transition_length": 1
+  },
+  "phase3d0": {
+    "bitwise_bridge_required": true,
+    "fresh_replays_per_case": 3,
+    "start_long_runs": false,
+    "steps": 4
+  },
+  "phase3da": {
+    "resume_points": [
+      50
+    ],
+    "resume_window": 16,
+    "steps": 100
+  },
+  "phase3db": {
+    "oracle_points": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64,
+      100,
+      128,
+      256,
+      512,
+      850,
+      1000,
+      2000,
+      5000,
+      10000,
+      20000,
+      30000
+    ],
+    "resume_points": [
+      100,
+      1000,
+      5000,
+      20000
+    ],
+    "resume_window": 16,
+    "steps": 30000
+  },
+  "sequence": [
+    "3D-0",
+    "3D-A",
+    "3D-B"
+  ],
+  "target": {
+    "activation": "relu",
+    "architecture": "gfx1201",
+    "bias": false,
+    "compute_dtype": "fp16",
+    "master_dtype": "fp32",
+    "optimizer": "adam_v1_frozen_phase3b",
+    "qualified_horizon_target": 30000,
+    "topology": [
+      64,
+      64,
+      64,
+      64
+    ]
+  }
+}

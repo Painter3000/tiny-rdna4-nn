@@ -1,0 +1,14 @@
+{
+  "environment_bound_dimensions": [
+    "ROCm",
+    "PyTorch",
+    "compiler",
+    "GPU"
+  ],
+  "local_use": "Rebuild modules from included sources and build contracts",
+  "phase4a2_archive_sha256": "ab9b2c2c8a99c503d630833ce240233f8b8b8183ed40b42831526d777b0e09f8",
+  "phase4a2_historical_reference_path": "freeze_phase4a2/PHASE4A2_BINARY_MANIFEST.json",
+  "phase4a2_reference_distribution": "external_release_artifact",
+  "phase4a2_reference_manifest": "external-release-artifact/PHASE4A2_BINARY_MANIFEST.json",
+  "scope": "Reference and provenance artifacts only; not a universal binary distribution"
+}

@@ -1,0 +1,126 @@
+{
+  "addendum_id": "PHASE3DA3_METRIC_TRAJECTORY_ADDENDUM_V1",
+  "addendum_version": 1,
+  "parent_contract": {
+    "path": "contracts/phase3da3_100_step_execution_contract_v1.json",
+    "sha256": "863dc082835adcb144bd87f875af279880a90ac2faf2ff4fde12319854671e03",
+    "commit": "59059e5922f57002e44acdb98540410bd8539e17",
+    "thresholds_unchanged": true
+  },
+  "historical_s100": {
+    "manifest_path": "contracts/phase3da3_historical_s100_manifest_v1.json",
+    "manifest_sha256": "108fcbb38faf201272c4a9500f4d163e63f4ec8ef2765ecf34be68b021a817d4",
+    "required_matches": 12,
+    "replays_per_case": 3,
+    "comparison": "A3_S100_SHA256_EQUALS_HISTORICAL_CASE_S100_SHA256",
+    "expectations_may_be_updated_after_series_start": false,
+    "mismatch_decision": "FAIL",
+    "gate": "PHASE3DA3_HISTORICAL_S100_FINGERPRINT_EQUIVALENCE",
+    "historical_per_step_trajectory_gate": "PASS_OR_NOT_AVAILABLE"
+  },
+  "backend_error_metrics": {
+    "families": ["E_rocwmma_cpu", "E_hipblaslt_cpu"],
+    "teacher_forced_steps": [1, 2, 4, 8, 16, 32, 50, 64, 100],
+    "per_family_per_tensor_fields": [
+      "E_max",
+      "E_p99",
+      "E_mean",
+      "E_median",
+      "argmax_index",
+      "gpu_value",
+      "cpu_value",
+      "absolute_difference",
+      "denominator"
+    ],
+    "rocwmma_cpu": {
+      "greater_than_1": "FAIL",
+      "greater_than_or_equal_0_9": "MANUAL_REVIEW_BLOCKED"
+    },
+    "hipblaslt_cpu": {
+      "greater_than_1": "FAIL_CROSSCHECK_OR_HARNESS",
+      "greater_than_or_equal_0_9": "MANUAL_REVIEW_BLOCKED"
+    },
+    "global_maximum_required_context": [
+      "backend_role",
+      "case",
+      "replay",
+      "step",
+      "tensor",
+      "index"
+    ],
+    "backend_families_may_be_merged": false,
+    "gate": "PHASE3DA3_SEPARATE_BACKEND_E_METRICS"
+  },
+  "trend_evaluation": {
+    "backend_roles": ["rocWMMA_cpu", "hipBLASLt_cpu"],
+    "steps": [16, 32, 50, 64, 100],
+    "epsilon": 5.960464477539063e-08,
+    "trigger": {
+      "minimum_increasing_E_p99_transitions": 3,
+      "minimum_last_first_ratio": 2,
+      "minimum_E_max_last": 0.5,
+      "all_conditions_required": true
+    },
+    "trigger_decision": "MANUAL_REVIEW_BLOCKED",
+    "gate": "PHASE3DA3_SEPARATE_BACKEND_TREND_EVALUATION"
+  },
+  "d_consistency": {
+    "rtol": 0.02,
+    "review_gate_threshold": 1,
+    "review_gate_comparison": "D_max_greater_than_or_equal",
+    "review_decision": "MANUAL_REVIEW_BLOCKED",
+    "combined_bound": 1.9607843137254901,
+    "combined_bound_formula": "2 / (1 + rtol)",
+    "combined_bound_replaces_review_gate": false,
+    "pairing_failure": {
+      "conditions": "E_rocwmma_cpu<=1 AND E_hipblaslt_cpu<=1 AND D>combined_bound",
+      "decision": "FAIL_METRIC_PAIRING_OR_STATE_IDENTITY",
+      "same_data_required": [
+        "step",
+        "tensor",
+        "logical_index",
+        "cpu_reference_value",
+        "prestep_state"
+      ]
+    },
+    "gate": "PHASE3DA3_D_DERIVED_BOUND_CONSISTENCY"
+  },
+  "activity_saturation": {
+    "minimum_global_effective_step_fraction": 0.95,
+    "below_minimum_decision": "FAIL_DEGENERATE_TRAINING_ACTIVITY",
+    "global_effective_step_count_must_be_positive": true,
+    "each_trainable_layer_requires_fp32_master_update": true,
+    "metrics_complete": true,
+    "metrics_finite": true,
+    "measurement_noninvasive": true,
+    "long_horizon_256_noop_rule_evaluable": false,
+    "long_horizon_reason": "qualification_horizon_below_256",
+    "long_horizon_rule_may_be_reported_pass": false,
+    "gate": "PHASE3DA3_100_STEP_ACTIVITY_SATURATION_CONTRACT"
+  },
+  "noninvasivity": {
+    "protected_state": [
+      "W_master",
+      "W_compute",
+      "m",
+      "v",
+      "optimizer_step",
+      "beta1_power",
+      "beta2_power",
+      "counter_data_stream_state"
+    ],
+    "mandatory_end_to_end_proof": "historical_S100_fingerprint",
+    "crosscheck_state_writes_allowed": false
+  },
+  "historical_provenance_classification": {
+    "recovery_gate": "PARTIAL",
+    "s100_match_functional_trajectory_fingerprint": "PASS",
+    "runtime_capture_completeness": "PARTIAL",
+    "s100_match_may_upgrade_recovery_to_pass": false,
+    "not_proven": [
+      "historical_dynamic_load_maps",
+      "historically_unarchived_compiler_command_lines",
+      "missing_historical_git_status_snapshots"
+    ]
+  }
+}

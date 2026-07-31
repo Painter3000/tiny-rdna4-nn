@@ -1,0 +1,171 @@
+{
+  "baseline": {
+    "required_architecture": "gfx1201",
+    "required_lds_bytes": 2048,
+    "required_p5_decision": "PHASE4A1_P5_WIDTH64_ISA_RESOURCE_GLOBAL_TRAFFIC_AUDIT_PASS",
+    "required_private_segment_bytes": 0,
+    "required_scratch_instruction_count": 0,
+    "required_tag": "phase4a1-width64-rocwmma-fused-forward-gfx1201-pass",
+    "required_wave_size": 32
+  },
+  "eligibility": {
+    "batch_rows_multiple": 16,
+    "bias": true,
+    "hidden_activation": "ReLU",
+    "hidden_width": 64,
+    "input_layout": "ColumnMajor_64_by_batch",
+    "input_width": 64,
+    "minimum_batch_rows": 16,
+    "n_hidden_layers": 2,
+    "network_scalar_type": "__half",
+    "output_activation": "None",
+    "output_layout": "ColumnMajor_64_by_batch",
+    "output_width": 64,
+    "platform": "HIP_AMD",
+    "runtime_architecture": [
+      "gfx1201"
+    ],
+    "stream": "caller_supplied_hipStream_t"
+  },
+  "execution_contract": {
+    "diagnostic_counters_in_production": false,
+    "diagnostic_oracle_arguments_in_production": false,
+    "grid_policy": "one_block_per_16_batch_rows",
+    "host_synchronization": false,
+    "internal_accumulator_type": "FP32",
+    "lds_bytes": 2048,
+    "mma_calls_per_block": 48,
+    "mma_calls_per_wave": 12,
+    "public_output_type": "__half",
+    "single_reused_lds_buffer": true,
+    "source_barriers": 3,
+    "threads_per_block": 128,
+    "tile_rows": 16,
+    "wave32_per_block": 4
+  },
+  "fail_closed_rules": [
+    "backend_not_compiled",
+    "non_HIP_platform",
+    "runtime_architecture_not_gfx1201",
+    "network_scalar_type_not_half",
+    "input_width_not_64",
+    "hidden_width_not_64",
+    "output_width_not_64",
+    "n_hidden_layers_not_2",
+    "hidden_activation_not_ReLU",
+    "output_activation_not_None",
+    "bias_disabled",
+    "batch_rows_zero_or_not_multiple_of_16",
+    "unsupported_matrix_layout",
+    "forward_or_backward_requested_before_qualification"
+  ],
+  "marker": "TCNN_RDNA4_P4A2_P0_PRODUCTION_INTEGRATION_CONTRACT_001",
+  "next_checkpoints": [
+    {
+      "kernel_change": false,
+      "name": "opt-in class, build and factory skeleton",
+      "phase": "4A2-P1"
+    },
+    {
+      "kernel_change": true,
+      "name": "production inference kernel and parameter-ABI adaptation",
+      "phase": "4A2-P2"
+    },
+    {
+      "kernel_change": false,
+      "name": "C++ and Python integration correctness",
+      "phase": "4A2-P3"
+    },
+    {
+      "kernel_change": false,
+      "name": "production ISA, resources and regression audit",
+      "phase": "4A2-P4"
+    },
+    {
+      "kernel_change": false,
+      "name": "conditioned performance qualification",
+      "phase": "4A2-P5"
+    }
+  ],
+  "p4_to_production_bridge_deltas": [
+    {
+      "p4": "standalone fixed batch of 16",
+      "production": "grid over batch_rows/16 with exact multiple-of-16 gate"
+    },
+    {
+      "p4": "row-major [16][64] buffers",
+      "production": "ColumnMajor GPUMatrix [64][batch], byte-equivalent per sample"
+    },
+    {
+      "p4": "separate FP16 weights and FP32 bias arrays",
+      "production": "single FP16 network parameter buffer with FP16 bias promoted to FP32"
+    },
+    {
+      "p4": "final FP32 global output",
+      "production": "FP32 accumulator cast to public __half network output"
+    },
+    {
+      "p4": "hidden oracle pointers and diagnostic counters",
+      "production": "no oracle pointers and no diagnostic counters"
+    },
+    {
+      "p4": "standalone executable launch",
+      "production": "caller stream, no implicit host synchronization"
+    }
+  ],
+  "parameter_abi": {
+    "bias_elements_per_layer": 64,
+    "bias_storage": "FP16_promoted_to_FP32_in_epilogue",
+    "initialization_and_set_params": "Network_parameter_storage_contract",
+    "layer_order": [
+      0,
+      1,
+      2
+    ],
+    "per_layer_order": [
+      "weights",
+      "bias"
+    ],
+    "storage_type": "__half",
+    "total_parameter_elements": 12480,
+    "weight_elements_per_layer": 4096,
+    "weight_layout": "ColumnMajor_64_by_64"
+  },
+  "phase": "4A2-P0",
+  "planned_integration_surfaces": [
+    "src/CMakeLists.txt",
+    "src/network.cu",
+    "src/portable_network.cu",
+    "include/tiny-cuda-nn/network.h",
+    "include/tiny-cuda-nn/gpu_matrix.h",
+    "include/tiny-cuda-nn/networks/rocwmma_width64_mlp.h",
+    "src/rocwmma_width64_mlp.cu",
+    "bindings/torch/tinycudann/bindings.cpp"
+  ],
+  "public_api": {
+    "build_option": "TCNN_ENABLE_ROCWMMA_WIDTH64_MLP",
+    "class_name": "RocWMMAWidth64MLP",
+    "compile_definition": "TCNN_WITH_ROCWMMA_WIDTH64_MLP",
+    "default_enabled": false,
+    "header": "include/tiny-cuda-nn/networks/rocwmma_width64_mlp.h",
+    "otype": "RocWMMAWidth64MLP",
+    "selection": "explicit_otype_only",
+    "silent_fallback": false,
+    "source": "src/rocwmma_width64_mlp.cu"
+  },
+  "schema_version": 1,
+  "scope": {
+    "automatic_backend_selection": "out_of_scope",
+    "backward": "fail_closed_until_separately_qualified",
+    "existing_backends_unchanged": [
+      "PortableMLP",
+      "HipBLASLtMLPFP16",
+      "FullyFusedMLP",
+      "CutlassMLP"
+    ],
+    "forward_training": "fail_closed_until_separately_qualified",
+    "performance_claim": "none",
+    "phase_4a2_initial_capability": "inference_only"
+  },
+  "title": "Width-64 production integration contract and surface freeze"
+}

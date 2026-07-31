@@ -1,0 +1,85 @@
+{
+  "contract_id": "PHASE3DA_HIPBLASLT_CROSSCHECK_FIX_CONTRACT_V1",
+  "contract_version": 1,
+  "baseline": {
+    "diagnosis_commit": "cf8b4fb14784c737b49eba642d1081f00f5422ad",
+    "historical_blocked_archive_sha256": "9e21e8b9eb4d5551bfadc1bafbc5006b2dc65cc1175f232740e41dcddc52e7f0",
+    "historical_diagnosis_sha256sums_sha256": "2a64bdc3a474372da7f98f78a74084aeb8fc81e372a08a16b41c54886cae87da",
+    "historical_result": "RDNA4_FUSED_MLP_PHASE3DA_100_STEP: BLOCKED"
+  },
+  "problem_class": "R1_CROSSCHECK_HARNESS",
+  "change_policy": {
+    "production_kernel_change_allowed": false,
+    "optimizer_change_allowed": false,
+    "training_state_change_allowed": false,
+    "metric_threshold_change_allowed": false,
+    "historical_result_reclassification_allowed": false
+  },
+  "authoritative_operation": {
+    "X": "[M,K]",
+    "W": "[K,N]",
+    "Y": "[M,N]",
+    "logical_equation": "Y = X * W"
+  },
+  "hipblaslt_mapping": {
+    "physical_X_layout": {
+      "source_storage": "row_major_[M,K]",
+      "descriptor_interpretation": "column_major_B_[K,M]"
+    },
+    "physical_W_layout": {
+      "source_storage": "row_major_[K,N]",
+      "host_transpose": false,
+      "descriptor_interpretation": "column_major_A_[N,K]_equals_W_transpose"
+    },
+    "physical_Y_layout": {
+      "descriptor_interpretation": "column_major_C_and_D_[N,M]",
+      "consumer_storage": "row_major_[M,N]"
+    },
+    "op_A": "HIPBLAS_OP_N",
+    "op_B": "HIPBLAS_OP_N",
+    "lda": "N",
+    "ldb": "K",
+    "ldc": "N",
+    "ldd": "N",
+    "descriptor_equation": "C_col[N,M] = A_col[N,K] * B_col[K,M]",
+    "logical_proof": "Y_row[M,N] = transpose(C_col) = transpose(W_transpose * X_transpose) = X * W"
+  },
+  "implementation": {
+    "scope": "hipBLASLt crosscheck harness only",
+    "marker": "P3DA-R1-HIPBLASLT-LAYOUT-FIX-V1",
+    "qualified_production_artifacts_mutable": false
+  },
+  "fixtures": {
+    "asymmetric_square": {
+      "M": 3,
+      "K": 64,
+      "N": 64,
+      "require_W_not_equal_W_transpose": true,
+      "positive_equation": "X * W",
+      "negative_equation": "X * W_transpose"
+    },
+    "non_square_descriptor": {
+      "M": 3,
+      "K": 5,
+      "N": 7,
+      "wrong_transpose_must_fail_closed": true
+    }
+  },
+  "step53_anchor": {
+    "S52_sha256": "f70c98be39f76a1ef7c01beaa71ad92599d309b6c9ecd110922188b6a47d42c7",
+    "X53_sha256": "2ee470e63486e6ddd56bd5a9996c7e79c20977e7a7f7a6442ec04dd9868bfcce",
+    "T53_sha256": "a92d4f2fd42933151f8a509e63742d03a789e68e8bdd2ce96c18d9d7c4462dc1",
+    "reported_linear_index": 2129,
+    "reported_multi_index": [33, 17],
+    "expected_rocWMMA_bits": "0x2fa7",
+    "expected_CPU_XW_bits": "0x2fa7"
+  },
+  "short_matrix": {
+    "cases": ["dense_a_m32", "sparse_a_m48", "dense_b_m64", "partial_b_m45"],
+    "teacher_forced_steps": [1, 4, 50, 53, 64, 100]
+  },
+  "reproducibility": {
+    "fresh_step53_processes": 3,
+    "required_match": "BYTE_IDENTICAL_NUMERIC_PAYLOADS"
+  }
+}

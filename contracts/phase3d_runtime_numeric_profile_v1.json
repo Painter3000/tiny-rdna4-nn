@@ -1,0 +1,25 @@
+{
+  "architecture": "gfx1201",
+  "beta1_denorm_mode": "preserve",
+  "beta1_first_subnormal_step": 829,
+  "beta1_first_zero_step": null,
+  "beta2_denorm_mode": "preserve",
+  "beta2_first_subnormal_step": null,
+  "beta2_first_zero_step": null,
+  "compiler": "AMD clang version 22.0.0git (https://github.com/RadeonOpenCompute/llvm-project roc-7.2.0 26014 7b800a19466229b8479a78de19143dc33c3ab9b5)",
+  "compiler_flags": [
+    "-x",
+    "hip",
+    "-std=c++17",
+    "-O2",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "--offload-arch=gfx1201",
+    "--rocm-path=/opt/rocm",
+    "-isystem",
+    "/opt/rocm/include",
+    "-L/opt/rocm/lib",
+    "-Wl,-rpath,/opt/rocm/lib"
+  ],
+  "measurement_artifact_hash": "e48534064e3c22ee08e925a0a19dfb28849dba4179a15fa82e56a2c2153efe35"
+}

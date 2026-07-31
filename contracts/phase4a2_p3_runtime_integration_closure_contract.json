@@ -1,0 +1,105 @@
+{
+  "baseline": {
+    "mapping_header_sha256": "f7e25b69d3f55c63208e18cece9034bcda54b1114e65a68895c7f8b060ffa517",
+    "production_source_sha256": "7b8736534fd94a3d8135a2573a72285dc1e75015794adeeef222e0fd8b5bd6f4",
+    "rebuild": false,
+    "required_head_prefix": "204a807",
+    "required_head_subject": "Add Phase 4A2-P2 rocWMMA Width-64 production inference",
+    "required_p2_decision": "PHASE4A2_P2_WIDTH64_PRODUCTION_INFERENCE_AND_PARAMETER_ABI_PASS",
+    "reuse_p2_extension": true
+  },
+  "integration_gates": {
+    "backward_fail_closed_by_contract": true,
+    "caller_stream_semantics": true,
+    "existing_factories_construct": [
+      "PortableMLP",
+      "HipBLASLtMLPFP16"
+    ],
+    "explicit_otype_only": true,
+    "no_kernel_math_change": true,
+    "no_performance_claim": true,
+    "no_silent_fallback": true,
+    "production_isa_claim": "deferred_to_4A2-P4",
+    "public_python_entry": true,
+    "training_forward_fail_closed": true
+  },
+  "marker": "TCNN_RDNA4_P4A2_P3_RUNTIME_INTEGRATION_CLOSURE_001",
+  "phase": "4A2-P3",
+  "reference": {
+    "compute": "CPU FP32 matmul",
+    "hidden_boundaries": "FP16",
+    "input_storage": "FP32 public input cast to FP16 at identity encoding boundary",
+    "max_abs_tolerance": 0.005,
+    "normalized_l2_tolerance": 0.002,
+    "output_storage": "FP16",
+    "parameter_storage": "FP16"
+  },
+  "runtime_matrix": {
+    "batch_sizes": [
+      1,
+      15,
+      16,
+      17,
+      31,
+      32,
+      33,
+      63,
+      64,
+      65,
+      127,
+      128,
+      129,
+      255,
+      256,
+      257,
+      511,
+      512,
+      513,
+      1023
+    ],
+    "dual_nondefault_streams": true,
+    "fresh_processes": 2,
+    "internal_padding_boundaries": [
+      256,
+      512,
+      768,
+      1024
+    ],
+    "model_isolation": true,
+    "parameter_hot_swap": "A -> B -> A",
+    "parameter_sets": [
+      "A",
+      "B"
+    ],
+    "prefix_invariance_pairs": [
+      [
+        16,
+        17
+      ],
+      [
+        32,
+        33
+      ],
+      [
+        64,
+        65
+      ],
+      [
+        128,
+        129
+      ],
+      [
+        256,
+        257
+      ],
+      [
+        512,
+        513
+      ]
+    ],
+    "repeat_batch": 257,
+    "repeat_launches": 64
+  },
+  "schema_version": 1,
+  "title": "Width-64 production runtime integration and lifecycle closure"
+}

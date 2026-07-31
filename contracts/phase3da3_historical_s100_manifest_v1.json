@@ -1,0 +1,14 @@
+{
+  "manifest_id": "PHASE3DA3_HISTORICAL_S100_MANIFEST_V1",
+  "manifest_version": 1,
+  "source_phase": "PHASE3DA_100_STEP",
+  "state_step": 100,
+  "hash_algorithm": "sha256",
+  "immutable_after_a3_series_start": true,
+  "cases": {
+    "dense_a_m32": "cae85c3691ca39e2c0b76f38a24326d0ab3a1bdf6c56aa37df85d1636850758e",
+    "sparse_a_m48": "780f221eb6081f3e8f3014275890cdec7a7978cdaf5aaa98512d7d9ef7547673",
+    "dense_b_m64": "8f406072e131875a7b67be811656e4fe6cffebf7dbfb7e7bf02d9cf909ad56b7",
+    "partial_b_m45": "fc3c54e613011f2413024c62f56fa782314e478d43c2e1d11244ae3f1d4198ae"
+  }
+}

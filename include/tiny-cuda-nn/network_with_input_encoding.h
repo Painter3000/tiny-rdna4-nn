@@ -1,0 +1,344 @@
+/*
+ * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright notice, this list of
+ *       conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright notice, this list of
+ *       conditions and the following disclaimer in the documentation and/or other materials
+ *       provided with the distribution.
+ *     * Neither the name of the NVIDIA CORPORATION nor the names of its contributors may be used
+ *       to endorse or promote products derived from this software without specific prior written
+ *       permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TOR (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/** @file   network_with_input_encoding.h
+ *  @author Thomas Müller, NVIDIA
+ *  @brief  A model that includes its encoding
+ */
+
+#pragma once
+
+// TCNN_RDNA4_P2_FIX_011: explicit HIP stream API for NetworkWithInputEncoding.
+
+#include <tiny-cuda-nn/common.h>
+
+#include <tiny-cuda-nn/encoding.h>
+#include <tiny-cuda-nn/gpu_matrix.h>
+#include <tiny-cuda-nn/gpu_memory.h>
+#include <tiny-cuda-nn/network.h>
+
+namespace tcnn {
+
+template <typename T>
+class NetworkWithInputEncoding : public Network<float, T> {
+public:
+	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, std::shared_ptr<Network<T>> network) : m_encoding{encoding}, m_network{network} {
+		m_logical_encoding_width = encoding->output_width();
+		// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: the shared-object constructor
+		// has no authoritative backend configuration with which to apply the
+		// qualified FP16 padding/layout contract. Reject that combination rather
+		// than silently connecting an encoding-preferred layout.
+		const auto params = network->hyperparams();
+		const std::string backend = params.value("otype", "");
+		if (
+			equals_case_insensitive(backend, "HipBLASLtMLPFP16") ||
+			equals_case_insensitive(backend, "RocWMMAWidth64MLP")
+		) {
+			throw std::runtime_error{
+				"NetworkWithInputEncoding(shared encoding, shared explicit FP16 "
+				"backend) is unqualified; use the JSON/factory constructor."
+			};
+		}
+	}
+
+	NetworkWithInputEncoding(std::shared_ptr<Encoding<T>> encoding, uint32_t n_output_dims, const json& network) : m_encoding{encoding} {
+		m_fp16_hipblaslt = equals_case_insensitive(network.value("otype", ""), "HipBLASLtMLPFP16");
+		// TCNN_RDNA4_P4A2_P2_PRODUCTION_INFERENCE_001: the rocWMMA backend
+		// consumes the same contiguous ColumnMajor [width][batch] bridge.
+		m_fp16_rocwmma_width64 = equals_case_insensitive(
+			network.value("otype", ""),
+			"RocWMMAWidth64MLP"
+		);
+		m_logical_encoding_width = encoding->output_width();
+		const uint32_t alignment = minimum_alignment(network);
+		encoding->set_alignment(alignment);
+		if (m_fp16_hipblaslt) {
+			// TCNN_RDNA4_P3B1E1A_FINAL_ENCODING_AUDIT_001: zero padding is a
+			// backend-bound contract. Standalone encodings and all other
+			// backends retain the historical padding value of one.
+			encoding->set_padding_value((T)0.0f);
+			// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: the qualified
+			// hipBLASLt shapes are discrete, not merely multiples of sixteen.
+			const uint32_t logical = m_logical_encoding_width;
+			if (logical > 128) {
+				// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: no silent unsupported
+				// width, backend switch, or FP32 fallback is permitted.
+				throw std::runtime_error{fmt::format("HipBLASLtMLPFP16 encoding width {} exceeds the supported maximum 128.", logical)};
+			}
+			const uint32_t supported = logical <= 16 ? 16 : logical <= 32 ? 32 : logical <= 64 ? 64 : 128;
+			encoding->set_padded_output_width(supported);
+		}
+
+		if (m_fp16_rocwmma_width64) {
+			encoding->set_padding_value((T)0.0f);
+			if (m_logical_encoding_width != 64) {
+				throw std::runtime_error{fmt::format(
+					"RocWMMAWidth64MLP requires an encoding width of exactly "
+					"64, but received {}.",
+					m_logical_encoding_width
+				)};
+			}
+			encoding->set_padded_output_width(64);
+		}
+
+		json local_network_config = network;
+		local_network_config["n_input_dims"] = m_encoding->padded_output_width();
+		local_network_config["n_output_dims"] = n_output_dims;
+		m_network.reset(create_network<T>(local_network_config));
+	}
+
+	NetworkWithInputEncoding(uint32_t n_dims_to_encode, uint32_t n_output_dims, const json& encoding, const json& network)
+	: NetworkWithInputEncoding{std::shared_ptr<Encoding<T>>{create_encoding<T>(n_dims_to_encode, encoding, 1)}, n_output_dims, network} { }
+
+	virtual ~NetworkWithInputEncoding() { }
+
+	MatrixLayout network_input_layout() const {
+		// TCNN_RDNA4_P3B1E_FP16_ENCODING_INTEGRATION_001: the explicit FP16
+		// hipBLASLt backend consumes contiguous column-major matrices. Encodings
+		// may prefer SoA, but their dynamic matrix kernels support this layout.
+		return (m_fp16_hipblaslt || m_fp16_rocwmma_width64)
+			? MatrixLayout::ColumnMajor
+			: m_encoding->preferred_output_layout();
+	}
+
+	void inference_mixed_precision_impl(hipStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>& output, bool use_inference_params = true) override {
+		GPUMatrixDynamic<T> network_input = {m_encoding->padded_output_width(), input.n(), stream, network_input_layout()};
+		m_encoding->inference_mixed_precision(stream, input, network_input, use_inference_params);
+		m_network->inference_mixed_precision(stream, network_input, output, use_inference_params);
+	}
+
+	uint32_t num_encoded_dims() const {
+		return m_encoding->padded_output_width();
+	}
+
+	std::unique_ptr<Context> forward_impl(hipStream_t stream, const GPUMatrixDynamic<float>& input, GPUMatrixDynamic<T>* output = nullptr, bool use_inference_params = false, bool prepare_input_gradients = false) override {
+		// Make sure our temporary buffers have the correct size for the given batch size
+		uint32_t batch_size = input.n();
+
+		auto forward = std::make_unique<ForwardContext>();
+
+		forward->network_input = GPUMatrixDynamic<T>{m_encoding->padded_output_width(), input.n(), stream, network_input_layout()};
+		forward->encoding_ctx = m_encoding->forward(stream, input, &forward->network_input, use_inference_params, prepare_input_gradients);
+		forward->network_ctx = m_network->forward(stream, forward->network_input, output, use_inference_params, true);
+
+		return forward;
+	}
+
+	void backward_impl(
+		hipStream_t stream,
+		const Context& ctx,
+		const GPUMatrixDynamic<float>& input,
+		const GPUMatrixDynamic<T>& output,
+		const GPUMatrixDynamic<T>& dL_doutput,
+		GPUMatrixDynamic<float>* dL_dinput = nullptr,
+		bool use_inference_params = false,
+		GradientMode param_gradients_mode = GradientMode::Overwrite
+	) override {
+		GPUMatrixDynamic<T> dL_dnetwork_input;
+		if (m_encoding->n_params() > 0 || dL_dinput) {
+			dL_dnetwork_input = {m_encoding->padded_output_width(), input.n(), stream, network_input_layout()};
+		}
+
+		const auto& forward = dynamic_cast<const ForwardContext&>(ctx);
+
+		m_network->backward(stream, *forward.network_ctx, forward.network_input, output, dL_doutput, dL_dnetwork_input.data() ? &dL_dnetwork_input : nullptr, use_inference_params, param_gradients_mode);
+		if (dL_dnetwork_input.data()) {
+			m_encoding->backward(
+				stream,
+				*forward.encoding_ctx,
+				input,
+				forward.network_input,
+				dL_dnetwork_input,
+				dL_dinput,
+				use_inference_params,
+				param_gradients_mode
+			);
+		}
+	}
+
+	void set_params_impl(T* params, T* inference_params, T* gradients) override {
+		size_t offset = 0;
+		m_network->set_params(params + offset, inference_params + offset, gradients + offset);
+		offset += m_network->n_params();
+
+		m_encoding->set_params(params + offset, inference_params + offset, gradients + offset);
+		offset += m_encoding->n_params();
+	}
+
+	void initialize_params(pcg32& rnd, float* params_full_precision, float scale = 1) override {
+		m_network->initialize_params(rnd, params_full_precision, scale);
+		params_full_precision += m_network->n_params();
+
+		m_encoding->initialize_params(rnd, params_full_precision, scale);
+		params_full_precision += m_encoding->n_params();
+	}
+
+	size_t n_params() const override {
+		return m_encoding->n_params() + m_network->n_params();
+	}
+
+	uint32_t padded_output_width() const override {
+		return m_network->padded_output_width();
+	}
+
+	uint32_t output_width() const override {
+		return m_network->output_width();
+	}
+
+	uint32_t required_input_alignment() const override {
+		return 1; // No alignment required due to encoding
+	}
+
+	std::vector<std::pair<uint32_t, uint32_t>> layer_sizes() const override {
+		return m_network->layer_sizes();
+	}
+
+	uint32_t width(uint32_t layer) const override {
+		return layer == 0 ? m_encoding->padded_output_width() : m_network->width(layer - 1);
+	}
+
+	uint32_t num_forward_activations() const override {
+		return m_network->num_forward_activations() + 1;
+	}
+
+	std::pair<const T*, MatrixLayout> forward_activations(const Context& ctx, uint32_t layer) const override {
+		const auto& forward = dynamic_cast<const ForwardContext&>(ctx);
+		return layer == 0 ? std::make_pair<const T*, MatrixLayout>(forward.network_input.data(), network_input_layout()) : m_network->forward_activations(*forward.network_ctx, layer - 1);
+	}
+
+	uint32_t input_width() const override {
+		return m_encoding->input_width();
+	}
+
+	const std::shared_ptr<Encoding<T>>& encoding() const {
+		return m_encoding;
+	}
+
+	json hyperparams() const override {
+		return {
+			{"otype", "NetworkWithInputEncoding"},
+			{"encoding", m_encoding->hyperparams()},
+			{"network", m_network->hyperparams()},
+			// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: authoritative flat
+			// parameter ranges and integration widths for audit/checkpoint replay.
+			{"logical_encoding_width", m_logical_encoding_width},
+			{"padded_encoding_width", m_encoding->padded_output_width()},
+			{"encoding_padding_value", (float)m_encoding->padding_value()},
+			{"network_parameter_offset", 0},
+			{"network_parameter_count", m_network->n_params()},
+			{"encoding_parameter_offset", m_network->n_params()},
+			{"encoding_parameter_count", m_encoding->n_params()},
+			{"total_parameter_count", n_params()},
+			{"network_input_layout", network_input_layout() == MatrixLayout::ColumnMajor ? "ColumnMajor" : "RowMajor"},
+		};
+	}
+
+	std::string generate_device_function(const std::string& name) const override {
+		std::string encoding = name + "_encoding";
+		std::string network = name + "_network";
+
+		std::ostringstream preamble;
+		preamble
+			<< m_network->generate_device_function(network) << "\n\n"
+			<< m_encoding->generate_device_function(encoding) << "\n\n"
+			;
+
+		std::string body = dfmt(1, R"(
+				return {MLP}({ENC}(input, params + {ENC_PARAMS_OFFSET}, fwd_ctx ? fwd_ctx + WARP_SIZE * {ENC_FWD_CTX_OFFSET} : nullptr), params, fwd_ctx);
+			)",
+			"ENC"_a = encoding,
+			"ENC_PARAMS_OFFSET"_a = m_encoding->params() - this->params(),
+			"ENC_FWD_CTX_OFFSET"_a = m_network->device_function_fwd_ctx_bytes(),
+			"MLP"_a = network
+		);
+
+		return fmt::format("{}{}", preamble.str(), this->generate_device_function_from_body(name, body));
+	}
+
+	std::string generate_backward_device_function(const std::string& name, uint32_t n_threads) const override {
+		std::string encoding = name + "_encoding";
+		std::string network = name + "_network";
+
+		std::ostringstream preamble;
+		preamble
+			<< m_network->generate_backward_device_function(network, n_threads) << "\n\n"
+			<< m_encoding->generate_backward_device_function(encoding, n_threads) << "\n\n"
+			;
+
+		std::string body = dfmt(1, R"(
+				bool requires_encoding_bwd = {ENC_N_PARAMS} != 0 || dL_dx;
+				{ENC_VEC_OUT} dL_denc;
+				{MLP}(dL_dy, params, fwd_ctx, dL_dparams, requires_encoding_bwd ? &dL_denc : nullptr);
+				if (requires_encoding_bwd) {{
+					{ENC}(dL_denc, params + {ENC_PARAMS_OFFSET}, fwd_ctx + WARP_SIZE * {ENC_FWD_CTX_OFFSET}, dL_dparams ? dL_dparams + {ENC_PARAMS_OFFSET} : nullptr, dL_dx);
+				}}
+			)",
+			"ENC"_a = encoding,
+			"ENC_VEC_OUT"_a = m_encoding->generate_vec_out(),
+			"ENC_N_PARAMS"_a = m_encoding->n_params(),
+			"ENC_PARAMS_OFFSET"_a = m_encoding->params() - this->params(),
+			"ENC_FWD_CTX_OFFSET"_a = m_network->device_function_fwd_ctx_bytes(),
+			"MLP"_a = network
+		);
+
+		return fmt::format("{}{}", preamble.str(), this->generate_backward_device_function_from_body(name, body));
+	}
+
+	uint32_t device_function_fwd_ctx_bytes() const override {
+		return m_network->device_function_fwd_ctx_bytes() + m_encoding->device_function_fwd_ctx_bytes();
+	}
+
+	bool device_function_fwd_ctx_aligned_per_element() const override {
+		return false;
+	}
+
+	uint32_t backward_device_function_shmem_bytes(uint32_t n_threads, GradientMode param_gradients_mode) const override {
+		return std::max(m_network->backward_device_function_shmem_bytes(n_threads, param_gradients_mode), m_encoding->backward_device_function_shmem_bytes(n_threads, param_gradients_mode));
+	}
+
+	void convert_params_to_jit_layout(hipStream_t stream, bool use_inference_params) override {
+		m_network->convert_params_to_jit_layout(stream, use_inference_params);
+		m_encoding->convert_params_to_jit_layout(stream, use_inference_params);
+	}
+
+	void convert_params_from_jit_layout(hipStream_t stream, bool use_inference_params) override {
+		m_network->convert_params_from_jit_layout(stream, use_inference_params);
+		m_encoding->convert_params_from_jit_layout(stream, use_inference_params);
+	}
+
+private:
+	std::shared_ptr<Encoding<T>> m_encoding;
+	std::shared_ptr<Network<T>> m_network;
+	bool m_fp16_hipblaslt = false;
+	bool m_fp16_rocwmma_width64 = false;
+	uint32_t m_logical_encoding_width = 0;
+
+	struct ForwardContext : public Context {
+		GPUMatrixDynamic<T> network_input;
+		std::unique_ptr<Context> encoding_ctx;
+		std::unique_ptr<Context> network_ctx;
+	};
+};
+
+}

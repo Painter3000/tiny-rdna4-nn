@@ -1,0 +1,600 @@
+/*
+ * Copyright (c) 2020-2025, NVIDIA CORPORATION.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are permitted
+ * provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright notice, this list of
+ *       conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright notice, this list of
+ *       conditions and the following disclaimer in the documentation and/or other materials
+ *       provided with the distribution.
+ *     * Neither the name of the NVIDIA CORPORATION nor the names of its contributors may be used
+ *       to endorse or promote products derived from this software without specific prior written
+ *       permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL NVIDIA CORPORATION BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TOR (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/** @file   torch_bindings.cu
+ *  @author Thomas Müller, Jacob Munkberg, Jon Hasselgren, Or Perel, NVIDIA
+ */
+
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#include <torch/extension.h>
+#pragma warning(pop)
+#else
+#include <torch/extension.h>
+#endif
+
+#if defined(__HIP_PLATFORM_AMD__)
+// TCNN_RDNA4_P1_FIX_012: use ROCm PyTorch's CUDA-masquerading device guard
+// and current-stream API; the public Python device remains torch.cuda.
+#include <ATen/hip/HIPUtils.h>
+#include <ATen/hip/impl/HIPGuardImplMasqueradingAsCUDA.h>
+#include <ATen/hip/impl/HIPStreamMasqueradingAsCUDA.h>
+#else
+#include <ATen/cuda/CUDAUtils.h>
+#include <c10/cuda/CUDAGuard.h>
+#endif
+
+#ifdef snprintf
+#undef snprintf
+#endif
+
+#include <json/json.hpp>
+
+#include <pybind11_json/pybind11_json.hpp>
+#include <pybind11/functional.h>
+
+#include <tiny-cuda-nn/cpp_api.h>
+#include <tiny-cuda-nn/object.h>
+#if defined(__HIP_PLATFORM_AMD__) && !defined(TCNN_NO_NETWORKS)
+#include <tiny-cuda-nn/networks/hipblaslt_mlp.h>
+#include <tiny-cuda-nn/networks/hipblaslt_mlp_fp16.h>
+#include <tiny-cuda-nn/network_with_input_encoding.h>
+#if defined(TCNN_WITH_ROCWMMA_WIDTH64_MLP)
+#include <tiny-cuda-nn/networks/rocwmma_width64_mlp.h>
+#endif
+#endif
+
+#define STRINGIFY(x) #x
+#define STR(x) STRINGIFY(x)
+#define FILE_LINE __FILE__ ":" STR(__LINE__)
+#define CHECK_THROW(x) \
+	do { if (!(x)) throw std::runtime_error(std::string(FILE_LINE " check failed " #x)); } while(0)
+
+c10::ScalarType torch_type(tcnn::cpp::Precision precision) {
+	switch (precision) {
+		case tcnn::cpp::Precision::Fp32: return torch::kFloat32;
+		case tcnn::cpp::Precision::Fp16: return torch::kHalf;
+		default: throw std::runtime_error{"Unknown precision tcnn->torch"};
+	}
+}
+
+void* void_data_ptr(torch::Tensor& tensor) {
+	switch (tensor.scalar_type()) {
+		case torch::kFloat32: return tensor.data_ptr<float>();
+		case torch::kHalf: return tensor.data_ptr<torch::Half>();
+		default: throw std::runtime_error{"Unknown precision torch->void"};
+	}
+}
+
+#define CHECK_INPUT(x) CHECK_THROW(x.device().is_cuda()); CHECK_THROW(x.is_contiguous())
+
+class Module {
+public:
+	Module(tcnn::cpp::Module* module) : m_module{module} {}
+
+	std::tuple<tcnn::cpp::Context, torch::Tensor> fwd(torch::Tensor input, torch::Tensor params) {
+		CHECK_INPUT(input);
+		CHECK_INPUT(params);
+
+		// Types
+		CHECK_THROW(input.scalar_type() == torch::kFloat32);
+		CHECK_THROW(params.scalar_type() == c10_param_precision());
+
+		// Sizes
+		CHECK_THROW(input.size(1) == n_input_dims());
+		CHECK_THROW(params.size(0) == n_params());
+
+		// Device
+		at::Device device = input.device();
+		CHECK_THROW(device == params.device());
+
+		#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		#else
+		const at::cuda::CUDAGuard device_guard{device};
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+		#endif
+
+		uint32_t batch_size = input.size(0);
+
+		torch::Tensor output = torch::empty({ batch_size, n_output_dims() }, torch::TensorOptions().dtype(c10_output_precision()).device(device));
+
+		tcnn::cpp::Context ctx;
+		if (!input.requires_grad() && !params.requires_grad()) {
+			m_module->inference(stream, batch_size, input.data_ptr<float>(), void_data_ptr(output), void_data_ptr(params));
+		} else {
+			ctx = m_module->forward(stream, batch_size, input.data_ptr<float>(), void_data_ptr(output), void_data_ptr(params), input.requires_grad());
+		}
+
+		return { std::move(ctx), output };
+	}
+
+	std::tuple<torch::Tensor, torch::Tensor> bwd(const tcnn::cpp::Context& ctx, torch::Tensor input, torch::Tensor params, torch::Tensor output, torch::Tensor dL_doutput) {
+		if (!ctx.ctx) {
+			throw std::runtime_error{"Module::bwd: called with invalid context. fwd likely (mistakenly) ran in inference mode."};
+		}
+
+		CHECK_INPUT(input);
+		CHECK_INPUT(params);
+		CHECK_INPUT(output);
+		CHECK_INPUT(dL_doutput);
+
+		// Types
+		CHECK_THROW(input.scalar_type() == torch::kFloat32);
+		CHECK_THROW(params.scalar_type() == c10_param_precision());
+		CHECK_THROW(output.scalar_type() == c10_output_precision());
+		CHECK_THROW(dL_doutput.scalar_type() == c10_output_precision());
+
+		// Sizes
+		CHECK_THROW(input.size(1) == n_input_dims());
+		CHECK_THROW(output.size(1) == n_output_dims());
+		CHECK_THROW(params.size(0) == n_params());
+		CHECK_THROW(output.size(0) == input.size(0));
+		CHECK_THROW(dL_doutput.size(0) == input.size(0));
+
+		// Device
+		at::Device device = input.device();
+		CHECK_THROW(device == params.device());
+		CHECK_THROW(device == output.device());
+		CHECK_THROW(device == dL_doutput.device());
+
+		#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		#else
+		const at::cuda::CUDAGuard device_guard{device};
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+		#endif
+
+		uint32_t batch_size = input.size(0);
+
+		torch::Tensor dL_dinput;
+		if (input.requires_grad()) {
+			dL_dinput = torch::empty({ batch_size, input.size(1) }, torch::TensorOptions().dtype(torch::kFloat32).device(device));
+		}
+
+		torch::Tensor dL_dparams;
+		if (params.requires_grad()) {
+			dL_dparams = torch::empty({ n_params() }, torch::TensorOptions().dtype(c10_param_precision()).device(device));
+		}
+
+		if (input.requires_grad() || params.requires_grad()) {
+			m_module->backward(
+				stream,
+				ctx,
+				batch_size,
+				input.requires_grad() ? dL_dinput.data_ptr<float>() : nullptr,
+				void_data_ptr(dL_doutput),
+				params.requires_grad() ? void_data_ptr(dL_dparams) : nullptr,
+				input.data_ptr<float>(),
+				void_data_ptr(output),
+				void_data_ptr(params),
+				tcnn::GradientMode::Overwrite
+			);
+		}
+
+		return { dL_dinput, dL_dparams };
+	}
+
+	// TCNN_RDNA4_P2E_FIX_002: explicit native GradientMode test hook. This is
+	// intentionally below the public torch.nn.Module API and reuses a caller-
+	// supplied gradient buffer so Overwrite/Accumulate/Ignore are observable.
+	std::tuple<torch::Tensor, torch::Tensor> bwd_mode(const tcnn::cpp::Context& ctx, torch::Tensor input,
+		torch::Tensor params, torch::Tensor output, torch::Tensor dL_doutput,
+		torch::Tensor dL_dparams, const std::string& mode_name) {
+		if (!ctx.ctx) throw std::runtime_error{"Module::bwd_mode: invalid forward context"};
+		CHECK_INPUT(input); CHECK_INPUT(params); CHECK_INPUT(output); CHECK_INPUT(dL_doutput); CHECK_INPUT(dL_dparams);
+		CHECK_THROW(input.scalar_type() == torch::kFloat32);
+		CHECK_THROW(params.scalar_type() == c10_param_precision());
+		CHECK_THROW(output.scalar_type() == c10_output_precision());
+		CHECK_THROW(dL_doutput.scalar_type() == c10_output_precision());
+		CHECK_THROW(dL_dparams.scalar_type() == c10_param_precision());
+		CHECK_THROW(input.size(1) == n_input_dims() && params.size(0) == n_params());
+		CHECK_THROW(dL_dparams.size(0) == n_params() && output.sizes() == dL_doutput.sizes());
+		CHECK_THROW(input.device() == params.device() && input.device() == output.device());
+		CHECK_THROW(input.device() == dL_doutput.device() && input.device() == dL_dparams.device());
+		tcnn::GradientMode mode;
+		if (mode_name == "Overwrite") mode = tcnn::GradientMode::Overwrite;
+		else if (mode_name == "Accumulate") mode = tcnn::GradientMode::Accumulate;
+		else if (mode_name == "Ignore") mode = tcnn::GradientMode::Ignore;
+		else throw std::runtime_error{"bwd_mode expects Overwrite, Accumulate, or Ignore"};
+		const at::Device device = input.device();
+#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+#else
+		const at::cuda::CUDAGuard device_guard{device};
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+#endif
+		torch::Tensor dL_dinput = torch::empty({input.size(0), input.size(1)},
+			torch::TensorOptions().dtype(torch::kFloat32).device(device));
+		m_module->backward(stream, ctx, input.size(0), dL_dinput.data_ptr<float>(), void_data_ptr(dL_doutput),
+			void_data_ptr(dL_dparams), input.data_ptr<float>(), void_data_ptr(output), void_data_ptr(params), mode);
+		return {dL_dinput, dL_dparams};
+	}
+
+	std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> bwd_bwd_input(const tcnn::cpp::Context& ctx, torch::Tensor input, torch::Tensor params, torch::Tensor dL_ddLdinput, torch::Tensor dL_doutput) {
+		// from: dL_ddLdinput
+		// to:   dL_ddLdoutput, dL_dparams, dL_dinput
+
+		if (!ctx.ctx) {
+			throw std::runtime_error{"Module::bwd_bwd_input: called with invalid context. fwd likely (mistakenly) ran in inference mode."};
+		}
+
+		CHECK_INPUT(input);
+		CHECK_INPUT(params);
+		CHECK_INPUT(dL_ddLdinput);
+		CHECK_INPUT(dL_doutput);
+
+		// Types
+		CHECK_THROW(input.scalar_type() == torch::kFloat32);
+		CHECK_THROW(dL_ddLdinput.scalar_type() == torch::kFloat32);
+		CHECK_THROW(params.scalar_type() == c10_param_precision());
+		CHECK_THROW(dL_doutput.scalar_type() == c10_output_precision());
+
+		// Sizes
+		CHECK_THROW(input.size(1) == n_input_dims());
+		CHECK_THROW(dL_doutput.size(1) == n_output_dims());
+		CHECK_THROW(dL_ddLdinput.size(1) == n_input_dims());
+		CHECK_THROW(params.size(0) == n_params());
+		CHECK_THROW(dL_doutput.size(0) == input.size(0));
+		CHECK_THROW(dL_ddLdinput.size(0) == input.size(0));
+
+		// Device
+		at::Device device = input.device();
+		CHECK_THROW(device == params.device());
+		CHECK_THROW(device == dL_ddLdinput.device());
+		CHECK_THROW(device == dL_doutput.device());
+
+		#if defined(__HIP_PLATFORM_AMD__)
+		const c10::hip::HIPGuardMasqueradingAsCUDA device_guard{device};
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		#else
+		const at::cuda::CUDAGuard device_guard{device};
+		hipStream_t stream = at::cuda::getCurrentCUDAStream();
+		#endif
+
+		uint32_t batch_size = input.size(0);
+
+		torch::Tensor dL_ddLdoutput;
+		if (dL_doutput.requires_grad()) {
+			dL_ddLdoutput = torch::zeros({ batch_size, n_output_dims() }, torch::TensorOptions().dtype(c10_output_precision()).device(device));
+		}
+
+		torch::Tensor dL_dparams;
+		if (params.requires_grad()) {
+			dL_dparams = torch::zeros({ n_params() }, torch::TensorOptions().dtype(c10_param_precision()).device(device));
+		}
+
+		torch::Tensor dL_dinput;
+		if (input.requires_grad()) {
+			dL_dinput = torch::zeros({ batch_size, n_input_dims() }, torch::TensorOptions().dtype(torch::kFloat32).device(device));
+		}
+
+		if (dL_doutput.requires_grad() || params.requires_grad()) {
+			m_module->backward_backward_input(
+				stream,
+				ctx,
+				batch_size,
+				dL_ddLdinput.data_ptr<float>(),
+				input.data_ptr<float>(),
+				(params.requires_grad() || input.requires_grad() ) ? void_data_ptr(dL_doutput) : nullptr,
+				params.requires_grad() ? void_data_ptr(dL_dparams) : nullptr,
+				dL_doutput.requires_grad() ? void_data_ptr(dL_ddLdoutput) : nullptr,
+				input.requires_grad() ? dL_dinput.data_ptr<float>() : nullptr,
+				void_data_ptr(params)
+			);
+		}
+
+		return {dL_ddLdoutput, dL_dparams, dL_dinput};
+	}
+
+	torch::Tensor initial_params(size_t seed) {
+		torch::Tensor output = torch::zeros({ n_params() }, torch::TensorOptions().dtype(torch::kFloat32).device(torch::kCUDA));
+		m_module->initialize_params(seed, output.data_ptr<float>());
+		return output;
+	}
+
+	uint32_t n_input_dims() const { return m_module->n_input_dims(); }
+
+	uint32_t n_params() const { return (uint32_t)m_module->n_params(); }
+	tcnn::cpp::Precision param_precision() const { return m_module->param_precision(); }
+	c10::ScalarType c10_param_precision() const { return torch_type(param_precision()); }
+
+	uint32_t n_output_dims() const { return m_module->n_output_dims(); }
+	tcnn::cpp::Precision output_precision() const { return m_module->output_precision(); }
+	c10::ScalarType c10_output_precision() const { return torch_type(output_precision()); }
+
+	nlohmann::json hyperparams() const { return m_module->hyperparams(); }
+	std::string name() const { return m_module->name(); }
+
+	bool jit_fusion() const { return m_module->jit_fusion(); }
+	void set_jit_fusion(bool val) { m_module->set_jit_fusion(val); }
+
+private:
+	std::unique_ptr<tcnn::cpp::Module> m_module;
+};
+
+#if !defined(TCNN_NO_NETWORKS)
+Module create_network_with_input_encoding(uint32_t n_input_dims, uint32_t n_output_dims, const nlohmann::json& encoding, const nlohmann::json& network) {
+	return Module{tcnn::cpp::create_network_with_input_encoding(n_input_dims, n_output_dims, encoding, network)};
+}
+
+Module create_network(uint32_t n_input_dims, uint32_t n_output_dims, const nlohmann::json& network) {
+	return Module{tcnn::cpp::create_network(n_input_dims, n_output_dims, network)};
+}
+#endif
+
+Module create_encoding(uint32_t n_input_dims, const nlohmann::json& encoding, tcnn::cpp::Precision requested_precision) {
+	return Module{tcnn::cpp::create_encoding(n_input_dims, encoding, requested_precision)};
+}
+
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+	py::enum_<tcnn::cpp::LogSeverity>(m, "LogSeverity")
+		.value("Info", tcnn::cpp::LogSeverity::Info)
+		.value("Debug", tcnn::cpp::LogSeverity::Debug)
+		.value("Warning", tcnn::cpp::LogSeverity::Warning)
+		.value("Error", tcnn::cpp::LogSeverity::Error)
+		.value("Success", tcnn::cpp::LogSeverity::Success)
+		.export_values()
+		;
+
+	py::enum_<tcnn::cpp::Precision>(m, "Precision")
+		.value("Fp32", tcnn::cpp::Precision::Fp32)
+		.value("Fp16", tcnn::cpp::Precision::Fp16)
+		.export_values()
+		;
+
+	m.def("batch_size_granularity", &tcnn::cpp::batch_size_granularity);
+	m.def("default_loss_scale", &tcnn::cpp::default_loss_scale);
+	m.def("free_temporary_memory", &tcnn::cpp::free_temporary_memory);
+	m.def("has_networks", &tcnn::cpp::has_networks);
+	m.def("preferred_precision", &tcnn::cpp::preferred_precision);
+
+	#if defined(TCNN_WITH_ROCWMMA_WIDTH64_MLP)
+	m.def("_phase4a2_forward_states", [](torch::Tensor input, torch::Tensor params) {
+		CHECK_INPUT(input);
+		CHECK_INPUT(params);
+		CHECK_THROW(input.scalar_type() == torch::kFloat16);
+		CHECK_THROW(params.scalar_type() == torch::kFloat16);
+		CHECK_THROW(input.dim() == 2 && input.size(1) == 64);
+		CHECK_THROW(params.numel() == tcnn::RocWMMAWidth64MLP::TOTAL_PARAMETER_ELEMENTS);
+		const uint32_t rows = static_cast<uint32_t>(input.size(0));
+		auto fp32_options = input.options().dtype(torch::kFloat32);
+		auto z0 = torch::empty({rows, 64}, fp32_options);
+		auto h0 = torch::empty_like(input);
+		auto z1 = torch::empty({rows, 64}, fp32_options);
+		auto h1 = torch::empty_like(input);
+		auto y = torch::empty_like(input);
+		tcnn::phase4a2_test_forward_states(
+			c10::hip::getCurrentHIPStreamMasqueradingAsCUDA(),
+			rows,
+			reinterpret_cast<const __half*>(input.data_ptr<at::Half>()),
+			reinterpret_cast<const __half*>(params.data_ptr<at::Half>()),
+			z0.data_ptr<float>(),
+			reinterpret_cast<__half*>(h0.data_ptr<at::Half>()),
+			z1.data_ptr<float>(),
+			reinterpret_cast<__half*>(h1.data_ptr<at::Half>()),
+			reinterpret_cast<__half*>(y.data_ptr<at::Half>())
+		);
+		return std::make_tuple(z0, h0, z1, h1, y);
+	});
+	m.def("_phase4a2_staleness_guard", [](
+		torch::Tensor input,
+		torch::Tensor params_before,
+		torch::Tensor params_after
+	) {
+		CHECK_INPUT(input);
+		CHECK_INPUT(params_before);
+		CHECK_INPUT(params_after);
+		CHECK_THROW(input.scalar_type() == torch::kFloat16);
+		CHECK_THROW(params_before.scalar_type() == torch::kFloat16);
+		CHECK_THROW(params_after.scalar_type() == torch::kFloat16);
+		CHECK_THROW(input.dim() == 2 && input.size(1) == 64);
+		CHECK_THROW(
+			params_before.numel() ==
+			tcnn::RocWMMAWidth64MLP::TOTAL_PARAMETER_ELEMENTS
+		);
+		CHECK_THROW(params_before.sizes() == params_after.sizes());
+		auto output = torch::empty_like(input);
+		auto result = tcnn::phase4a2_test_staleness_guard(
+			c10::hip::getCurrentHIPStreamMasqueradingAsCUDA(),
+			static_cast<uint32_t>(input.size(0)),
+			reinterpret_cast<const __half*>(input.data_ptr<at::Half>()),
+			reinterpret_cast<const __half*>(
+				params_before.data_ptr<at::Half>()
+			),
+			reinterpret_cast<const __half*>(
+				params_after.data_ptr<at::Half>()
+			),
+			reinterpret_cast<__half*>(output.data_ptr<at::Half>())
+		);
+		py::dict attestation;
+		attestation["logical_weight_mutation_count"] =
+			result.logical_weight_mutation_count;
+		attestation["forward_view_refresh_count"] =
+			result.forward_view_refresh_count;
+		attestation["fused_forward_launch_count"] =
+			result.fused_forward_launch_count;
+		attestation["logical_weight_version"] =
+			result.logical_weight_version;
+		attestation["packed_view_version"] =
+			result.packed_view_version;
+		attestation["forward_view_is_current"] =
+			result.forward_view_is_current;
+		attestation["stale_launch_rejected_before_kernel"] =
+			result.stale_launch_rejected_before_kernel;
+		return attestation;
+	});
+	m.def("_phase4a2_reset_runtime_attestation", []() {
+		tcnn::phase4a2_reset_runtime_attestation();
+	});
+	m.def("_phase4a2_runtime_attestation", []() {
+		const auto value = tcnn::phase4a2_runtime_attestation();
+		py::dict result;
+		result["forward_view_refresh_count"] =
+			value.forward_view_refresh_count;
+		result["fused_forward_launch_count"] =
+			value.fused_forward_launch_count;
+		result["logical_weight_version"] =
+			value.logical_weight_version;
+		result["packed_view_version"] =
+			value.packed_view_version;
+		result["forward_view_is_current"] =
+			value.forward_view_is_current;
+		return result;
+	});
+	#endif
+
+	m.def("supports_jit_fusion", &tcnn::cpp::supports_jit_fusion, py::arg("device")=-1);
+	m.def("rtc_set_cache_dir", &tcnn::cpp::rtc_set_cache_dir);
+	m.def("rtc_set_include_dir", &tcnn::cpp::rtc_set_include_dir);
+
+	m.def("set_log_callback", &tcnn::cpp::set_log_callback);
+
+	// Encapsulates an abstract context of an operation
+	// (commonly the forward pass) to be passed on to other
+	// operations (commonly the backward pass).
+	py::class_<tcnn::cpp::Context>(m, "Context");
+
+	// The python bindings expose TCNN's C++ API through
+	// a single "Module" class that can act as the encoding,
+	// the neural network, or a combined encoding + network
+	// under the hood. The bindings don't need to concern
+	// themselves with these implementation details, though.
+	py::class_<Module>(m, "Module")
+		.def("fwd", &Module::fwd)
+		.def("bwd", &Module::bwd)
+		.def("bwd_mode", &Module::bwd_mode)
+		.def("bwd_bwd_input", &Module::bwd_bwd_input)
+		.def("initial_params", &Module::initial_params)
+		.def("n_input_dims", &Module::n_input_dims)
+		.def("n_params", &Module::n_params)
+		.def("param_precision", &Module::param_precision)
+		.def("n_output_dims", &Module::n_output_dims)
+		.def("output_precision", &Module::output_precision)
+		.def("hyperparams", &Module::hyperparams)
+		.def("name", &Module::name)
+		.def_property("jit_fusion", &Module::jit_fusion, &Module::set_jit_fusion)
+		;
+
+#if !defined(TCNN_NO_NETWORKS)
+	m.def("create_network_with_input_encoding", &create_network_with_input_encoding);
+	m.def("create_network", &create_network);
+	#if defined(__HIP_PLATFORM_AMD__)
+	// TCNN_RDNA4_P3A1_HIPBLASLT_006: private cache diagnostics.
+	m.def("_hipblaslt_cache_hits", &tcnn::hipblaslt_mlp_cache_hits);
+	m.def("_hipblaslt_cache_misses", &tcnn::hipblaslt_mlp_cache_misses);
+	m.def("_hipblaslt_mlp_cache_misses", &tcnn::hipblaslt_mlp_cache_misses);
+	m.def("_hipblaslt_cache_size", &tcnn::hipblaslt_mlp_cache_size);
+	m.def("_hipblaslt_epilogue_bias_launches", &tcnn::hipblaslt_epilogue_bias_launches);
+	m.def("_hipblaslt_epilogue_relu_bias_launches", &tcnn::hipblaslt_epilogue_relu_bias_launches);
+	m.def("_hipblaslt_epilogue_relu_aux_bias_launches", &tcnn::hipblaslt_epilogue_relu_aux_bias_launches);
+	m.def("_hipblaslt_epilogue_fallbacks", &tcnn::hipblaslt_epilogue_fallbacks);
+	m.def("_hipblaslt_post_kernel_launches", &tcnn::hipblaslt_post_kernel_launches);
+	m.def("_hipblaslt_planning_handle_count", &tcnn::hipblaslt_planning_handle_count);
+	m.def("_hipblaslt_execution_handle_count", &tcnn::hipblaslt_execution_handle_count);
+	m.def("_hipblaslt_execution_handle_capacity", &tcnn::hipblaslt_execution_handle_capacity);
+	m.def("_hipblaslt_execution_handle_creations", &tcnn::hipblaslt_execution_handle_creations);
+	m.def("_hipblaslt_execution_handle_reuses", &tcnn::hipblaslt_execution_handle_reuses);
+	m.def("_hipblaslt_execution_handle_overflows", &tcnn::hipblaslt_execution_handle_overflows);
+	m.def("_hipblaslt_epilogue_descriptor_count", &tcnn::hipblaslt_epilogue_descriptor_count);
+	m.def("_hipblaslt_fused_relu_biasgrad_stage1_launches", &tcnn::hipblaslt_fused_relu_biasgrad_stage1_launches);
+	m.def("_hipblaslt_fused_relu_only_launches", &tcnn::hipblaslt_fused_relu_only_launches);
+	m.def("_hipblaslt_biasgrad_finalize_launches", &tcnn::hipblaslt_biasgrad_finalize_launches);
+	m.def("_hipblaslt_fused_relu_biasgrad_fallbacks", &tcnn::hipblaslt_fused_relu_biasgrad_fallbacks);
+	m.def("_hipblaslt_legacy_activation_grad_launches", &tcnn::hipblaslt_legacy_activation_grad_launches);
+	m.def("_hipblaslt_legacy_bias_grad_launches", &tcnn::hipblaslt_legacy_bias_grad_launches);
+	m.def("_hipblaslt_fused_partial_bytes_live", &tcnn::hipblaslt_fused_partial_bytes_live);
+	m.def("_hipblaslt_fused_partial_bytes_peak", &tcnn::hipblaslt_fused_partial_bytes_peak);
+	// TCNN_RDNA4_P3B1B_FP16_FORWARD_001: private structural diagnostics.
+	m.def("_hipblaslt_fp16_cache_hits", &tcnn::hipblaslt_fp16_cache_hits);
+	m.def("_hipblaslt_fp16_cache_misses", &tcnn::hipblaslt_fp16_cache_misses);
+	m.def("_hipblaslt_fp16_cache_size", &tcnn::hipblaslt_fp16_cache_size);
+	m.def("_hipblaslt_fp16_heuristic_queries", &tcnn::hipblaslt_fp16_heuristic_queries);
+	m.def("_hipblaslt_fp16_execution_handle_count", &tcnn::hipblaslt_fp16_execution_handle_count);
+	m.def("_hipblaslt_fp16_execution_handle_creations", &tcnn::hipblaslt_fp16_execution_handle_creations);
+	m.def("_hipblaslt_fp16_execution_handle_reuses", &tcnn::hipblaslt_fp16_execution_handle_reuses);
+	m.def("_hipblaslt_fp16_descriptor_count", &tcnn::hipblaslt_fp16_descriptor_count);
+	m.def("_hipblaslt_fp16_bias_launches", &tcnn::hipblaslt_fp16_bias_launches);
+	m.def("_hipblaslt_fp16_relu_bias_launches", &tcnn::hipblaslt_fp16_relu_bias_launches);
+	m.def("_hipblaslt_fp16_scratch_bytes_live", &tcnn::hipblaslt_fp16_scratch_bytes_live);
+	m.def("_hipblaslt_fp16_scratch_bytes_peak", &tcnn::hipblaslt_fp16_scratch_bytes_peak);
+	// TCNN_RDNA4_P3B1C_FP16_BACKWARD_001: backward structural counters.
+	m.def("_hipblaslt_fp16_dx_launches", &tcnn::hipblaslt_fp16_dx_launches);
+	m.def("_hipblaslt_fp16_dw_launches", &tcnn::hipblaslt_fp16_dw_launches);
+	m.def("_hipblaslt_fp16_dz_launches", &tcnn::hipblaslt_fp16_dz_launches);
+	m.def("_hipblaslt_fp16_db_launches", &tcnn::hipblaslt_fp16_db_launches);
+	m.def("_hipblaslt_fp16_test_activation_biasgrad", [](torch::Tensor upstream, torch::Tensor activation, bool relu) {
+		CHECK_INPUT(upstream); CHECK_INPUT(activation);
+		CHECK_THROW(upstream.scalar_type() == torch::kFloat16 && activation.scalar_type() == torch::kFloat16);
+		CHECK_THROW(upstream.dim() == 2 && upstream.sizes() == activation.sizes());
+		const uint32_t batch = upstream.size(0), width = upstream.size(1), tiles = tcnn::div_round_up(batch, 256u);
+		auto dz = torch::empty_like(upstream);
+		auto partials = torch::empty({tiles, width}, torch::TensorOptions().dtype(torch::kFloat32).device(upstream.device()));
+		auto db = torch::empty({width}, torch::TensorOptions().dtype(torch::kFloat32).device(upstream.device()));
+		hipStream_t stream = c10::hip::getCurrentHIPStreamMasqueradingAsCUDA();
+		tcnn::launch_fp16_activation_biasgrad(width, batch, stream, (__half*)upstream.data_ptr<at::Half>(),
+			(__half*)activation.data_ptr<at::Half>(), (__half*)dz.data_ptr<at::Half>(),
+			partials.data_ptr<float>(), db.data_ptr<float>(), tiles, relu, true);
+		return std::make_tuple(dz, db);
+	});
+	// TCNN_RDNA4_P3B1B1_FP16_FORWARD_HARDENING_001: controlled failure-path tests.
+	m.def("_hipblaslt_fp16_test_null_parameter_guard", &tcnn::hipblaslt_fp16_test_null_parameter_guard);
+	m.def("_hipblaslt_fp16_test_invalid_descriptor_counter", &tcnn::hipblaslt_fp16_test_invalid_descriptor_counter);
+	// TCNN_RDNA4_P3B1E1_ENCODING_CLOSURE_001: test-only proof that the
+	// unqualified shared-object constructor rejects the FP16 composition.
+	m.def("_phase3b1e1_test_alternative_constructor_rejected", []() {
+		auto encoding = std::shared_ptr<tcnn::Encoding<__half>>{tcnn::create_encoding<__half>(3, {{"otype", "Identity"}}, 16)};
+		auto network = std::make_shared<tcnn::HipBLASLtMLPFP16>(16, 16, 16, 1, tcnn::Activation::ReLU, tcnn::Activation::None);
+		try {
+			tcnn::NetworkWithInputEncoding<__half> combined{encoding, network};
+		} catch (const std::runtime_error& error) {
+			return std::string{error.what()}.find("unqualified") != std::string::npos;
+		}
+		return false;
+	});
+	// TCNN_RDNA4_P3B1E1A_FINAL_ENCODING_AUDIT_001: expose only the immutable
+	// default-padding contract for standalone audit coverage.
+	m.def("_phase3b1e1a_test_standalone_padding_values", []() {
+		py::dict result;
+		for (const auto& name : {"Identity", "Frequency", "OneBlob", "HashGrid"}) {
+			nlohmann::json config{{"otype", name}};
+			if (std::string{name} == "Frequency") config["n_frequencies"] = 2;
+			if (std::string{name} == "OneBlob") config["n_bins"] = 8;
+			if (std::string{name} == "HashGrid") {
+				config = {{"otype", "HashGrid"}, {"n_levels", 1}, {"n_features_per_level", 2},
+					{"log2_hashmap_size", 3}, {"base_resolution", 4}, {"per_level_scale", 2.0}};
+			}
+			auto encoding = std::unique_ptr<tcnn::Encoding<__half>>{tcnn::create_encoding<__half>(2, config, 16)};
+			result[py::str(name)] = (float)encoding->padding_value();
+		}
+		return result;
+	});
+	#endif
+#endif
+
+	m.def("create_encoding", &create_encoding);
+}

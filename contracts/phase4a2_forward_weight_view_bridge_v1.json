@@ -1,0 +1,23 @@
+{
+  "contract": "PHASE4A2_FORWARD_WEIGHT_VIEW_BRIDGE_V1",
+  "logical_parameter_state": {
+    "W_master": "[I,O] FP32",
+    "W_compute": "[I,O] FP16",
+    "dW": "[I,O]"
+  },
+  "forward_only_physical_view": {
+    "name": "W_forward_physical_view",
+    "mapping": "physical[n,i] = logical[i,n]",
+    "location": "GPU-only derived buffer",
+    "refresh": "on the caller stream immediately before every forward",
+    "bias": "copied without reordering"
+  },
+  "prohibitions": [
+    "physical ordering as authoritative master state",
+    "physical ordering as dW output",
+    "host transpose in the runtime path",
+    "changes to qualified Phase-3A backward",
+    "changes to deterministic dW reduction",
+    "changes to qualified Phase-3B Adam"
+  ]
+}

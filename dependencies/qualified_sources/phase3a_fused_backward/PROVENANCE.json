@@ -1,0 +1,12 @@
+{
+  "current_in_tree_sha256": "7ad0cc174c25918448b7936bfdca63bf2fdf5aab441063ca3618aefdee135a85",
+  "modification_status": "UNMODIFIED",
+  "path_semantics": "historical relative path inside the qualified development snapshot",
+  "provenance_commit": "fa5939089bcd6efa39c64ce7923869ab297cf27a",
+  "purpose": "Qualified Phase-3A fused backward implementation used by the portable Phase-3C rocWMMA and hipBLASLt validation paths.",
+  "qualified_source_sha256": "7ad0cc174c25918448b7936bfdca63bf2fdf5aab441063ca3618aefdee135a85",
+  "source_path": "phase3a_fused_backward/impl/native/phase3a_fused_backward.hip",
+  "source_snapshot_commit": "39b2f69935aebe21cdd9876e3b425adc4d1dea3a",
+  "upstream_or_original_path": "phase3a_fused_backward/impl/native/phase3a_fused_backward.hip",
+  "version": "phase3c-qualified-source-provenance-v1"
+}

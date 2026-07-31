@@ -1,0 +1,17 @@
+{
+  "source_commit": "39b2f69935aebe21cdd9876e3b425adc4d1dea3a",
+  "source_branch": "phase4a2-fused-rocwmma-amd-gsplat-gfx1201",
+  "phase3c_v2": {
+    "tag": "phase3c-portable-smoke-gfx1201-pass-v2",
+    "commit": "884b82f1a83bed98533c51c7ba2ba7bf23cc2c92"
+  },
+  "phase4a": {
+    "tag": "phase4a-hipblaslt-amd-gsplat-integration-gfx1201-pass",
+    "commit": "158da07cda09104b2888334dc66bd5994cd74ddd"
+  },
+  "phase4a2": {
+    "tag": "phase4a2-fused-rocwmma-amd-gsplat-gfx1201-pass",
+    "commit": "1a9b166c79649ccc494d26b709dccf7b3e3310c7",
+    "archive_sha256": "ab9b2c2c8a99c503d630833ce240233f8b8b8183ed40b42831526d777b0e09f8"
+  }
+}

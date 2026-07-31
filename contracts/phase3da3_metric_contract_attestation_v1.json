@@ -1,0 +1,51 @@
+{
+  "attestation_id": "PHASE3DA3_METRIC_CONTRACT_ATTESTATION_V1",
+  "attestation_version": 1,
+  "source_contract_paths": [
+    "contracts/phase3d_execution_contract_addendum_v2.json",
+    "contracts/phase3d_preregistration_contract_v1.json",
+    "contracts/phase3da3_metric_trajectory_addendum_v1.json"
+  ],
+  "source_contract_sha256": {
+    "contracts/phase3d_execution_contract_addendum_v2.json": "05c352cc819d5ff3fe06952c94b7f11ee96c03367e31d07c7fac6c7f9c64c74f",
+    "contracts/phase3d_preregistration_contract_v1.json": "9963c9863154b599f651fa8a95878845f291d487cfcb57912ecbd18d28b4cafc",
+    "contracts/phase3da3_metric_trajectory_addendum_v1.json": "a5e6b3fe1ab2e1f35c8ccfb79b805436967444b8f3de6652e41cb9cbd5966402"
+  },
+  "extraction_validator_sha256": "9ca7055b9c9e58cfdca42ca053076b3dd22f7786138781f4525c669af1ba13ee",
+  "values": {
+    "E_rocwmma_cpu": {"fail_above": 1.0, "review_at_or_above": 0.9},
+    "E_hipblaslt_cpu": {"fail_above": 1.0, "review_at_or_above": 0.9},
+    "D_rocwmma_hipblaslt": {"review_at_or_above": 1.0},
+    "D_combined_bound": 1.9607843137254901,
+    "trend": {
+      "oracle_points": [16,32,50,64,100],
+      "minimum_rising_transitions": 3,
+      "minimum_last_first_ratio": 2.0,
+      "minimum_final_E_max": 0.5,
+      "epsilon": 5.960464477539063e-08
+    },
+    "activity": {
+      "minimum_global_effective_step_fraction": 0.95,
+      "require_update_each_trainable_layer": true,
+      "long_horizon_noop_steps": 256,
+      "long_horizon_noop_rule_evaluable_at_100_steps": false
+    }
+  },
+  "extraction_map": {
+    "E_rocwmma_cpu.fail_above": ["contracts/phase3d_execution_contract_addendum_v2.json","/drift/e_max_gt"],
+    "E_rocwmma_cpu.review_at_or_above": ["contracts/phase3d_preregistration_contract_v1.json","/drift/review_headroom_e_max_ge"],
+    "E_hipblaslt_cpu.fail_above": ["contracts/phase3d_execution_contract_addendum_v2.json","/drift/e_max_gt"],
+    "E_hipblaslt_cpu.review_at_or_above": ["contracts/phase3d_preregistration_contract_v1.json","/drift/review_headroom_e_max_ge"],
+    "D_rocwmma_hipblaslt.review_at_or_above": ["contracts/phase3d_execution_contract_addendum_v2.json","/drift/d_max_ge"],
+    "D_combined_bound": ["contracts/phase3d_execution_contract_addendum_v2.json","/drift/d_combined_bound"],
+    "trend.oracle_points": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/trend_evaluation/steps"],
+    "trend.minimum_rising_transitions": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/trend_evaluation/trigger/minimum_increasing_E_p99_transitions"],
+    "trend.minimum_last_first_ratio": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/trend_evaluation/trigger/minimum_last_first_ratio"],
+    "trend.minimum_final_E_max": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/trend_evaluation/trigger/minimum_E_max_last"],
+    "trend.epsilon": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/trend_evaluation/epsilon"],
+    "activity.minimum_global_effective_step_fraction": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/activity_saturation/minimum_global_effective_step_fraction"],
+    "activity.require_update_each_trainable_layer": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/activity_saturation/each_trainable_layer_requires_fp32_master_update"],
+    "activity.long_horizon_noop_steps": ["contracts/phase3d_execution_contract_addendum_v2.json","/activity_rules/layer_consecutive_no_op_steps_blocked_at"],
+    "activity.long_horizon_noop_rule_evaluable_at_100_steps": ["contracts/phase3da3_metric_trajectory_addendum_v1.json","/activity_saturation/long_horizon_256_noop_rule_evaluable"]
+  }
+}

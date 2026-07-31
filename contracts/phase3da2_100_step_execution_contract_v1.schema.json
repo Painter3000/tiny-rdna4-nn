@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "anchors",
+    "historical_phase3da",
+    "primary_matrix",
+    "run_ids",
+    "teacher_forced_cpu_oracle",
+    "corrected_gpu_crosscheck",
+    "trend_rule",
+    "resume_contract",
+    "replay_determinism",
+    "activity",
+    "production_immutability",
+    "evidence_paths",
+    "final_decision"
+  ],
+  "properties": {
+    "contract_id": {"const": "PHASE3DA2_100_STEP_EXECUTION_CONTRACT_V1"},
+    "contract_version": {"const": 1},
+    "anchors": {"type": "object"},
+    "historical_phase3da": {"type": "object"},
+    "primary_matrix": {"type": "object"},
+    "run_ids": {"type": "object"},
+    "teacher_forced_cpu_oracle": {"type": "object"},
+    "corrected_gpu_crosscheck": {"type": "object"},
+    "trend_rule": {"type": "object"},
+    "resume_contract": {"type": "object"},
+    "replay_determinism": {"type": "object"},
+    "activity": {"type": "object"},
+    "production_immutability": {"type": "object"},
+    "evidence_paths": {"type": "object"},
+    "final_decision": {"type": "object"}
+  }
+}

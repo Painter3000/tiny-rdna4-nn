@@ -1,0 +1,56 @@
+{
+  "schema": "phase4a-native-build-v1",
+  "target": "gfx1201",
+  "network_backend": "HipBLASLtMLP",
+  "tcnn_enable_rocwmma_width64_mlp": false,
+  "fused_rocwmma_production_path": "NOT_TESTED_IN_AMD_GSPLAT",
+  "result_classification": "functional_integration_comparison",
+  "sources": {
+    "tiny_rdna4_nn_commit": "c6be102949908abbbddfa70ad28fd8f8dbea184f",
+    "tiny_rdna4_nn_archive_sha256": "e5fd1b7313f5c5bfe7644aa036996627c95b0968da0f7b7a1fc1de009c14729f",
+    "amd_gsplat_commit": "2c62b22552c0ad4ed120aae304ce66ae27bc5d08",
+    "amd_gsplat_archive_sha256": "688d5e4e3e2b74b0605c6801ae0433b845bc4bc4fcd2b3544a0d9c4dea48a129"
+  },
+  "toolchain": {
+    "compiler": "/opt/rocm/llvm/bin/clang++",
+    "compiler_version": "AMD clang 22.0.0git; ROCm 7.2.0 build 26014",
+    "rocm": "7.2.0.70200-43",
+    "hip_runtime": "7.2.26015.70200-43",
+    "torch_hip": "7.2.53211",
+    "pytorch": "2.13.0+rocm7.2",
+    "hipblaslt": "1.2.1.70200-43",
+    "rocwmma": "2.2.0.70200-43 (installed but not used by HipBLASLtMLP)"
+  },
+  "build": {
+    "command": "scripts/build_phase4a_native_modules.sh",
+    "environment": {
+      "PYTORCH_ROCM_ARCH": "gfx1201",
+      "MAX_JOBS": "8"
+    },
+    "compiler_flags": [
+      "-std=c++17/-std=c++20",
+      "--offload-arch=gfx1201",
+      "-O3",
+      "-fno-gpu-rdc",
+      "-D__HIP_PLATFORM_AMD__",
+      "-DUSE_ROCM",
+      "-DTCNN_PORTABLE_MLP_ONLY",
+      "-DTCNN_HALF_PRECISION=1",
+      "-DTCNN_NO_RTC"
+    ],
+    "link_libraries": [
+      "amdhip64",
+      "hipblaslt",
+      "torch",
+      "torch_hip"
+    ],
+    "expected_modules": [
+      "tinycudann_bindings/_120_C.cpython-312-x86_64-linux-gnu.so",
+      "gsplat/csrc.so"
+    ]
+  },
+  "qualified_binary_sha256": {
+    "tiny_rdna4_nn": "6ca34004368bcb31ed2ab0c35c9abf013f69c0b06169ec5c62c18fdbbda17c8e",
+    "amd_gsplat": "749702d07f3e6f8a8a92248f2643542a0f76bdba3d86d203b3cf3ca5bfea0ee5"
+  }
+}
