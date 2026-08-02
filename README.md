@@ -4,11 +4,10 @@
 <details>
 <summary><strong>ROCm / gfx1201 port note</strong></summary>
 
-- Type: ROCm port / RDNA4 fused-MLP research branch based on `NVlabs/tiny-cuda-nn`.
+- ROCm port / RDNA4 fused-MLP research branch based on `NVlabs/tiny-cuda-nn`.
 - Target: AMD Radeon AI PRO R9700 / RDNA4 / `gfx1201`.
-- Stack: ROCm 7.2, Python 3.12, PyTorch `2.13.0+rocm7.2`, HIP `7.2.53211`.
+- Stack: ROCm 7.2, Python 3.12, PyTorch `2.13.0+rocm7.2`.
 - Validation: Phase 4A2 Model-B Public **PASS**.
-- Qualified release: `phase4a2-model-b-public-gfx1201-pass`.
 
 </details>
 <!-- PAINTER3000_STATUS_BLOCK_END -->
