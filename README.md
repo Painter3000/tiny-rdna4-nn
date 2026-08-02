@@ -1,18 +1,23 @@
 # tiny-rdna4-nn
 
 <!-- PAINTER3000_STATUS_BLOCK_START -->
-## Repository snapshot
+## Quick status
 
-- **Repository type:** Community ROCm port / RDNA4 fused-MLP research branch based on `NVlabs/tiny-cuda-nn`.
-- **Target GPU:** AMD Radeon AI PRO R9700.
-- **Target architecture:** RDNA4 / `gfx1201`.
-- **Target stack:** Ubuntu 24.04, ROCm 7.2, Python 3.12, PyTorch `2.13.0+rocm7.2`, HIP `7.2.53211`, AMD Clang 22.0.0.
-- **Validation status:** Phase 4A2 Model-B Public **PASS**; `RDNA4_FUSED_MLP_PHASE4A2_AMD_GSPLAT_FUSED_ROCWMMA: PASS`.
-- **Qualified release:** `phase4a2-model-b-public-gfx1201-pass`.
-- **Upstream base:** `NVlabs/tiny-cuda-nn`, with recursive source/submodule provenance frozen by the qualified release tag.
+| Type | Target | Validation |
+|---|---|---|
+| ROCm port / RDNA4 fused-MLP research branch based on `NVlabs/tiny-cuda-nn` | R9700 / RDNA4 `gfx1201`, ROCm 7.2, PyTorch `2.13.0+rocm7.2` | **PASS** — Phase 4A2 Model-B Public |
+
+<details>
+<summary>Qualified release details</summary>
+
+- Qualified release: `phase4a2-model-b-public-gfx1201-pass`
+- Overall gate: `RDNA4_FUSED_MLP_PHASE4A2_AMD_GSPLAT_FUSED_ROCWMMA: PASS`
+- Python: 3.12
+- HIP: `7.2.53211`
+- Compiler: AMD Clang 22.0.0
+
+</details>
 <!-- PAINTER3000_STATUS_BLOCK_END -->
-
-
 A community ROCm port of [NVlabs/tiny-cuda-nn](https://github.com/NVlabs/tiny-cuda-nn) for **AMD RDNA4 / `gfx1201`**, developed and validated on the **AMD Radeon AI PRO R9700** with **ROCm 7.2**.
 
 The current public milestone integrates a dedicated **rocWMMA Width-64 fused MLP** with the **AMD `gsplat` image path** and validates real forward, backward, optimization, replay, resume, runtime-attestation, and 100-step execution on RDNA4.
